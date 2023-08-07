@@ -74,7 +74,7 @@ public class Book_contact : MonoBehaviour
 		if (this.check_ready_book(id) == false)
 		{
 			PlayerPrefs.SetString("contact_data" + this.leng, str_data);
-			if (avatar != null) this.ct.carrot.save_file(id + ".png", avatar);
+			if (avatar != null) this.ct.carrot.get_tool().save_file(id + ".png", avatar);
 			this.leng++;
 			PlayerPrefs.SetInt("contact_leng", this.leng);
 			this.ct.carrot.show_msg(PlayerPrefs.GetString("app_title", "app_title"), PlayerPrefs.GetString("save_success", "save_success"), Carrot.Msg_Icon.Success);
@@ -92,7 +92,7 @@ public class Book_contact : MonoBehaviour
 		if (avatar != null)
 		{
 			string user_id = data_contact["user_id"].ToString();
-			this.ct.carrot.save_file(user_id + ".png", avatar);
+			this.ct.carrot.get_tool().save_file(user_id + ".png", avatar);
 		}
 		this.ct.carrot.show_msg(PlayerPrefs.GetString("app_title", "app_title"), PlayerPrefs.GetString("save_success", "save_success"), Carrot.Msg_Icon.Success);
 	}
@@ -183,7 +183,7 @@ public class Book_contact : MonoBehaviour
 				if (data["user_id"] != null)
 				{
 					if (data["user_id"].ToString() != "")
-						this.ct.carrot.delete_file(data["user_id"].ToString() + ".png");
+						this.ct.carrot.get_tool().delete_file(data["user_id"].ToString() + ".png");
 				}
 			}
 			PlayerPrefs.DeleteKey("contact_data" + index);
@@ -199,10 +199,10 @@ public class Book_contact : MonoBehaviour
 	{
 		this.is_import_contact = true;
 		string s_link_get_contact;
-        if (this.ct.carrot.get_id_user_login() != "")
-			s_link_get_contact=this.ct.carrot.get_url_host() + "/getcontact?id_device=" + SystemInfo.deviceUniqueIdentifier + "&user_id=" + this.ct.carrot.get_id_user_login() + "&user_lang=" + this.ct.carrot.get_lang_user_login();
+        if (this.ct.carrot.user.get_id_user_login() != "")
+			s_link_get_contact=this.ct.carrot.mainhost + "/getcontact?id_device=" + SystemInfo.deviceUniqueIdentifier + "&user_id=" + this.ct.carrot.user.get_id_user_login() + "&user_lang=" + this.ct.carrot.user.get_lang_user_login();
         else
-			s_link_get_contact = this.ct.carrot.get_url_host() + "/getcontact?id_device=" + SystemInfo.deviceUniqueIdentifier+ "&user_lang="+PlayerPrefs.GetString("lang","en");
+			s_link_get_contact = this.ct.carrot.mainhost + "/getcontact?id_device=" + SystemInfo.deviceUniqueIdentifier+ "&user_lang="+PlayerPrefs.GetString("lang","en");
 		PlayerPrefs.SetInt("is_import_contact", 1);
 		Application.OpenURL(s_link_get_contact);
 	}
@@ -218,7 +218,7 @@ public class Book_contact : MonoBehaviour
 		if (this.is_import_contact)
 		{
 			WWWForm frm_get_import = this.ct.carrot.frm_act("get_import");
-			this.ct.carrot.send_hide(frm_get_import, this.act_get_import);
+			//this.ct.carrot.send_hide(frm_get_import, this.act_get_import);
 		}
 	}
 
@@ -300,6 +300,7 @@ public class Book_contact : MonoBehaviour
 		offline_info.GetComponent<Panel_info>().btn_action.gameObject.SetActive(false);
 		offline_info.GetComponent<Panel_info>().type=- 1;
 
+		/*
 		GameObject item_field_avatar = Instantiate(this.ct.carrot.item_user_edit_prefab);
 		item_field_avatar.name = "field_avatar";
 		item_field_avatar.transform.SetParent(this.area_body_main);
@@ -309,6 +310,7 @@ public class Book_contact : MonoBehaviour
 		item_field_avatar.GetComponent<Carrot_item_user_edit>().set_data("6", "");
 		item_field_avatar.GetComponent<Carrot_item_user_edit>().s_name = "avatar";
 		item_field_avatar.GetComponent<Carrot_item_user_edit>().txt_title.text = PlayerPrefs.GetString("avatar_user", "Avatar");
+		*/
 
 		this.add_field_edit("1", "", "name", "user_name", "Full name","","",false);
 		this.add_field_edit("8", s_new_phone, "sdt", "user_phone", "Phone number","","",false);
@@ -319,11 +321,12 @@ public class Book_contact : MonoBehaviour
 
 		this.ct.btn_add_contact.SetActive(false);
 		this.menu_footer_edit.SetActive(true);
-		this.ct.carrot.data_avatar_user = null;
+		//this.ct.carrot.data_avatar_user = null;
 	}
 
 	public void add_field_edit(string type_field,string val_field,string name_field,string title_field,string title_en_field,string val_select,string val_select_en,bool is_delete)
     {
+		/*
 		GameObject item_field_edit = Instantiate(this.ct.carrot.item_user_edit_prefab);
 		item_field_edit.name = "field_add";
 		item_field_edit.transform.SetParent(this.area_body_main);
@@ -334,8 +337,10 @@ public class Book_contact : MonoBehaviour
 		item_field_edit.GetComponent<Carrot_item_user_edit>().s_name = name_field;
 		item_field_edit.GetComponent<Carrot_item_user_edit>().txt_title.text = PlayerPrefs.GetString(title_field, title_en_field);
 		item_field_edit.GetComponent<Carrot_item_user_edit>().button_delete.SetActive(is_delete);
+	
 
 		if (type_field == "2") item_field_edit.GetComponent<Carrot_item_user_edit>().set_data_select_down(val_select, val_select_en, val_field);
+		*/
 	}
 
 	public void show_edit(int index,string s_data,bool is_edit_user_login_cur)
@@ -344,7 +349,7 @@ public class Book_contact : MonoBehaviour
 		IDictionary data = (IDictionary)Carrot.Json.Deserialize(s_data);
 		IList list_info = (IList)data["list_info"];
 		this.ct.carrot.close();
-		this.ct.carrot.data_avatar_user = null;
+		//this.ct.carrot.data_avatar_user = null;
 
 		this.is_edit_user_login = is_edit_user_login_cur;
 		this.edit_index_contact = index;
@@ -365,6 +370,7 @@ public class Book_contact : MonoBehaviour
 		update_title.GetComponent<Panel_info>().btn_action.gameObject.SetActive(false);
 		update_title.GetComponent<Panel_info>().type = -1;
 
+		/*
 		GameObject item_field_avatar = Instantiate(this.ct.carrot.item_user_edit_prefab);
 		item_field_avatar.name = "field_avatar";
 		item_field_avatar.transform.SetParent(this.area_body_main);
@@ -383,6 +389,7 @@ public class Book_contact : MonoBehaviour
 			this.ct.carrot.load_file_img(data["user_id"].ToString() + ".png", item_field_avatar.GetComponent<Carrot_item_user_edit>().img_avatar);
 			if (this.ct.carrot.check_file_exist(data["user_id"].ToString() + ".png")) this.ct.carrot.data_avatar_user = item_field_avatar.GetComponent<Carrot_item_user_edit>().img_avatar.sprite.texture.EncodeToPNG();
 		}
+		*/
 
 		for (int i = 0; i < list_info.Count; i++)
         {
@@ -417,13 +424,16 @@ public class Book_contact : MonoBehaviour
 		{
 			if (child.name == "field_add")
 			{
+				/*
 				Carrot_item_user_edit item_field = child.GetComponent<Carrot_item_user_edit>();
 				c.add_field(item_field.s_type,item_field.s_name, item_field.txt_title.text, item_field.get_val(), item_field.val_select, item_field.val_select_en);
+				*/
 			}
 		}
 
 		if (this.is_edit_user_login)
 		{
+			/*
 			IDictionary data_user_login = (IDictionary)Carrot.Json.Deserialize(this.ct.carrot.s_data_user_login);
 			c.user_id = this.ct.carrot.get_id_user_login();
 			c.user_lang = this.ct.carrot.get_lang_user_login();
@@ -431,18 +441,19 @@ public class Book_contact : MonoBehaviour
 			frm_update_contact.AddField("data", c.get_json());
 			if(this.ct.carrot.data_avatar_user!=null) frm_update_contact.AddBinaryData("avatar", this.ct.carrot.data_avatar_user);
 			this.ct.carrot.send(frm_update_contact, act_after_update_info_user_login);
+			*/
 		}
 		else
 		{
 			if (this.edit_user_id != "")
 			{
 				c.user_id = this.edit_user_id;
-				this.update_contact(this.edit_index_contact, c.get_json(), this.ct.carrot.data_avatar_user);
+				//this.update_contact(this.edit_index_contact, c.get_json(), this.ct.carrot.data_avatar_user);
 				this.ct.carrot.show_msg(PlayerPrefs.GetString("app_title", "app_title"), PlayerPrefs.GetString("save_success", "save_success"), Msg_Icon.Success);
 			}
 			else
 			{
-				this.add_contact(c.user_id, c.get_json(), this.ct.carrot.data_avatar_user);
+				//this.add_contact(c.user_id, c.get_json(), this.ct.carrot.data_avatar_user);
 				this.ct.carrot.show_msg(PlayerPrefs.GetString("add_contact", "Add new contact"), PlayerPrefs.GetString("add_contact_success", "New contact created successfully!"), Msg_Icon.Success);
 			}
 			this.menu_footer_edit.SetActive(false);
@@ -456,7 +467,7 @@ public class Book_contact : MonoBehaviour
 		this.ct.carrot.show_msg(PlayerPrefs.GetString("acc_edit", "Update account information"),PlayerPrefs.GetString(data_acc["msg"].ToString(), data_acc["msg_en"].ToString()),Carrot.Msg_Icon.Success);
 		if (data_acc["error"].ToString() == "0")
 		{
-			this.ct.carrot.set_data_user_login(data_acc);
+			//this.ct.carrot.set_data_user_login(data_acc);
 			this.menu_footer_edit.SetActive(false);
 		}
 	}
@@ -493,8 +504,10 @@ public class Book_contact : MonoBehaviour
 		WWWForm frm_backup = this.ct.carrot.frm_act("backup");
 		frm_backup.AddField("data", s_data_backup);
 		frm_backup.AddField("length", length_contact);
+		/*
 		frm_backup.AddField("user_id", this.ct.carrot.get_id_user_login());
 		frm_backup.AddField("user_lang", this.ct.carrot.get_lang_user_login());
+		*/
 		return frm_backup;
 	}
 

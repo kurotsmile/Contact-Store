@@ -67,6 +67,7 @@ public class Item_contacts_act : MonoBehaviour
 
     private void load_contacts_avatar(Texture2D data_img)
     {
+        /*
         GameObject item_info_avatar = Instantiate(this.prefab_contacts_avatar);
         item_info_avatar.transform.SetParent(GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.area_body_box);
         item_info_avatar.transform.localPosition = new Vector3(item_info_avatar.transform.localPosition.x, item_info_avatar.transform.localPosition.y, 0f);
@@ -77,11 +78,12 @@ public class Item_contacts_act : MonoBehaviour
         data_img = GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.ResampleAndCrop(data_img, 200, 60);
         item_info_avatar.GetComponent<Image>().sprite = GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.Texture2DtoSprite(data_img);
         item_info_avatar.GetComponent<Button>().onClick.AddListener(view_img_avatar);
+        */
     }
 
     private void view_img_avatar()
     {
-        GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.camera_photo.view_photo_libary(this.data_avatar, -1);
+        GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.camera_pro.show_list_img(null);
     }
 
     public void btn_call()
@@ -135,7 +137,7 @@ public class Item_contacts_act : MonoBehaviour
 
     public void btn_download_vcf()
     {
-        Application.OpenURL(GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.get_url_host()+"/download_vcf.php?id_user="+this.s_user_id+"&lang="+this.s_user_lang);
+        //Application.OpenURL(GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.get_url_host()+"/download_vcf.php?id_user="+this.s_user_id+"&lang="+this.s_user_lang);
     }
 
     private string get_val_in_field(string s_id_name)

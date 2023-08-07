@@ -213,7 +213,7 @@ public class App_Contacts : MonoBehaviour
 
     public void show_backup()
     {
-        if (this.carrot.get_id_user_login() == "")
+        if (this.carrot.user.get_id_user_login() == "")
         {
             this.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
             is_check_user_go_backup = true;
@@ -229,9 +229,11 @@ public class App_Contacts : MonoBehaviour
         this.StopAllCoroutines();
         this.carrot.stop_all_act();
         this.add_item_loading_or_screen_loading(this.area_body_main);
+        /*
         WWWForm frm=this.carrot.frm_act("get_list_contacts");
         this.carrot.send_hide(frm, act_get_list_contact_home);
         PlayerPrefs.SetInt("is_view_contact", 0);
+        */
     }
 
     private void act_get_list_contact_home(string s_data)
@@ -322,14 +324,14 @@ public class App_Contacts : MonoBehaviour
     public void view_contact(string s_user_id,string s_user_lang)
     {
         this.play_sound(0);
-        this.carrot.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
-        this.check_and_show_ads();
+        //this.carrot.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
+        this.carrot.ads.show_ads_Interstitial();
     }
 
     private void after_view_contact(string s_data)
     {
         GameObject item_act_contact = Instantiate(this.prefab_contact_act);
-        item_act_contact.transform.SetParent(this.carrot.area_body_box);
+        //item_act_contact.transform.SetParent(this.carrot.area_body_box);
         item_act_contact.transform.localPosition = new Vector3(item_act_contact.transform.localPosition.x, item_act_contact.transform.localPosition.y, 0f);
         item_act_contact.transform.localScale = new Vector3(1f, 1f, 1f);
         item_act_contact.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -338,7 +340,7 @@ public class App_Contacts : MonoBehaviour
 
     public void view_contact_import(int index)
     {
-        this.check_and_show_ads();
+        this.carrot.ads.show_ads_Interstitial();
         this.play_sound(0);
     }
 
@@ -352,26 +354,6 @@ public class App_Contacts : MonoBehaviour
     {
         this.play_sound(0);
         this.carrot.show_rate();
-    }
-
-    public void check_and_show_ads()
-    {
-        if (this.is_ads)
-        {
-            this.count_ads++;
-            if (this.count_ads >= PlayerPrefs.GetInt("count_ads",6))
-            {
-#if UNITY_WSA
-                Vungle.playAd(this.ads_id_trunggiang_vungle);
-#else
-                if (Advertisement.IsReady())
-                {
-                    Advertisement.Show();
-                }
-#endif
-                this.count_ads = 0;
-            }
-        }
     }
 
     public void delete_backup(string sid, string lang)
@@ -430,9 +412,7 @@ public class App_Contacts : MonoBehaviour
 
     public void btn_show_user_login()
     {
-        this.play_sound(0);
         this.carrot.show_login();
-        if(this.carrot.get_id_user_login()!="") this.carrot.delay_function(0.5f, act_fix_btn_user_info);
     }
 
     public void btn_show_list_lang()
@@ -482,43 +462,10 @@ public class App_Contacts : MonoBehaviour
 
     public void btn_account()
     {
-        this.play_sound(0);
-        if (this.carrot.get_id_user_login() != "")
-        {
-            Debug.Log(this.carrot.s_data_user_login);
-            this.carrot.stop_all_act();
-            this.StopAllCoroutines();
-            this.GetComponent<Book_contact>().show_edit(-1, this.carrot.s_data_user_login,true);
-            this.panel_setting.SetActive(false);
-        }
-        else
-        {
-            this.carrot.show_login();
-        }
+        this.carrot.show_login();
     }
 
-    public void aft_show_info_login_user()
-    {
-        if (this.is_check_user_go_backup)
-        {
-            this.is_check_user_go_backup = false;
-            this.show_backup();
-        }
-        else
-            this.carrot.delay_function(0.5f, act_fix_btn_user_info);
-    }
 
-    private void act_fix_btn_user_info()
-    {
-        foreach (Transform child in this.carrot.area_body_box)
-        {
-            if (child.GetComponent<Carrot.Carrot_item_user_info>().act == "edit")
-            {
-                child.GetComponent<Button>().onClick.RemoveAllListeners();
-                child.GetComponent<Button>().onClick.AddListener(this.btn_account);
-            }
-        }
-    }
 
     public void btn_show_search()
     {
@@ -547,7 +494,7 @@ public class App_Contacts : MonoBehaviour
             {
                 WWWForm frm = this.carrot.frm_act("get_list_contacts");
                 frm.AddField("search", this.inp_search.text);
-                this.carrot.send_hide(frm, act_get_list_contact_home);
+               // this.carrot.send_hide(frm, act_get_list_contact_home);
             }
             else
             {
@@ -565,7 +512,7 @@ public class App_Contacts : MonoBehaviour
         frm_seach.AddField("search_address", this.inp_search_address.text);
         frm_seach.AddField("search_sex", this.dropdow_search_sex.value);
         frm_seach.AddField("search_phone", this.inp_search_phone.text);
-        this.carrot.send(frm_seach,this.act_get_list_contact_home);
+       // this.carrot.send(frm_seach,this.act_get_list_contact_home);
     }
 
     public void add_tip_info(Sprite icon_tip, string s_name, string s_tip,int type_act)

@@ -22,9 +22,8 @@ public class Panel_backup : MonoBehaviour
     {
 		this.cts.add_item_loading(this.area_list_backup);
 		WWWForm frm_backup = this.cts.carrot.frm_act("list_backup");
-		frm_backup.AddField("user_id", this.cts.carrot.get_id_user_login());
-		frm_backup.AddField("user_lang", this.cts.carrot.get_lang_user_login());
-		this.cts.carrot.send_hide(frm_backup, list_backup_handle);
+		frm_backup.AddField("user_id", this.cts.carrot.user.get_id_user_login());
+		frm_backup.AddField("user_lang", this.cts.carrot.user.get_lang_user_login());
 	}
 
 	private void list_backup_handle(string s_data)
@@ -58,7 +57,7 @@ public class Panel_backup : MonoBehaviour
 
     public void start_backup()
     {
-		this.cts.carrot.send(this.cts.GetComponent<Book_contact>().frm_submit_backup_contact(), act_start_backup);
+		//this.cts.carrot.send(this.cts.GetComponent<Book_contact>().frm_submit_backup_contact(), act_start_backup);
 	}
 
 	private void act_start_backup(string s_data)
@@ -72,7 +71,7 @@ public class Panel_backup : MonoBehaviour
 		WWWForm frm_backup = GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.frm_act("delete_backup");
 		frm_backup.AddField("id_backup", id_backup);
 		frm_backup.AddField("lang_backup", lang_backup);
-		GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.send(frm_backup, delete_backup);
+		//GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.send(frm_backup, delete_backup);
 	}
 
 	private void delete_backup(string s_data)
@@ -86,19 +85,19 @@ public class Panel_backup : MonoBehaviour
 		WWWForm frm = GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.frm_act("view_backup");
 		frm.AddField("id_backup",id_backup);
 		frm.AddField("lang_backup", lang_backup);
-		GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.send(frm, act_view_backup);
+		//GameObject.Find("App_Contacts").GetComponent<App_Contacts>().carrot.send(frm, act_view_backup);
 	}
 
 	private void act_view_backup(string s_data)
     {
 		IDictionary data = (IDictionary)Carrot.Json.Deserialize(s_data);
-		this.cts.carrot.show_list_box(data["comment"].ToString(), this.icon_backup);
+		//this.cts.carrot.show_list_box(data["comment"].ToString(), this.icon_backup);
 		IList list_contact = (IList)Carrot.Json.Deserialize(data["data"].ToString());
 		for (int i = 0; i < list_contact.Count; i++) 
         {
 			IDictionary data_backup = (IDictionary)list_contact[i];
 			GameObject obj_item_backup = Instantiate(this.prefab_contact_backup);
-			obj_item_backup.transform.SetParent(this.cts.carrot.area_body_box);
+			//obj_item_backup.transform.SetParent(this.cts.carrot.area_body_box);
 			obj_item_backup.transform.localPosition = new Vector3(obj_item_backup.transform.localPosition.x, obj_item_backup.transform.localPosition.y, 0f);
 			obj_item_backup.transform.localScale = new Vector3(1f, 1f, 1f);
 			obj_item_backup.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -128,7 +127,7 @@ public class Panel_backup : MonoBehaviour
 		WWWForm frm = this.cts.carrot.frm_act("view_backup");
 		frm.AddField("id_backup", id_backup);
 		frm.AddField("lang_backup", lang_backup);
-		this.cts.carrot.send(frm, act_export_backup);
+		//this.cts.carrot.send(frm, act_export_backup);
 	}
 
 	private void act_export_backup(string s_data)

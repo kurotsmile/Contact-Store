@@ -79,7 +79,7 @@ public class Call_contact : MonoBehaviour
         yield return new WaitForSeconds(2f);
         WWWForm frm = this.ct.carrot.frm_act("get_info_phone");
         frm.AddField("phone", this.s_dial_txt);
-        this.ct.carrot.send_hide(frm, act_get_info_by_phone);
+       // this.ct.carrot.send_hide(frm, act_get_info_by_phone);
         this.img_loading.SetActive(true);
     }
 

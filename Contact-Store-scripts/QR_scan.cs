@@ -95,6 +95,7 @@ public class QR_scan : MonoBehaviour
 
     public void getDataFromReader(string dataStr)
     {
+        /*
         string str_qr = dataStr.Replace(this.ct.carrot.get_url_host()+"/user/", "");
 
         this.ct.play_sound(2);
@@ -112,6 +113,7 @@ public class QR_scan : MonoBehaviour
             this.txt_data_qr.text = dataStr;
         }
         Debug.Log("data Str is " + str_qr);
+        */
     }
 
 
@@ -137,8 +139,8 @@ public class QR_scan : MonoBehaviour
         if (codeWtr != null)
         {
             this.StopReader();
-            string s_user_link = this.ct.carrot.get_url_host() + "/user/" + this.ct.carrot.get_id_user_login() + "/" + this.ct.carrot.get_lang_user_login();
-            codeWtr.CreateCode(codetype, s_user_link);
+            //string s_user_link = this.ct.carrot.get_url_host() + "/user/" + this.ct.carrot.get_id_user_login() + "/" + this.ct.carrot.get_lang_user_login();
+            //codeWtr.CreateCode(codetype, s_user_link);
         }
     }
 

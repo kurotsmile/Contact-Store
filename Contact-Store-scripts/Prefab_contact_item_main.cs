@@ -27,6 +27,7 @@ public class Prefab_contact_item_main : MonoBehaviour {
 		}
 
 		if(this.type==1){
+			/*
 			GameObject.Find("App_Contacts").GetComponent<App_Contacts>().StopAllCoroutines();
 			this.carrot.stop_all_act();
 			this.carrot.show_list_box(this.txt_name.text, this.img_avatar.sprite);
@@ -62,6 +63,7 @@ public class Prefab_contact_item_main : MonoBehaviour {
 			item_act_contact.transform.localScale = new Vector3(1f, 1f, 1f);
 			item_act_contact.transform.localRotation = Quaternion.Euler(Vector3.zero);
 			item_act_contact.GetComponent<Item_contacts_act>().set_data_by_contact(this.index,s_data);
+			*/
 		}
 
 		if (this.type == 2) {
@@ -84,7 +86,7 @@ public class Prefab_contact_item_main : MonoBehaviour {
 		IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
 		this.list_info = (IList)data_contact["list_info"];
 		this.s_user_id = data_contact["user_id"].ToString();
-		this.carrot.load_file_img(this.s_user_id + ".png", this.img_avatar,60);
+		//this.carrot.load_file_img(this.s_user_id + ".png", this.img_avatar,60);
 		this.txt_name.text = this.get_val_in_field("name");
 		this.txt_address.text = this.get_val_in_field("address");
 		this.txt_phone.text = this.get_val_in_field("sdt");
