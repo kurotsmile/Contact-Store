@@ -1,12 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking;
-using UnityEngine.Advertisements;
 using UnityEngine.Purchasing;
-using UnityEngine.Android;
-using System;
+using Firebase.Extensions;
+using Firebase.Firestore;
 
 public class App_Contacts : MonoBehaviour
 {
@@ -66,31 +63,23 @@ public class App_Contacts : MonoBehaviour
     public Color32 color_sel;
     public Color32 color_normal;
 
-    private string gameId = "3245240";
-
     [Header("Setting")]
     public Image img_setting_audio;
     public GameObject panel_setting_remove_ads;
-    private bool is_ads = true;
-    private bool is_sound = true;
     private bool is_check_user_go_backup = false;
-    private int count_ads = 0;
     private string link_deep_app;
+
     void Start()
     {
         this.link_deep_app = Application.absoluteURL;
-        this.check_ads();
         this.panel_setting.SetActive(false);
         this.panel_backup.SetActive(false);
         this.panel_search.SetActive(false);
         this.panel_call.SetActive(false);
 
         this.carrot.Load_Carrot(check_exit_app);
-        this.carrot.shop.onCarrotPaySuccess = this.on_buy_success_pay_carrot;
-        this.carrot.shop.onCarrotRestoreSuccess = this.on_restore_success_pay_carrot;
         this.GetComponent<Book_contact>().load_book_contact();
         this.GetComponent<Field_contact>().load_field();
-        this.check_sound();
     }
 
     public void check_link_deep_app()
@@ -117,50 +106,6 @@ public class App_Contacts : MonoBehaviour
         }
     }
 
-    private void load_ads()
-    {
-        if (this.is_ads)
-        {
-#if UNITY_WSA
-            Vungle.init(this.ads_id_app_vungle);
-            Vungle.loadBanner(this.ads_id_banner_vungle, Vungle.VungleBannerSize.VungleAdSizeBannerShort, Vungle.VungleBannerPosition.TopCenter);
-            Vungle.showBanner(this.ads_id_banner_vungle);
-
-            Vungle.loadAd(this.ads_id_trunggiang_vungle);
-#else
-            if (Advertisement.isSupported) Advertisement.Initialize(gameId, false);
-#endif
-        }
-    }
-
-    private void check_ads()
-    {
-        if (PlayerPrefs.GetInt("is_buy_ads", 0) == 0)
-        {
-            this.is_ads = true;
-            this.panel_setting_remove_ads.SetActive(true);
-        }
-        else
-        {
-            this.is_ads = false;
-            this.panel_setting_remove_ads.SetActive(false);
-        }
-    }
-
-    private void check_sound()
-    {
-        if (PlayerPrefs.GetInt("is_sound", 0) == 0)
-        {
-            this.is_sound = true;
-            this.img_setting_audio.sprite = this.icon_setting_on_sound;
-        }
-        else
-        {
-            this.is_sound = false;
-            this.img_setting_audio.sprite = this.icon_setting_off_sound;
-        }
-    }
-
     public void load_app_online()
     {
         if (PlayerPrefs.GetString("lang") == "")
@@ -177,7 +122,6 @@ public class App_Contacts : MonoBehaviour
                 this.carrot.delay_function(0.5f, this.GetComponent<Book_contact>().show_list_book);
             }
         }
-        this.load_ads();
     }
 
     public void load_app_offline()
@@ -229,17 +173,40 @@ public class App_Contacts : MonoBehaviour
         this.StopAllCoroutines();
         this.carrot.stop_all_act();
         this.add_item_loading_or_screen_loading(this.area_body_main);
-        /*
-        WWWForm frm=this.carrot.frm_act("get_list_contacts");
-        this.carrot.send_hide(frm, act_get_list_contact_home);
-        PlayerPrefs.SetInt("is_view_contact", 0);
-        */
+
+        Query ContactQuery = this.carrot.db.Collection("user-" + this.carrot.lang.get_key_lang()).WhereEqualTo("status_share", "0");
+        ContactQuery = ContactQuery.WhereNotEqualTo("phone","");
+        ContactQuery.Limit(60).GetSnapshotAsync().ContinueWithOnMainThread(task =>
+        {
+            QuerySnapshot QDocs=task.Result;
+            if (task.IsCompleted)
+            {
+                if (QDocs.Count > 0)
+                {
+                    this.carrot.clear_contain(this.area_body_main);
+
+                    foreach (DocumentSnapshot doc in QDocs.Documents)
+                    {
+                        IDictionary data_contact = doc.ToDictionary();
+
+                        GameObject obj_contact_item = Instantiate(this.prefab_contact_main_item);
+                        obj_contact_item.transform.SetParent(this.area_body_main);
+                        obj_contact_item.transform.localPosition = new Vector3(0, 0, 0);
+                        obj_contact_item.transform.localScale = new Vector3(1f, 1f, 1f);
+                        obj_contact_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+                        Prefab_contact_item_main contact_obj = obj_contact_item.GetComponent<Prefab_contact_item_main>();
+                        if(data_contact["name"]!=null) contact_obj.txt_name.text = data_contact["name"].ToString();
+                        if(data_contact["phone"]!=null) contact_obj.txt_phone.text = data_contact["phone"].ToString();
+                    }
+                }
+            }
+        });
     }
 
     private void act_get_list_contact_home(string s_data)
     {
         string type_view;
-        this.carrot.stop_all_act();
         this.carrot.hide_loading();
         this.carrot.clear_contain(this.area_body_main);
         this.panel_search.SetActive(false);
@@ -361,37 +328,6 @@ public class App_Contacts : MonoBehaviour
        this.panel_backup.GetComponent<Panel_backup>().delete_item_backup(sid, lang);
     }
 
-    public void buy_success(Product product)
-    {
-        this.on_buy_success_pay_carrot(product.definition.id);
-    }
-
-    private void on_buy_success_pay_carrot(string s_id_product)
-    {
-        if (s_id_product == this.carrot.shop.get_id_by_index(0))
-        {
-            this.carrot.show_msg(PlayerPrefs.GetString("remove_ads", "remove_ads"), PlayerPrefs.GetString("buy_ads_success", "buy_ads_success"), Carrot.Msg_Icon.Success);
-            this.act_inapp_removeads();
-        }
-    }
-
-    private void on_restore_success_pay_carrot(string[] arr_id)
-    {
-        for(int i = 0; i < arr_id.Length; i++)
-        {
-            string s_id_product = arr_id[i];
-            if (s_id_product == this.carrot.shop.get_id_by_index(0)) this.act_inapp_removeads();
-        }
-    }
-
-    private void act_inapp_removeads()
-    {
-#if UNITY_WSA
-        Vungle.closeBanner(this.ads_id_banner_vungle);
-#endif
-        PlayerPrefs.SetInt("is_buy_ads", 1);
-        this.check_ads();
-    }
 
     public void add_item_loading(Transform area_body)
     {
@@ -464,8 +400,6 @@ public class App_Contacts : MonoBehaviour
     {
         this.carrot.show_login();
     }
-
-
 
     public void btn_show_search()
     {
@@ -557,18 +491,8 @@ public class App_Contacts : MonoBehaviour
         this.panel_call.SetActive(false);
     }
 
-    public void btn_setting_change_sound()
-    {
-        if (this.is_sound)
-            PlayerPrefs.SetInt("is_sound", 1);
-        else
-            PlayerPrefs.SetInt("is_sound", 0);
-        this.check_sound();
-        this.play_sound(0);
-    }
-
     public void play_sound(int index)
     {
-        if (is_sound) this.sound[index].Play();
+        if (this.carrot.get_status_sound()) this.sound[index].Play();
     }
 }
