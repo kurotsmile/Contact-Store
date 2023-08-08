@@ -19,10 +19,7 @@ public class App_Contacts : MonoBehaviour
 
     [Header("Template Prefab")]
     public GameObject prefab_contact_main_item;
-    public GameObject prefab_contact_more;
-    public GameObject prefab_tip_info;
     public GameObject prefab_row_waitting;
-    public GameObject prefab_contact_act;
     public GameObject prefab_item_none;
 
     [Header("Search Obj")]
@@ -38,8 +35,6 @@ public class App_Contacts : MonoBehaviour
     public Sprite icon_contact_public;
     public Sprite icon_search_user;
     public Sprite icon_search_contact;
-    public Sprite icon_setting_on_sound;
-    public Sprite icon_setting_off_sound;
 
     [Header("Other Object")]
     public Image img_avatar_account;
@@ -165,12 +160,7 @@ public class App_Contacts : MonoBehaviour
 
     private void after_view_contact(string s_data)
     {
-        GameObject item_act_contact = Instantiate(this.prefab_contact_act);
-        //item_act_contact.transform.SetParent(this.carrot.area_body_box);
-        item_act_contact.transform.localPosition = new Vector3(item_act_contact.transform.localPosition.x, item_act_contact.transform.localPosition.y, 0f);
-        item_act_contact.transform.localScale = new Vector3(1f, 1f, 1f);
-        item_act_contact.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        item_act_contact.GetComponent<Item_contacts_act>().set_data_by_account(s_data);
+
     }
 
     public void view_contact_import(int index)
@@ -254,7 +244,14 @@ public class App_Contacts : MonoBehaviour
 
     public void btn_search_contact()
     {
+        if (this.inp_search.text.Trim() != "")
+        {
 
+        }
+        else
+        {
+            this.carrot.show_msg("Contact Search", "Search keywords cannot be empty", Carrot.Msg_Icon.Alert);
+        }
     }
 
     public void btn_search_option()
@@ -262,20 +259,6 @@ public class App_Contacts : MonoBehaviour
 
     }
 
-    public void add_tip_info(Sprite icon_tip, string s_name, string s_tip,int type_act)
-    {
-        GameObject Item_info_tip = Instantiate(this.prefab_tip_info);
-        Item_info_tip.transform.SetParent(this.area_body_main);
-        Item_info_tip.transform.localPosition = new Vector3(Item_info_tip.transform.localPosition.x, Item_info_tip.transform.localPosition.y, 0f);
-        Item_info_tip.transform.localScale = new Vector3(1f, 1f, 1f);
-        Item_info_tip.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        Item_info_tip.GetComponent<Panel_info>().btn_action.gameObject.SetActive(false);
-        Item_info_tip.GetComponent<Panel_info>().type = type_act;
-        Item_info_tip.GetComponent<Panel_info>().txt_title.text = s_name;
-        Item_info_tip.GetComponent<Panel_info>().txt_tip.text = s_tip;
-        Item_info_tip.GetComponent<Panel_info>().icon.sprite = icon_tip;
-        Item_info_tip.GetComponent<Panel_info>().icon.color = Color.black;
-    }
 
     public Carrot.Carrot_Box_Item add_item_title_list(string s_title)
     {
@@ -295,18 +278,6 @@ public class App_Contacts : MonoBehaviour
         item_title.GetComponent<Image>().color = this.carrot.color_highlight;
 
         return item_title;
-    }
-
-    public void add_none_info(Transform area_body_add)
-    {
-        GameObject Item_info_none = Instantiate(this.prefab_item_none);
-        Item_info_none.transform.SetParent(area_body_add);
-        Item_info_none.transform.localPosition = new Vector3(Item_info_none.transform.localPosition.x, Item_info_none.transform.localPosition.y, 0f);
-        Item_info_none.transform.localScale = new Vector3(1f, 1f, 1f);
-        Item_info_none.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        Item_info_none.GetComponent<Panel_info>().txt_title.text = PlayerPrefs.GetString("info_none","None");
-        Item_info_none.GetComponent<Panel_info>().txt_tip.text = PlayerPrefs.GetString("info_none_tip", "There are no related entries");
-        Item_info_none.GetComponent<Panel_info>().icon.color = Color.black;
     }
 
     public void btn_show_call()

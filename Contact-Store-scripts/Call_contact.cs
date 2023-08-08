@@ -54,6 +54,7 @@ public class Call_contact : MonoBehaviour
             GameObject item_found = this.bc.get_contact_by_phone(s_dial_txt);
             if (item_found != null)
             {
+                /*
                 Prefab_contact_item_main data_obj = item_found.GetComponent<Prefab_contact_item_main>();
                 this.txt_contact_name_found.text = data_obj.txt_name.text;
                 this.txt_contact_phone_found.text = data_obj.txt_phone.text;
@@ -62,6 +63,7 @@ public class Call_contact : MonoBehaviour
                 this.panel_info_contact_found.SetActive(true);
                 this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
                 this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(data_obj.click);
+                */
             }
             else
             {

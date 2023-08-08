@@ -1,7 +1,6 @@
 using Firebase.Extensions;
 using Firebase.Firestore;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Manager_Contact : MonoBehaviour
@@ -11,7 +10,6 @@ public class Manager_Contact : MonoBehaviour
 
     [Header("Icon")]
     public Sprite icon_contact;
-    public Sprite icon_call;
     public Sprite icon_save;
     public Sprite icon_sort_name;
 
@@ -62,21 +60,30 @@ public class Manager_Contact : MonoBehaviour
                         item_contact.on_load(this.app.carrot);
                         item_contact.check_type();
                         item_contact.set_icon(this.icon_contact);
-                        if (data_contact["name"] != null) item_contact.set_title(data_contact["name"].ToString());
+                        if (data_contact["name"]!=null) item_contact.set_title(data_contact["name"].ToString());
 
-                        if (data_contact["phone"] != null)
+                        if (data_contact["phone"]!=null)
                         {
                             var s_phone = data_contact["phone"].ToString();
                             Carrot.Carrot_Box_Btn_Item btn_call = item_contact.create_item();
-                            btn_call.set_icon(this.icon_call);
+                            if (data_contact["sex"] != null)
+                            {
+                                if (data_contact["sex"].ToString() == "0")
+                                    btn_call.set_icon(this.app.icon_call_boy);
+                                else
+                                    btn_call.set_icon(this.app.icon_call_girl);
+                            }
+                            else
+                            {
+                                btn_call.set_icon(this.app.icon_call_boy);
+                            }
                             btn_call.set_color(this.app.carrot.color_highlight);
                             btn_call.set_act(() => this.call(s_phone));
-                            s_tip= data_contact["phone"].ToString();
+                            s_tip=data_contact["phone"].ToString();
                         }
-                        else
-                        {
-                            if(data_contact["email"]!=null) s_tip = data_contact["email"].ToString();
-                        }
+                        
+
+                        if(s_tip=="") if(data_contact["email"] !=null) s_tip = data_contact["email"].ToString();
 
                         if (data_contact["email"] != null)
                         {
@@ -106,7 +113,7 @@ public class Manager_Contact : MonoBehaviour
 
     private void call(string s_phone)
     {
-        Application.OpenURL("tel:"+s_phone);
+        Application.OpenURL("tel://" + s_phone);
     }
 
     private void mail(string s_mail)

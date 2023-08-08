@@ -120,24 +120,11 @@ public class Book_contact : MonoBehaviour
 		this.ct.StopAllCoroutines();
 		this.ct.carrot.clear_contain(this.area_body_main);
 
-		GameObject offline_info = Instantiate(this.ct.prefab_tip_info);
+		GameObject offline_info = Instantiate(this.ct.prefab_contact_main_item);
 		offline_info.transform.SetParent(this.area_body_main);
 		offline_info.transform.localPosition = new Vector3(offline_info.transform.localPosition.x, offline_info.transform.localPosition.y, 0f);
 		offline_info.transform.localScale = new Vector3(1f, 1f, 1f);
 		offline_info.transform.localRotation = Quaternion.Euler(Vector3.zero);
-		offline_info.GetComponent<Panel_info>().icon.color = Color.black;
-		offline_info.GetComponent<Panel_info>().txt_title.text = PlayerPrefs.GetString("book_contact", "book_contact");
-		offline_info.GetComponent<Panel_info>().txt_tip.text = PlayerPrefs.GetString("book_contact_tip1", "book_contact_tip1");
-		if (this.is_call_model)
-		{
-			offline_info.GetComponent<Panel_info>().type = 0;
-			offline_info.GetComponent<Panel_info>().btn_action.GetComponent<Image>().sprite = this.sp_delete;
-		}
-		else
-		{
-			offline_info.GetComponent<Panel_info>().type = 1;
-			offline_info.GetComponent<Panel_info>().btn_action.GetComponent<Image>().sprite = this.sp_call;
-		}
 
 		for (int i = 0; i < this.leng; i++)
 		{
@@ -149,17 +136,17 @@ public class Book_contact : MonoBehaviour
 				book_item.transform.localPosition = new Vector3(book_item.transform.localPosition.x, book_item.transform.localPosition.y, 0f);
 				book_item.transform.localScale = new Vector3(1f, 1f, 1f);
 				book_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-				book_item.GetComponent<Prefab_contact_item_main>().s_user_id = i.ToString();
-				book_item.GetComponent<Prefab_contact_item_main>().type = 1;
-				book_item.GetComponent<Prefab_contact_item_main>().carrot = this.ct.carrot;
-				book_item.GetComponent<Prefab_contact_item_main>().set_data(i, s_data_contact, this.is_call_model);
 			}
 		}
 
 		if (this.ct.carrot.is_online())
 		{
-			this.ct.add_tip_info(this.sp_back, PlayerPrefs.GetString("phonebook"), PlayerPrefs.GetString("book_contact_tip2"), 2);
-			this.ct.add_tip_info(this.sp_icon_import, PlayerPrefs.GetString("book_data_import"), PlayerPrefs.GetString("book_data_import_tip"), 3);
+			Carrot_Box_Item item_list_contacts=this.ct.add_item_title_list(PlayerPrefs.GetString("phonebook","List Contact"));
+			item_list_contacts.set_tip(PlayerPrefs.GetString("book_contact_tip2","List Contact by country"));
+
+			Carrot_Box_Item item_list_import=this.ct.add_item_title_list(PlayerPrefs.GetString("book_data_import", "List Contact Import"));
+			item_list_import.set_tip("List Contacts import data");
+
 			this.get_import_contact();
 		}
 		this.ct.check_link_deep_app();
@@ -288,17 +275,11 @@ public class Book_contact : MonoBehaviour
 	public void add_new_contact(string s_new_phone)
 	{
 		this.ct.carrot.clear_contain(this.ct.area_body_main);
-		GameObject offline_info = Instantiate(this.ct.prefab_tip_info);
+		GameObject offline_info = Instantiate(this.ct.prefab_contact_main_item);
 		offline_info.transform.SetParent(this.area_body_main);
 		offline_info.transform.localPosition = new Vector3(offline_info.transform.localPosition.x, offline_info.transform.localPosition.y, 0f);
 		offline_info.transform.localScale = new Vector3(1f, 1f, 1f);
 		offline_info.transform.localRotation = Quaternion.Euler(Vector3.zero);
-		offline_info.GetComponent<Panel_info>().icon.sprite = this.sp_icon_add_phone;
-		offline_info.GetComponent<Panel_info>().icon.color = Color.black;
-		offline_info.GetComponent<Panel_info>().txt_title.text = PlayerPrefs.GetString("add_contact", "Add new contact");
-		offline_info.GetComponent<Panel_info>().txt_tip.text = PlayerPrefs.GetString("add_contact_tip", "New contact created successfully!");
-		offline_info.GetComponent<Panel_info>().btn_action.gameObject.SetActive(false);
-		offline_info.GetComponent<Panel_info>().type=- 1;
 
 		/*
 		GameObject item_field_avatar = Instantiate(this.ct.carrot.item_user_edit_prefab);
@@ -355,20 +336,11 @@ public class Book_contact : MonoBehaviour
 		this.edit_index_contact = index;
 		this.edit_user_id = data["user_id"].ToString();
 
-		GameObject update_title= Instantiate(this.ct.prefab_tip_info);
+		GameObject update_title= Instantiate(this.ct.prefab_contact_main_item);
 		update_title.transform.SetParent(this.area_body_main);
 		update_title.transform.localPosition = new Vector3(update_title.transform.localPosition.x, update_title.transform.localPosition.y, 0f);
 		update_title.transform.localScale = new Vector3(1f, 1f, 1f);
 		update_title.transform.localRotation = Quaternion.Euler(Vector3.zero);
-		update_title.GetComponent<Panel_info>().icon.sprite = this.sp_icon_update_phone;
-		update_title.GetComponent<Panel_info>().icon.color = Color.black;
-		if(is_edit_user_login_cur)
-			update_title.GetComponent<Panel_info>().txt_title.text = PlayerPrefs.GetString("acc_edit", "Update account information");
-		else
-			update_title.GetComponent<Panel_info>().txt_title.text = PlayerPrefs.GetString("update_contact", "Update contact");
-		update_title.GetComponent<Panel_info>().txt_tip.text = PlayerPrefs.GetString("update_contact_tip", "Update and add contact information fields");
-		update_title.GetComponent<Panel_info>().btn_action.gameObject.SetActive(false);
-		update_title.GetComponent<Panel_info>().type = -1;
 
 		/*
 		GameObject item_field_avatar = Instantiate(this.ct.carrot.item_user_edit_prefab);
@@ -513,12 +485,12 @@ public class Book_contact : MonoBehaviour
 
 	public void search(string s_key_search)
     {
-		this.ct.StopAllCoroutines();
 		this.ct.carrot.clear_contain(this.ct.area_body_main);
 		Contact_carrot c;
 		int count_contact_found=0;
 
-		this.ct.add_tip_info(this.ct.icon_search_return, PlayerPrefs.GetString("search_return") + "(" + s_key_search + ")", PlayerPrefs.GetString("search_return_tip"),-1);
+		Carrot.Carrot_Box_Item item_return_title=this.ct.add_item_title_list(PlayerPrefs.GetString("search_return","Search Return"));
+		item_return_title.set_tip(PlayerPrefs.GetString("search_return_tip"));
 
 		for (int i = 0; i < this.leng; i++)
 		{
@@ -530,22 +502,14 @@ public class Book_contact : MonoBehaviour
 				if (c.check_name_or_phone(s_key_search))
 				{
 					count_contact_found++;
-					GameObject book_item = Instantiate(this.ct.prefab_contact_main_item);
-					book_item.transform.SetParent(this.area_body_main);
-					book_item.transform.localPosition = new Vector3(book_item.transform.localPosition.x, book_item.transform.localPosition.y, 0f);
-					book_item.transform.localScale = new Vector3(1f, 1f, 1f);
-					book_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-					book_item.GetComponent<Prefab_contact_item_main>().s_user_id = i.ToString();
-					book_item.GetComponent<Prefab_contact_item_main>().type = 1;
-					book_item.GetComponent<Prefab_contact_item_main>().carrot = this.ct.carrot;
-					book_item.GetComponent<Prefab_contact_item_main>().set_data(i, s_data_contact, this.is_call_model);
+
 				}
 			}
 		}
 
         if (count_contact_found == 0)
         {
-			this.ct.add_none_info(this.area_body_main);
+
         }
 	}
 
@@ -566,11 +530,6 @@ public class Book_contact : MonoBehaviour
 					book_item.transform.localPosition = new Vector3(book_item.transform.localPosition.x, book_item.transform.localPosition.y, 0f);
 					book_item.transform.localScale = new Vector3(1f, 1f, 1f);
 					book_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-					book_item.GetComponent<Prefab_contact_item_main>().s_user_id = i.ToString();
-					book_item.GetComponent<Prefab_contact_item_main>().type = 1;
-					book_item.GetComponent<Prefab_contact_item_main>().carrot = this.ct.carrot;
-					book_item.GetComponent<Prefab_contact_item_main>().set_data(i, s_data_contact, this.is_call_model);
-					book_item.SetActive(false);
 					return book_item;
 				}
 			}

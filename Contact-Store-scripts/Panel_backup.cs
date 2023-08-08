@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class Panel_backup : MonoBehaviour
 {
@@ -46,7 +44,7 @@ public class Panel_backup : MonoBehaviour
         }
         else
         {
-			this.cts.add_none_info(this.area_list_backup);
+			this.cts.carrot.show_msg("Contact Store", "You don't have any backups on the database yet", Carrot.Msg_Icon.Alert);
         }
 	}
 
