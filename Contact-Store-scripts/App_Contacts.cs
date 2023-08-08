@@ -8,6 +8,8 @@ public class App_Contacts : MonoBehaviour
 {
     [Header("Obj Main")]
     public Carrot.Carrot carrot;
+    public Manager_Contact manager_contact;
+    public Search_Contacts search;
 
     [Header("Obj App")]
     public GameObject panel_backup;
@@ -15,7 +17,7 @@ public class App_Contacts : MonoBehaviour
     public GameObject panel_call;
     public QR_scan qr;
     public Transform area_body_main;
-    public Manager_Contact manager_contact;
+
 
     [Header("Template Prefab")]
     public GameObject prefab_contact_main_item;
@@ -244,14 +246,7 @@ public class App_Contacts : MonoBehaviour
 
     public void btn_search_contact()
     {
-        if (this.inp_search.text.Trim() != "")
-        {
-
-        }
-        else
-        {
-            this.carrot.show_msg("Contact Search", "Search keywords cannot be empty", Carrot.Msg_Icon.Alert);
-        }
+        this.search.search_contact(this.inp_search.text.Trim());
     }
 
     public void btn_search_option()

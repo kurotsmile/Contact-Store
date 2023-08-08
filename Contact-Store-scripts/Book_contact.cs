@@ -536,7 +536,6 @@ public class Book_contact : MonoBehaviour
 		}
 		return null;
 	}
-
 }
 
 public class Contact_backup

@@ -14,6 +14,7 @@ public class Manager_Contact : MonoBehaviour
     public Sprite icon_sort_name;
 
     private string s_type_order = "name";
+    private IList list_contacts;
 
     public void list()
     {
@@ -41,67 +42,16 @@ public class Manager_Contact : MonoBehaviour
                     btn_sort_name.set_color(this.app.carrot.color_highlight);
                     btn_sort_name.set_act(() => this.sort());
 
-                    foreach (DocumentSnapshot doc in QDocs.Documents)
+                    this.list_contacts = (IList) Carrot.Json.Deserialize("[]");
+
+                    foreach(DocumentSnapshot doc in QDocs.Documents)
                     {
                         IDictionary data_contact = doc.ToDictionary();
                         data_contact["id"] = doc.Id;
-
-                        var id_contact = ""; if (data_contact["id"] != null) id_contact = data_contact["id"].ToString();
-                        var lang_contact = "en"; if (data_contact["lang"] != null) lang_contact = data_contact["lang"].ToString();
-                        string s_tip = "";
-
-                        GameObject obj_contact_item = Instantiate(this.app.prefab_contact_main_item);
-                        obj_contact_item.transform.SetParent(this.app.area_body_main);
-                        obj_contact_item.transform.localPosition = new Vector3(0, 0, 0);
-                        obj_contact_item.transform.localScale = new Vector3(1f, 1f, 1f);
-                        obj_contact_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-                        Carrot.Carrot_Box_Item item_contact = obj_contact_item.GetComponent<Carrot.Carrot_Box_Item>();
-                        item_contact.on_load(this.app.carrot);
-                        item_contact.check_type();
-                        item_contact.set_icon(this.icon_contact);
-                        if (data_contact["name"]!=null) item_contact.set_title(data_contact["name"].ToString());
-
-                        if (data_contact["phone"]!=null)
-                        {
-                            var s_phone = data_contact["phone"].ToString();
-                            Carrot.Carrot_Box_Btn_Item btn_call = item_contact.create_item();
-                            if (data_contact["sex"] != null)
-                            {
-                                if (data_contact["sex"].ToString() == "0")
-                                    btn_call.set_icon(this.app.icon_call_boy);
-                                else
-                                    btn_call.set_icon(this.app.icon_call_girl);
-                            }
-                            else
-                            {
-                                btn_call.set_icon(this.app.icon_call_boy);
-                            }
-                            btn_call.set_color(this.app.carrot.color_highlight);
-                            btn_call.set_act(() => this.call(s_phone));
-                            s_tip=data_contact["phone"].ToString();
-                        }
-                        
-
-                        if(s_tip=="") if(data_contact["email"] !=null) s_tip = data_contact["email"].ToString();
-
-                        if (data_contact["email"] != null)
-                        {
-                            var s_email = data_contact["email"].ToString();
-                            Carrot.Carrot_Box_Btn_Item btn_email = item_contact.create_item();
-                            btn_email.set_icon(this.app.carrot.icon_carrot_mail);
-                            btn_email.set_color(this.app.carrot.color_highlight);
-                            btn_email.set_act(() => this.mail(s_email));
-                        }
-
-                        item_contact.set_tip(s_tip);
-
-                        Carrot.Carrot_Box_Btn_Item btn_save = item_contact.create_item();
-                        btn_save.set_icon(this.icon_save);
-                        btn_save.set_color(this.app.carrot.color_highlight);
-
-                        item_contact.set_act(()=>this.app.carrot.user.show_user_by_id(id_contact, lang_contact));
+                        this.list_contacts.Add(data_contact);
                     }
+
+                    this.show_list_data_contacts(this.list_contacts);
                 }
                 else
                 {
@@ -109,6 +59,68 @@ public class Manager_Contact : MonoBehaviour
                 }
             }
         });
+    }
+
+    public void show_list_data_contacts(IList list_contacts)
+    {
+        foreach (IDictionary data_contact in list_contacts)
+        {
+            var id_contact = ""; if (data_contact["id"] != null) id_contact = data_contact["id"].ToString();
+            var lang_contact = "en"; if (data_contact["lang"] != null) lang_contact = data_contact["lang"].ToString();
+            string s_tip = "";
+
+            GameObject obj_contact_item = Instantiate(this.app.prefab_contact_main_item);
+            obj_contact_item.transform.SetParent(this.app.area_body_main);
+            obj_contact_item.transform.localPosition = new Vector3(0, 0, 0);
+            obj_contact_item.transform.localScale = new Vector3(1f, 1f, 1f);
+            obj_contact_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+            Carrot.Carrot_Box_Item item_contact = obj_contact_item.GetComponent<Carrot.Carrot_Box_Item>();
+            item_contact.on_load(this.app.carrot);
+            item_contact.check_type();
+            item_contact.set_icon(this.icon_contact);
+            if (data_contact["name"] != null) item_contact.set_title(data_contact["name"].ToString());
+
+            if (data_contact["phone"] != null)
+            {
+                var s_phone = data_contact["phone"].ToString();
+                Carrot.Carrot_Box_Btn_Item btn_call = item_contact.create_item();
+                if (data_contact["sex"] != null)
+                {
+                    if (data_contact["sex"].ToString() == "0")
+                        btn_call.set_icon(this.app.icon_call_boy);
+                    else
+                        btn_call.set_icon(this.app.icon_call_girl);
+                }
+                else
+                {
+                    btn_call.set_icon(this.app.icon_call_boy);
+                }
+                btn_call.set_color(this.app.carrot.color_highlight);
+                btn_call.set_act(() => this.call(s_phone));
+                s_tip = data_contact["phone"].ToString();
+            }
+
+
+            if (s_tip == "") if (data_contact["email"] != null) s_tip = data_contact["email"].ToString();
+
+            if (data_contact["email"] != null)
+            {
+                var s_email = data_contact["email"].ToString();
+                Carrot.Carrot_Box_Btn_Item btn_email = item_contact.create_item();
+                btn_email.set_icon(this.app.carrot.icon_carrot_mail);
+                btn_email.set_color(this.app.carrot.color_highlight);
+                btn_email.set_act(() => this.mail(s_email));
+            }
+
+            item_contact.set_tip(s_tip);
+
+            Carrot.Carrot_Box_Btn_Item btn_save = item_contact.create_item();
+            btn_save.set_icon(this.icon_save);
+            btn_save.set_color(this.app.carrot.color_highlight);
+
+            item_contact.set_act(() => this.app.carrot.user.show_user_by_id(id_contact, lang_contact));
+        }
     }
 
     private void call(string s_phone)
@@ -128,5 +140,10 @@ public class Manager_Contact : MonoBehaviour
         else
             this.s_type_order = "name";
         this.list();
+    }
+
+    public IList get_list_contacts()
+    {
+        return this.list_contacts;
     }
 }
