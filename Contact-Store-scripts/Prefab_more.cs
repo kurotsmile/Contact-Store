@@ -7,7 +7,7 @@ public class Prefab_more : MonoBehaviour {
 	public Text txt_title;
 	public Text txt_tip;
 	public void click(){
-		GameObject.Find ("App_Contacts").GetComponent<App_Contacts> ().show_list_contact_home ();
+
 	}
 	
 	public void search_option()

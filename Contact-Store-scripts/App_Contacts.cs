@@ -15,6 +15,7 @@ public class App_Contacts : MonoBehaviour
     public GameObject panel_call;
     public QR_scan qr;
     public Transform area_body_main;
+    public Manager_Contact manager_contact;
 
     [Header("Template Prefab")]
     public GameObject prefab_contact_main_item;
@@ -103,19 +104,9 @@ public class App_Contacts : MonoBehaviour
     public void load_app_online()
     {
         if (PlayerPrefs.GetString("lang") == "")
-        {
             this.btn_show_list_lang();
-        }
         else
-        {
-            if (PlayerPrefs.GetInt("is_view_contact", 0) == 0)
-                this.show_list_contact_home();
-            else
-            {
-                this.add_item_loading_or_screen_loading(this.area_body_main);
-                this.carrot.delay_function(0.5f, this.GetComponent<Book_contact>().show_list_book);
-            }
-        }
+            this.manager_contact.list();
     }
 
     public void load_app_offline()
@@ -158,40 +149,10 @@ public class App_Contacts : MonoBehaviour
         this.play_sound(0);
     }
 
-    public void show_list_contact_home()
+    public void btn_list_contact_home()
     {
-        this.StopAllCoroutines();
-        this.carrot.stop_all_act();
-        this.add_item_loading_or_screen_loading(this.area_body_main);
-
-        Query ContactQuery = this.carrot.db.Collection("user-" + this.carrot.lang.get_key_lang()).WhereEqualTo("status_share", "0");
-        ContactQuery = ContactQuery.WhereNotEqualTo("phone","");
-        ContactQuery.Limit(60).GetSnapshotAsync().ContinueWithOnMainThread(task =>
-        {
-            QuerySnapshot QDocs=task.Result;
-            if (task.IsCompleted)
-            {
-                if (QDocs.Count > 0)
-                {
-                    this.carrot.clear_contain(this.area_body_main);
-
-                    foreach (DocumentSnapshot doc in QDocs.Documents)
-                    {
-                        IDictionary data_contact = doc.ToDictionary();
-
-                        GameObject obj_contact_item = Instantiate(this.prefab_contact_main_item);
-                        obj_contact_item.transform.SetParent(this.area_body_main);
-                        obj_contact_item.transform.localPosition = new Vector3(0, 0, 0);
-                        obj_contact_item.transform.localScale = new Vector3(1f, 1f, 1f);
-                        obj_contact_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-                        Prefab_contact_item_main contact_obj = obj_contact_item.GetComponent<Prefab_contact_item_main>();
-                        if(data_contact["name"]!=null) contact_obj.txt_name.text = data_contact["name"].ToString();
-                        if(data_contact["phone"]!=null) contact_obj.txt_phone.text = data_contact["phone"].ToString();
-                    }
-                }
-            }
-        });
+        this.play_sound(0);
+        this.manager_contact.list();
     }
 
     private void act_get_list_contact_home(string s_data)
@@ -319,7 +280,7 @@ public class App_Contacts : MonoBehaviour
         item_waiting.transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 
-    private void add_item_loading_or_screen_loading(Transform area_body_add)
+    public void add_item_loading_or_screen_loading(Transform area_body_add)
     {
         if (area_body_add.childCount > 6)
             this.carrot.show_loading();
@@ -340,7 +301,7 @@ public class App_Contacts : MonoBehaviour
 
     private void act_after_load_lang(string s_data)
     {
-        this.show_list_contact_home();
+        this.manager_contact.list();
     }
 
     public void btn_show_list_app_other()

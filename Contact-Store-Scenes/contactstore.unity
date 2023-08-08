@@ -5824,8 +5824,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -47.2}
-  m_SizeDelta: {x: 40, y: 40}
+  m_AnchoredPosition: {x: 10, y: -56.1}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &600417839
 MonoBehaviour:
@@ -6816,6 +6816,7 @@ GameObject:
   - component: {fileID: 698190118}
   - component: {fileID: 698190120}
   - component: {fileID: 698190119}
+  - component: {fileID: 698190123}
   m_Layer: 0
   m_Name: App_Contacts
   m_TagString: Untagged
@@ -6859,6 +6860,7 @@ MonoBehaviour:
   panel_call: {fileID: 789889237}
   qr: {fileID: 969786013}
   area_body_main: {fileID: 1050745622}
+  manager_contact: {fileID: 698190123}
   prefab_contact_main_item: {fileID: 346399769378897854, guid: 5c76e0e7f1ec6f749989da9d070de244,
     type: 3}
   prefab_contact_more: {fileID: 1462354889535108, guid: e3d2bed2fbe37764cab057f2f6c84562,
@@ -7078,6 +7080,21 @@ MonoBehaviour:
   sp_icon_add_phone: {fileID: 21300000, guid: 8036454285c405e41859af4b59a8cf3a, type: 3}
   sp_icon_update_phone: {fileID: 21300000, guid: b4e92c014b049034c867d4bccc3bea7b,
     type: 3}
+--- !u!114 &698190123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698190115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22412674dc244441a9dd492ece5e5fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  app: {fileID: 698190117}
+  icon_contact: {fileID: 21300000, guid: ab68af346d792c9479ef0e96edbb19b2, type: 3}
+  icon_call: {fileID: 21300000, guid: a28785cface9834488bf83121e7a6c4c, type: 3}
 --- !u!1 &702764737
 GameObject:
   m_ObjectHideFlags: 0
@@ -9884,8 +9901,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.9000244, y: -47.160004}
-  m_SizeDelta: {x: 40, y: 40}
+  m_AnchoredPosition: {x: -4.899994, y: -58.63}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1059902275
 MonoBehaviour:
@@ -19029,7 +19046,7 @@ PrefabInstance:
     - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
         type: 3}
       propertyPath: color_highlight.rgba
-      value: 4294958965
+      value: 4294951936
       objectReference: {fileID: 0}
     - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
         type: 3}

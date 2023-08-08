@@ -21,10 +21,6 @@ public class Panel_info : MonoBehaviour {
 			GameObject.Find ("App_Contacts").GetComponent<Book_contact> ().change_model_list_contacts();
 		}
 
-		if(this.type==2){
-			GameObject.Find ("App_Contacts").GetComponent<App_Contacts> ().show_list_contact_home ();
-		}
-
 		if(this.type==3){
 			GameObject.Find ("App_Contacts").GetComponent<Book_contact> ().import_my_contact();
 		}
