@@ -62,7 +62,6 @@ public class App_Contacts : MonoBehaviour
     [Header("Setting")]
     public Image img_setting_audio;
     public GameObject panel_setting_remove_ads;
-    private bool is_check_user_go_backup = false;
     private string link_deep_app;
 
     void Start()
@@ -106,7 +105,10 @@ public class App_Contacts : MonoBehaviour
         if (PlayerPrefs.GetString("lang") == "")
             this.btn_show_list_lang();
         else
+        {
             this.manager_contact.list();
+            this.check_link_deep_app();
+        }  
     }
 
     public void load_app_offline()
@@ -141,7 +143,6 @@ public class App_Contacts : MonoBehaviour
         if (this.carrot.user.get_id_user_login() == "")
         {
             this.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
-            is_check_user_go_backup = true;
             this.carrot.delay_function(2f, this.carrot.show_login);
         }
         else
@@ -155,89 +156,6 @@ public class App_Contacts : MonoBehaviour
         this.manager_contact.list();
     }
 
-    private void act_get_list_contact_home(string s_data)
-    {
-        string type_view;
-        this.carrot.hide_loading();
-        this.carrot.clear_contain(this.area_body_main);
-        this.panel_search.SetActive(false);
-        this.panel_call.SetActive(false);
-        IDictionary data_contacts= (IDictionary)Carrot.Json.Deserialize(s_data);
-        IList list_contact = (IList)data_contacts["list_contacts"];
-        type_view = data_contacts["type_view"].ToString();
-        this.area_body_main.gameObject.SetActive(false);
-        this.area_body_main.parent.gameObject.SetActive(false);
-
-        this.img_search.sprite = this.icon_search_user;
-        this.img_btn_contact_home.color = this.color_sel;
-        this.img_btn_contact_store.color = this.color_normal;
-        this.btn_add_account.SetActive(true);
-        this.btn_add_contact.SetActive(false);
-        this.button_contact_backup.SetActive(false);
-        this.button_edit_contact_user_login.SetActive(true);
-        this.button_search_option.SetActive(true);
-        this.GetComponent<Book_contact>().menu_footer_edit.SetActive(false);
-
-        this.area_body_main.gameObject.SetActive(true);
-        this.area_body_main.parent.gameObject.SetActive(true);
-
-        if (type_view == "search") this.add_tip_info(this.icon_search_return, PlayerPrefs.GetString("search_return")+"("+list_contact.Count+")", PlayerPrefs.GetString("search_return_tip"),0);
-        if (list_contact.Count > 0)
-        {
-            if (type_view == "nomal") this.add_prefab_more();
-            foreach (IDictionary app in list_contact)
-            {
-                GameObject item_app_other;
-
-                item_app_other = Instantiate(this.prefab_contact_main_item);
-                item_app_other.transform.SetParent(this.area_body_main);
-
-                item_app_other.transform.localPosition = new Vector3(item_app_other.transform.localPosition.x, item_app_other.transform.localPosition.y, 0f);
-                item_app_other.transform.localScale = new Vector3(1f, 1f, 1f);
-                item_app_other.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                item_app_other.GetComponent<Prefab_contact_item_main>().type = 0;
-                item_app_other.GetComponent<Prefab_contact_item_main>().txt_name.text = app["name"].ToString();
-                if (item_app_other.GetComponent<Prefab_contact_item_main>().btn_del != null) item_app_other.GetComponent<Prefab_contact_item_main>().btn_del.SetActive(false);
-
-                item_app_other.GetComponent<Prefab_contact_item_main>().txt_address.text = app["address"].ToString();
-                item_app_other.GetComponent<Prefab_contact_item_main>().btn_sms.SetActive(false);
-                if (app["sex"].ToString() == "0")
-                    item_app_other.GetComponent<Prefab_contact_item_main>().img_btn_call.sprite = this.icon_call_boy;
-                else
-                    item_app_other.GetComponent<Prefab_contact_item_main>().img_btn_call.sprite = this.icon_call_girl;
-
-                item_app_other.GetComponent<Prefab_contact_item_main>().txt_phone.text = app["phone"].ToString();
-                item_app_other.GetComponent<Prefab_contact_item_main>().s_user_id = app["id"].ToString();
-                item_app_other.GetComponent<Prefab_contact_item_main>().s_user_lang = app["lang"].ToString();
-                item_app_other.GetComponent<Prefab_contact_item_main>().img_icon_contact.sprite = this.icon_contact_public;
-                if (app["avatar"].ToString() != "") this.carrot.get_img(app["avatar"].ToString(), item_app_other.GetComponent<Prefab_contact_item_main>().img_avatar);
-            }
-        }
-        else
-        {
-            this.add_none_info(this.area_body_main);
-        }
-
-        if (type_view == "nomal") this.add_prefab_more();
-        if (type_view == "search") this.add_tip_info(this.GetComponent<Book_contact>().sp_back, PlayerPrefs.GetString("phonebook"), PlayerPrefs.GetString("book_contact_tip2"),2);
-
-        if (this.inp_search.text.Trim() != "") this.inp_search.text = "";
-
-        this.check_link_deep_app();
-    }
-
-    private void add_prefab_more()
-    {
-        GameObject item_more;
-        item_more = Instantiate(this.prefab_contact_more);
-        item_more.transform.SetParent(this.area_body_main);
-
-        item_more.transform.localPosition = new Vector3(item_more.transform.localPosition.x, item_more.transform.localPosition.y, 0f);
-        item_more.transform.localScale = new Vector3(1f, 1f, 1f);
-        item_more.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        item_more.GetComponent<Prefab_more>().txt_title.text = PlayerPrefs.GetString("more", "See more");
-        item_more.GetComponent<Prefab_more>().txt_tip.text = PlayerPrefs.GetString("more_tip", "Click here to see 20 more contacts");
-    }
 
     public void view_contact(string s_user_id,string s_user_lang)
     {
@@ -310,34 +228,6 @@ public class App_Contacts : MonoBehaviour
         this.carrot.show_list_carrot_app();
     }
 
-    public void btn_buy_product(int index)
-    {
-        this.play_sound(0);
-        this.carrot.buy_product(index);
-    }
-
-    public void btn_restore_product()
-    {
-        this.play_sound(0);
-        this.carrot.show_loading();
-        this.carrot.restore_product();
-    }
-
-    public void btn_delete_all_data()
-    {
-        this.play_sound(0);
-        this.carrot.show_loading();
-        this.GetComponent<Book_contact>().delete_all_contact();
-        this.carrot.delete_all_data();
-        this.carrot.delay_function(3.5f, this.btn_show_list_lang);
-    }
-
-    public void btn_share_app()
-    {
-        this.play_sound(0);
-        this.carrot.show_share();
-    }
-
     public void btn_account()
     {
         this.carrot.show_login();
@@ -364,31 +254,12 @@ public class App_Contacts : MonoBehaviour
 
     public void btn_search_contact()
     {
-        if (this.inp_search.text.Trim() != "")
-        {
-            if (PlayerPrefs.GetInt("is_view_contact",0)==0)
-            {
-                WWWForm frm = this.carrot.frm_act("get_list_contacts");
-                frm.AddField("search", this.inp_search.text);
-               // this.carrot.send_hide(frm, act_get_list_contact_home);
-            }
-            else
-            {
-                this.GetComponent<Book_contact>().search(this.inp_search.text);
-                this.inp_search.text = "";
-            }
-        }
+
     }
 
     public void btn_search_option()
     {
-        WWWForm frm_seach = this.carrot.frm_act("get_list_contacts");
-        frm_seach.AddField("search","search_option");
-        frm_seach.AddField("search_name", this.inp_search_name.text);
-        frm_seach.AddField("search_address", this.inp_search_address.text);
-        frm_seach.AddField("search_sex", this.dropdow_search_sex.value);
-        frm_seach.AddField("search_phone", this.inp_search_phone.text);
-       // this.carrot.send(frm_seach,this.act_get_list_contact_home);
+
     }
 
     public void add_tip_info(Sprite icon_tip, string s_name, string s_tip,int type_act)
@@ -404,6 +275,26 @@ public class App_Contacts : MonoBehaviour
         Item_info_tip.GetComponent<Panel_info>().txt_tip.text = s_tip;
         Item_info_tip.GetComponent<Panel_info>().icon.sprite = icon_tip;
         Item_info_tip.GetComponent<Panel_info>().icon.color = Color.black;
+    }
+
+    public Carrot.Carrot_Box_Item add_item_title_list(string s_title)
+    {
+        GameObject obj_title_list = Instantiate(this.prefab_contact_main_item);
+        obj_title_list.transform.SetParent(this.area_body_main);
+        obj_title_list.transform.localPosition = new Vector3(obj_title_list.transform.localPosition.x, obj_title_list.transform.localPosition.y, 0f);
+        obj_title_list.transform.localScale = new Vector3(1f, 1f, 1f);
+        obj_title_list.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        Carrot.Carrot_Box_Item item_title = obj_title_list.GetComponent<Carrot.Carrot_Box_Item>();
+        item_title.set_icon_white(this.carrot.icon_carrot_all_category);
+        item_title.txt_name.color = Color.white;
+        item_title.txt_tip.color = Color.white;
+        item_title.on_load(this.carrot);
+        item_title.check_type();
+        item_title.set_title(s_title);
+        item_title.GetComponent<Image>().color = this.carrot.color_highlight;
+
+        return item_title;
     }
 
     public void add_none_info(Transform area_body_add)
