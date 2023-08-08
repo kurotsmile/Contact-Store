@@ -1,25 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Purchasing;
 using Firebase.Extensions;
 using Firebase.Firestore;
 
 public class App_Contacts : MonoBehaviour
 {
+    [Header("Obj Main")]
     public Carrot.Carrot carrot;
+
     [Header("Obj App")]
-    public GameObject panel_setting;
     public GameObject panel_backup;
     public GameObject panel_search;
     public GameObject panel_call;
     public QR_scan qr;
     public Transform area_body_main;
-
-    [Header("Ads")]
-    public string ads_id_app_vungle;
-    public string ads_id_banner_vungle;
-    public string ads_id_trunggiang_vungle;
 
     [Header("Template Prefab")]
     public GameObject prefab_contact_main_item;
@@ -72,7 +67,6 @@ public class App_Contacts : MonoBehaviour
     void Start()
     {
         this.link_deep_app = Application.absoluteURL;
-        this.panel_setting.SetActive(false);
         this.panel_backup.SetActive(false);
         this.panel_search.SetActive(false);
         this.panel_call.SetActive(false);
@@ -133,12 +127,8 @@ public class App_Contacts : MonoBehaviour
     private void check_exit_app()
     {
         this.play_sound(0);
-        if (this.panel_setting.activeInHierarchy)
-        {
-            this.show_setting(false);
-            this.carrot.set_no_check_exit_app();
-        }
-        else if (this.panel_search.activeInHierarchy)
+
+        if (this.panel_search.activeInHierarchy)
         {
             this.panel_search.SetActive(false);
             this.carrot.set_no_check_exit_app();
@@ -290,8 +280,7 @@ public class App_Contacts : MonoBehaviour
 
     public void view_contact(string s_user_id,string s_user_lang)
     {
-        this.play_sound(0);
-        //this.carrot.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
+        this.carrot.user.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
         this.carrot.ads.show_ads_Interstitial();
     }
 
@@ -311,23 +300,15 @@ public class App_Contacts : MonoBehaviour
         this.play_sound(0);
     }
 
-    public void show_setting(bool is_show)
+    public void btn_setting()
     {
-        this.panel_setting.SetActive(is_show);
-        this.play_sound(0);
-    }
-
-    public void app_rate()
-    {
-        this.play_sound(0);
-        this.carrot.show_rate();
+        this.carrot.Create_Setting();
     }
 
     public void delete_backup(string sid, string lang)
     {
        this.panel_backup.GetComponent<Panel_backup>().delete_item_backup(sid, lang);
     }
-
 
     public void add_item_loading(Transform area_body)
     {
