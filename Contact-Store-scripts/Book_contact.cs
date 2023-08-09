@@ -27,12 +27,8 @@ public class Book_contact : MonoBehaviour
 	public void show()
     {
 		this.app.carrot.clear_contain(this.app.area_body_main);
-		this.app.add_item_loading();
-
-        if (this.length > 0)
+		if (this.length > 0)
         {
-			this.app.carrot.clear_contain(this.app.area_body_main);
-
 			this.app.add_item_title_list("Book_Contacts");
 
 			IList list_contact_book = (IList)Carrot.Json.Deserialize("[]");
@@ -50,7 +46,7 @@ public class Book_contact : MonoBehaviour
         }
         else
         {
-			this.app.carrot.show_msg("Contact Store", "No list Contact!", Carrot.Msg_Icon.Alert);
+			this.app.add_item_none();
         }
     }
 
@@ -58,7 +54,7 @@ public class Book_contact : MonoBehaviour
     {
 		PlayerPrefs.SetString("contact_" + this.length, Carrot.Json.Serialize(data));
 		this.length++;
-		PlayerPrefs.GetInt("contact_length", this.length);
+		PlayerPrefs.SetInt("contact_length", this.length);
 		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!",Carrot.Msg_Icon.Success);
     }
 

@@ -30,10 +30,9 @@ public class Manager_Contact : MonoBehaviour
             QuerySnapshot QDocs = task.Result;
             if (task.IsCompleted)
             {
+                this.app.carrot.clear_contain(this.app.area_body_main);
                 if (QDocs.Count > 0)
                 {
-                    this.app.carrot.clear_contain(this.app.area_body_main);
-
                     Carrot.Carrot_Box_Item item_title=this.app.add_item_title_list("List Contact country(" + this.app.carrot.lang.get_key_lang() + ")");
                     item_title.set_tip("Number of items listed:" + QDocs.Count);
                     Carrot.Carrot_Box_Btn_Item btn_sort_name=item_title.create_item();
@@ -55,8 +54,16 @@ public class Manager_Contact : MonoBehaviour
                 }
                 else
                 {
-                    this.app.carrot.show_msg("Contact Store", "No list Contacts", Carrot.Msg_Icon.Alert);
+                    this.app.add_item_none();
                 }
+            }
+
+            if (task.IsFaulted)
+            {
+                this.app.carrot.clear_contain(this.app.area_body_main);
+                Carrot.Carrot_Box_Item item_error = this.app.add_item_title_list("Error");
+                item_error.set_icon_white(this.app.carrot.icon_carrot_bug);
+                item_error.set_tip("Operation failed, please try again!");
             }
         });
     }

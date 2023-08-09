@@ -28,6 +28,7 @@ public class App_Contacts : MonoBehaviour
     public Sprite icon_contact_public;
     public Sprite icon_search_user;
     public Sprite icon_search_contact;
+    public Sprite icon_sad;
 
     [Header("Other Object")]
     public Image img_avatar_account;
@@ -199,15 +200,23 @@ public class App_Contacts : MonoBehaviour
         this.search.search_contact(this.inp_search.text.Trim());
     }
 
+    public Carrot.Carrot_Box_Item create_item_main()
+    {
+        GameObject obj_item_main = Instantiate(this.prefab_contact_main_item);
+        obj_item_main.transform.SetParent(this.area_body_main);
+        obj_item_main.transform.localPosition = new Vector3(obj_item_main.transform.localPosition.x, obj_item_main.transform.localPosition.y, 0f);
+        obj_item_main.transform.localScale = new Vector3(1f, 1f, 1f);
+        obj_item_main.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        Carrot.Carrot_Box_Item item_title = obj_item_main.GetComponent<Carrot.Carrot_Box_Item>();
+        item_title.on_load(this.carrot);
+        item_title.check_type();
+        return item_title;
+    }
+
     public Carrot.Carrot_Box_Item add_item_title_list(string s_title)
     {
-        GameObject obj_title_list = Instantiate(this.prefab_contact_main_item);
-        obj_title_list.transform.SetParent(this.area_body_main);
-        obj_title_list.transform.localPosition = new Vector3(obj_title_list.transform.localPosition.x, obj_title_list.transform.localPosition.y, 0f);
-        obj_title_list.transform.localScale = new Vector3(1f, 1f, 1f);
-        obj_title_list.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-        Carrot.Carrot_Box_Item item_title = obj_title_list.GetComponent<Carrot.Carrot_Box_Item>();
+        Carrot.Carrot_Box_Item item_title = this.create_item_main();
         item_title.set_icon_white(this.carrot.icon_carrot_all_category);
         item_title.txt_name.color = Color.white;
         item_title.txt_tip.color = Color.white;
@@ -217,6 +226,20 @@ public class App_Contacts : MonoBehaviour
         item_title.GetComponent<Image>().color = this.carrot.color_highlight;
 
         return item_title;
+    }
+
+    public Carrot.Carrot_Box_Item add_item_none()
+    {
+        Carrot.Carrot_Box_Item item_none = this.create_item_main();
+        item_none.set_icon_white(this.icon_sad);
+        item_none.txt_name.color = Color.white;
+        item_none.txt_tip.color = Color.white;
+        item_none.on_load(this.carrot);
+        item_none.check_type();
+        item_none.GetComponent<Image>().color = this.carrot.color_highlight;
+        item_none.set_title("List is empty");
+        item_none.set_tip("There are no items in the list");
+        return item_none;
     }
 
     public void btn_show_call()
