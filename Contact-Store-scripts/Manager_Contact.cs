@@ -47,6 +47,7 @@ public class Manager_Contact : MonoBehaviour
                     {
                         IDictionary data_contact = doc.ToDictionary();
                         data_contact["id"] = doc.Id;
+                        data_contact["type_item"] = "user";
                         this.list_contacts.Add(data_contact);
                     }
 
@@ -122,11 +123,27 @@ public class Manager_Contact : MonoBehaviour
 
             item_contact.set_tip(s_tip);
 
-            Carrot.Carrot_Box_Btn_Item btn_save = item_contact.create_item();
-            btn_save.set_icon(this.icon_save);
-            btn_save.set_color(this.app.carrot.color_highlight);
-            btn_save.set_act(() => this.app.book_contact.add(data_contact));
+            if (data_contact["type_item"] != null)
+            {
+                string type_item = data_contact["type_item"].ToString();
 
+                if(type_item== "user")
+                {
+                    Carrot.Carrot_Box_Btn_Item btn_save = item_contact.create_item();
+                    btn_save.set_icon(this.icon_save);
+                    btn_save.set_color(this.app.carrot.color_highlight);
+                    btn_save.set_act(() => this.app.book_contact.add(data_contact));
+                }
+
+                if (type_item == "contact")
+                {
+                    Carrot.Carrot_Box_Btn_Item btn_del = item_contact.create_item();
+                    btn_del.set_icon(this.app.carrot.sp_icon_del_data);
+                    btn_del.set_color(Color.red);
+                    btn_del.set_act(() => this.app.book_contact.delete(int.Parse(data_contact["index"].ToString())));
+                }
+
+            }
             item_contact.set_act(() => this.app.carrot.user.show_user_by_id(id_contact, lang_contact));
         }
     }

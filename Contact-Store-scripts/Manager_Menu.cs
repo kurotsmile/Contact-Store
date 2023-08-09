@@ -37,7 +37,7 @@ public class Manager_Menu : MonoBehaviour
 
         if (this.index_cur_func == 0) this.app.manager_contact.list();
         if (this.index_cur_func == 1) this.app.book_contact.show();
-        if (this.index_cur_func == 2) this.app.show_backup();
+        if (this.index_cur_func == 2) this.app.backup_Contacts.show();
         if (this.index_cur_func == 3) this.app.btn_show_call();
     }
 
@@ -46,5 +46,6 @@ public class Manager_Menu : MonoBehaviour
         this.app.play_sound(0);
         PlayerPrefs.SetInt("index_cur_func", index);
         this.select_menu(index);
+        this.app.carrot.ads.show_ads_Interstitial();
     }
 }

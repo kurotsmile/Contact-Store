@@ -8,10 +8,10 @@ public class App_Contacts : MonoBehaviour
     public Manager_Menu menu;
     public Manager_Contact manager_contact;
     public Book_contact book_contact;
+    public Backup_Contacts backup_Contacts;
     public Search_Contacts search;
 
     [Header("Obj App")]
-    public GameObject panel_backup;
     public GameObject panel_call;
     public QR_scan qr;
     public Transform area_body_main;
@@ -24,7 +24,6 @@ public class App_Contacts : MonoBehaviour
     [Header("Icon Obj")]
     public Sprite icon_call_girl;
     public Sprite icon_call_boy;
-    public Sprite icon_search_return;
     public Sprite icon_contact_public;
     public Sprite icon_search_user;
     public Sprite icon_search_contact;
@@ -53,7 +52,6 @@ public class App_Contacts : MonoBehaviour
     void Start()
     {
         this.link_deep_app = Application.absoluteURL;
-        this.panel_backup.SetActive(false);
         this.panel_call.SetActive(false);
 
         this.carrot.Load_Carrot(check_exit_app);
@@ -114,25 +112,6 @@ public class App_Contacts : MonoBehaviour
         }
     }
 
-    public void show_backup()
-    {
-        if (this.carrot.user.get_id_user_login() == "")
-        {
-            this.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
-            this.carrot.delay_function(2f, this.carrot.show_login);
-        }
-        else
-            this.panel_backup.GetComponent<Panel_backup>().show();
-        this.play_sound(0);
-    }
-
-    public void btn_list_contact_home()
-    {
-        this.play_sound(0);
-        this.manager_contact.list();
-    }
-
-
     public void view_contact(string s_user_id,string s_user_lang)
     {
         this.carrot.user.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
@@ -153,11 +132,6 @@ public class App_Contacts : MonoBehaviour
     public void btn_setting()
     {
         this.carrot.Create_Setting();
-    }
-
-    public void delete_backup(string sid, string lang)
-    {
-       this.panel_backup.GetComponent<Panel_backup>().delete_item_backup(sid, lang);
     }
 
     public void add_item_loading()

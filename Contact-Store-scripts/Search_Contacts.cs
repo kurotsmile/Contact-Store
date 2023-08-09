@@ -7,6 +7,9 @@ public class Search_Contacts : MonoBehaviour
     [Header("Obj Main")]
     public App_Contacts app;
 
+    [Header("Obj Search")]
+    public Sprite icon_search_return;
+
     private Carrot.Carrot_Box box_search_advanced = null;
 
     public void search_contact(string s_key)
@@ -40,6 +43,10 @@ public class Search_Contacts : MonoBehaviour
             }
             this.app.inp_search.text = "";
             this.app.carrot.clear_contain(this.app.area_body_main);
+
+            Carrot.Carrot_Box_Item item_search_result=this.app.add_item_title_list("Search Results");
+            item_search_result.set_icon(this.icon_search_return);
+            item_search_result.set_tip("Contacts found:" + list_search.Count);
             this.app.manager_contact.show_list_data_contacts(list_search);
         }
         else

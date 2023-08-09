@@ -48,6 +48,8 @@ public class Book_contact : MonoBehaviour
 				if (s_data != "")
 				{
 					IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
+					data_contact["type_item"] = "contact";
+					data_contact["index"] = i;
 					list_contact_book.Add(data_contact);
 				}
 
@@ -68,6 +70,12 @@ public class Book_contact : MonoBehaviour
 		this.length++;
 		PlayerPrefs.SetInt("contact_length", this.length);
 		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!",Carrot.Msg_Icon.Success);
+    }
+
+	public void delete(int index)
+    {
+		PlayerPrefs.DeleteKey("contact_" + index);
+		this.list();
     }
 
 	public GameObject get_contact_by_phone(string s_dial_txt)
