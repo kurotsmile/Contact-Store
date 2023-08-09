@@ -5,6 +5,7 @@ public class App_Contacts : MonoBehaviour
 {
     [Header("Obj Main")]
     public Carrot.Carrot carrot;
+    public Manager_Menu menu;
     public Manager_Contact manager_contact;
     public Book_contact book_contact;
     public Search_Contacts search;
@@ -19,7 +20,6 @@ public class App_Contacts : MonoBehaviour
     [Header("Template Prefab")]
     public GameObject prefab_contact_main_item;
     public GameObject prefab_row_waitting;
-    public GameObject prefab_item_none;
 
     [Header("Icon Obj")]
     public Sprite icon_call_girl;
@@ -42,10 +42,11 @@ public class App_Contacts : MonoBehaviour
     public GameObject button_contact_backup;
     public GameObject btn_add_account;
     public GameObject btn_add_contact;
-    public AudioSource[] sound;
-
     public Color32 color_sel;
     public Color32 color_normal;
+
+    [Header("Sounds")]
+    public AudioSource[] sound;
 
     private string link_deep_app;
 
@@ -89,14 +90,14 @@ public class App_Contacts : MonoBehaviour
             this.btn_show_list_lang();
         else
         {
-            this.manager_contact.list();
+            this.menu.load();
             this.check_link_deep_app();
         }  
     }
 
     public void load_app_offline()
     {
-        this.carrot.delay_function(0.5f, this.book_contact.show);
+        this.book_contact.show();
     }
 
     private void check_exit_app()
@@ -182,12 +183,6 @@ public class App_Contacts : MonoBehaviour
     private void act_after_load_lang(string s_data)
     {
         this.manager_contact.list();
-    }
-
-    public void btn_show_list_app_other()
-    {
-        this.play_sound(0);
-        this.carrot.show_list_carrot_app();
     }
 
     public void btn_account()

@@ -38,7 +38,7 @@ public class Search_Contacts : MonoBehaviour
                     }
                 }
             }
-
+            this.app.inp_search.text = "";
             this.app.carrot.clear_contain(this.app.area_body_main);
             this.app.manager_contact.show_list_data_contacts(list_search);
         }
