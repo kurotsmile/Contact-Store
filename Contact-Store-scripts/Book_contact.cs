@@ -28,6 +28,30 @@ public class Book_contact : MonoBehaviour
     {
 		this.app.carrot.clear_contain(this.app.area_body_main);
 		this.app.add_item_loading();
+
+        if (this.length > 0)
+        {
+			this.app.carrot.clear_contain(this.app.area_body_main);
+
+			this.app.add_item_title_list("Book_Contacts");
+
+			IList list_contact_book = (IList)Carrot.Json.Deserialize("[]");
+			for (int i = this.length - 1; i >= 0; i--)
+			{
+				string s_data = PlayerPrefs.GetString("contact_" + i, "");
+				if (s_data != "")
+				{
+					IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
+					list_contact_book.Add(data_contact);
+				}
+
+			}
+			this.app.manager_contact.show_list_data_contacts(list_contact_book);
+        }
+        else
+        {
+			this.app.carrot.show_msg("Contact Store", "No list Contact!", Carrot.Msg_Icon.Alert);
+        }
     }
 
 	public void add(IDictionary data)
