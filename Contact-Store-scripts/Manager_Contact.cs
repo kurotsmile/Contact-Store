@@ -19,7 +19,7 @@ public class Manager_Contact : MonoBehaviour
     public void list()
     {
         this.app.carrot.clear_contain(this.app.area_body_main);
-        this.app.add_item_loading(this.app.area_body_main);
+        this.app.add_item_loading();
 
         Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
         ContactQuery = ContactQuery.WhereEqualTo("status_share", "0");
@@ -118,6 +118,7 @@ public class Manager_Contact : MonoBehaviour
             Carrot.Carrot_Box_Btn_Item btn_save = item_contact.create_item();
             btn_save.set_icon(this.icon_save);
             btn_save.set_color(this.app.carrot.color_highlight);
+            btn_save.set_act(() => this.app.book_contact.add(data_contact));
 
             item_contact.set_act(() => this.app.carrot.user.show_user_by_id(id_contact, lang_contact));
         }

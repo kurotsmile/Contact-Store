@@ -95,7 +95,6 @@ public class App_Contacts : MonoBehaviour
 
     public void load_app_offline()
     {
-        this.add_item_loading_or_screen_loading(this.area_body_main);
         this.carrot.delay_function(0.5f, this.book_contact.show);
     }
 
@@ -159,21 +158,13 @@ public class App_Contacts : MonoBehaviour
        this.panel_backup.GetComponent<Panel_backup>().delete_item_backup(sid, lang);
     }
 
-    public void add_item_loading(Transform area_body)
+    public void add_item_loading()
     {
         GameObject item_waiting = Instantiate(this.prefab_row_waitting);
-        item_waiting.transform.SetParent(area_body);
+        item_waiting.transform.SetParent(this.area_body_main);
         item_waiting.transform.localPosition = new Vector3(item_waiting.transform.localPosition.x, item_waiting.transform.localPosition.y, 0f);
         item_waiting.transform.localScale = new Vector3(1f, 1f, 1f);
         item_waiting.transform.localRotation = Quaternion.Euler(Vector3.zero);
-    }
-
-    public void add_item_loading_or_screen_loading(Transform area_body_add)
-    {
-        if (area_body_add.childCount > 6)
-            this.carrot.show_loading();
-        else
-            this.add_item_loading(area_body_add);
     }
 
     public void btn_show_user_login()

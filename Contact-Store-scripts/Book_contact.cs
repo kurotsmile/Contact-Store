@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Book_contact : MonoBehaviour
@@ -7,7 +8,7 @@ public class Book_contact : MonoBehaviour
 	public App_Contacts app;
 	
 	[Header("Contacts Book Obj")]
-	private int leng = 0;
+	private int length = 0;
 	public Texture2D avatar_default;
 
 	[Header("Icon contacts")]
@@ -20,12 +21,21 @@ public class Book_contact : MonoBehaviour
 
 	public void load_book_contact()
 	{
-		this.leng = PlayerPrefs.GetInt("contact_leng", 0);
+		this.length = PlayerPrefs.GetInt("contact_length", 0);
 	}
 
 	public void show()
     {
+		this.app.carrot.clear_contain(this.app.area_body_main);
+		this.app.add_item_loading();
+    }
 
+	public void add(IDictionary data)
+    {
+		PlayerPrefs.SetString("contact_" + this.length, Carrot.Json.Serialize(data));
+		this.length++;
+		PlayerPrefs.GetInt("contact_length", this.length);
+		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!",Carrot.Msg_Icon.Success);
     }
 
 	public GameObject get_contact_by_phone(string s_dial_txt)

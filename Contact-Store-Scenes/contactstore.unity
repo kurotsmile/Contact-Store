@@ -3539,8 +3539,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 698190122}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: show_list_book
+        m_TargetAssemblyTypeName: Book_contact, Assembly-CSharp
+        m_MethodName: show
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

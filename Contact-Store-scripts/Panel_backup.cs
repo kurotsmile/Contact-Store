@@ -18,7 +18,7 @@ public class Panel_backup : MonoBehaviour
 
 	private void show_list_backup()
     {
-		this.cts.add_item_loading(this.area_list_backup);
+		this.cts.add_item_loading();
 		WWWForm frm_backup = this.cts.carrot.frm_act("list_backup");
 		frm_backup.AddField("user_id", this.cts.carrot.user.get_id_user_login());
 		frm_backup.AddField("user_lang", this.cts.carrot.user.get_lang_user_login());
