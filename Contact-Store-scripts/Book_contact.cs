@@ -19,7 +19,8 @@ public class Book_contact : MonoBehaviour
 	public Sprite sp_icon_add_phone;
 	public Sprite sp_icon_update_phone;
 
-	private bool is_list_ready = false;
+	private int index_del = -1;
+	private Carrot.Carrot_Window_Msg msg;
 
 	public void load_book_contact()
 	{
@@ -60,7 +61,6 @@ public class Book_contact : MonoBehaviour
 		{
 			this.app.add_item_none();
 		}
-		this.is_list_ready = true;
 	}
 
 	public void add(IDictionary data)
@@ -74,9 +74,24 @@ public class Book_contact : MonoBehaviour
 
 	public void delete(int index)
     {
-		PlayerPrefs.DeleteKey("contact_" + index);
-		this.list();
+		this.index_del = index;
+		if (this.msg != null) this.msg.close();
+		this.msg = this.app.carrot.show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
     }
+
+	private void act_yes_delete()
+    {
+		if (this.msg != null) this.msg.close();
+		PlayerPrefs.DeleteKey("contact_" + this.index_del);
+		this.list();
+		this.app.play_sound(0);
+	}
+
+	private void act_no_delete()
+    {
+		if (this.msg != null) this.msg.close();
+		this.app.play_sound(0);
+	}
 
 	public GameObject get_contact_by_phone(string s_dial_txt)
     {

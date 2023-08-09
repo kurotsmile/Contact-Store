@@ -15,12 +15,31 @@ public class Manager_Contact : MonoBehaviour
 
     private string s_type_order = "name";
     private IList list_contacts;
+    private bool is_read_cache = false;
 
     public void list()
     {
         this.app.carrot.clear_contain(this.app.area_body_main);
         this.app.add_item_loading();
 
+        if (this.app.carrot.is_offline()) this.is_read_cache = true;
+
+        if (this.is_read_cache == false)
+        {
+            this.get_data_from_sever();
+        }
+        else
+        {
+            string s_list_data = PlayerPrefs.GetString("contacts_" + this.s_type_order + "_" + this.app.carrot.lang.get_key_lang(), "");
+            if (s_list_data == "")
+                this.get_data_from_sever();
+            else
+                this.get_data_from_cache(s_list_data);
+        }
+    }
+
+    private void get_data_from_sever()
+    {
         Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
         ContactQuery = ContactQuery.WhereEqualTo("status_share", "0");
         ContactQuery = ContactQuery.WhereNotEqualTo(this.s_type_order, "");
@@ -33,17 +52,9 @@ public class Manager_Contact : MonoBehaviour
                 this.app.carrot.clear_contain(this.app.area_body_main);
                 if (QDocs.Count > 0)
                 {
-                    Carrot.Carrot_Box_Item item_title=this.app.add_item_title_list("List Contact country(" + this.app.carrot.lang.get_key_lang() + ")");
-                    item_title.set_tip("Number of items listed:" + QDocs.Count);
-                    Carrot.Carrot_Box_Btn_Item btn_sort_name=item_title.create_item();
-                    btn_sort_name.set_icon(this.icon_sort_name);
-                    btn_sort_name.set_icon_color(Color.white);
-                    btn_sort_name.set_color(this.app.carrot.color_highlight);
-                    btn_sort_name.set_act(() => this.sort());
+                    this.list_contacts = (IList)Carrot.Json.Deserialize("[]");
 
-                    this.list_contacts = (IList) Carrot.Json.Deserialize("[]");
-
-                    foreach(DocumentSnapshot doc in QDocs.Documents)
+                    foreach (DocumentSnapshot doc in QDocs.Documents)
                     {
                         IDictionary data_contact = doc.ToDictionary();
                         data_contact["id"] = doc.Id;
@@ -51,6 +62,10 @@ public class Manager_Contact : MonoBehaviour
                         this.list_contacts.Add(data_contact);
                     }
 
+                    PlayerPrefs.SetString("contacts_" + this.s_type_order + "_" + this.app.carrot.lang.get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
+                    this.is_read_cache = true;
+
+                    this.add_item_title();
                     this.show_list_data_contacts(this.list_contacts);
                 }
                 else
@@ -68,6 +83,27 @@ public class Manager_Contact : MonoBehaviour
             }
         });
     }
+
+    private void get_data_from_cache(string s_data_json)
+    {
+        this.app.carrot.clear_contain(this.app.area_body_main);
+
+        this.list_contacts = (IList)Carrot.Json.Deserialize(s_data_json);
+        this.add_item_title();
+        this.show_list_data_contacts(this.list_contacts);
+    }
+
+    private void add_item_title()
+    {
+        Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list("List Contact country(" + this.app.carrot.lang.get_key_lang() + ")");
+        item_title.set_tip("Number of items listed:" + this.list_contacts.Count);
+        Carrot.Carrot_Box_Btn_Item btn_sort_name = item_title.create_item();
+        btn_sort_name.set_icon(this.icon_sort_name);
+        btn_sort_name.set_icon_color(Color.white);
+        btn_sort_name.set_color(this.app.carrot.color_highlight);
+        btn_sort_name.set_act(() => this.sort());
+    }
+
 
     public void show_list_data_contacts(IList list_contacts)
     {
