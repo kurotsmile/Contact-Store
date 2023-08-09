@@ -1408,7 +1408,7 @@ GameObject:
   - component: {fileID: 242960400}
   - component: {fileID: 242960399}
   m_Layer: 5
-  m_Name: menu_item_backup_txt
+  m_Name: menu_backup_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1903,7 +1903,7 @@ GameObject:
   - component: {fileID: 288023271}
   - component: {fileID: 288023270}
   m_Layer: 5
-  m_Name: txt_menu_book
+  m_Name: menu_book_phone_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2709,7 +2709,7 @@ GameObject:
   - component: {fileID: 432009459}
   - component: {fileID: 432009458}
   m_Layer: 5
-  m_Name: menu_item_backup_icon
+  m_Name: menu_backup_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4026,7 +4026,7 @@ GameObject:
   - component: {fileID: 566893036}
   - component: {fileID: 566893035}
   m_Layer: 5
-  m_Name: txt_menu_home_account
+  m_Name: menu_account_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4314,7 +4314,7 @@ GameObject:
   - component: {fileID: 594318485}
   - component: {fileID: 594318487}
   m_Layer: 5
-  m_Name: menu_phone_world
+  m_Name: menu_contacts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5036,7 +5036,7 @@ GameObject:
   - component: {fileID: 668205107}
   - component: {fileID: 668205106}
   m_Layer: 5
-  m_Name: Image
+  m_Name: menu_book_phone_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5285,46 +5285,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key:
   - app_title
-  - search_contacts
+  - search_contact
   - setting
   - phonebook
+  - acc_info
+  - contact
   - backup
-  - save
-  - acc
-  - qr_scan_tip
-  - camera_flip
-  - qr_create
-  - back
-  - backup_title
-  - backup_tip
-  - back
-  - backup_list
-  - backup_start
-  - add_field_other
-  - call
   - call
   emp:
   - {fileID: 1339170822}
   - {fileID: 1735231369}
   - {fileID: 1253868259}
-  - {fileID: 861339438}
-  - {fileID: 242960399}
   - {fileID: 288023270}
   - {fileID: 566893035}
-  - {fileID: 1411717905}
-  - {fileID: 592396376}
-  - {fileID: 1117913556}
-  - {fileID: 1057791940}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 861339438}
+  - {fileID: 242960399}
   - {fileID: 1400622105}
-  - {fileID: 1598240438}
   List_img_change_icon_lang:
   - {fileID: 600417839}
 --- !u!114 &698190120
@@ -6405,7 +6381,7 @@ GameObject:
   - component: {fileID: 861339439}
   - component: {fileID: 861339438}
   m_Layer: 5
-  m_Name: menu_phone_world_txt
+  m_Name: menu_contacts_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10103,7 +10079,7 @@ GameObject:
   - component: {fileID: 1244785227}
   - component: {fileID: 1244785226}
   m_Layer: 5
-  m_Name: menu_phone_world_icon
+  m_Name: menu_contacts_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10179,7 +10155,7 @@ GameObject:
   - component: {fileID: 1253868260}
   - component: {fileID: 1253868259}
   m_Layer: 5
-  m_Name: txt_menu_setting
+  m_Name: menu_setting_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11895,7 +11871,7 @@ GameObject:
   - component: {fileID: 1460736644}
   - component: {fileID: 1460736643}
   m_Layer: 5
-  m_Name: Image
+  m_Name: menu_setting_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13137,8 +13113,8 @@ RectTransform:
   m_LocalScale: {x: 1.0001035, y: 1.0001035, z: 1.0001035}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1253868258}
   - {fileID: 1460736642}
+  - {fileID: 1253868258}
   m_Father: {fileID: 1332596928}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13253,7 +13229,7 @@ GameObject:
   - component: {fileID: 1689004788}
   - component: {fileID: 1689004787}
   m_Layer: 5
-  m_Name: img_avatar_account
+  m_Name: menu_account_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15599,6 +15575,11 @@ PrefabInstance:
         type: 3}
       propertyPath: id_ads_Rewarded_android
       value: ca-app-pub-5388516931803092/6352990742
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
+        type: 3}
+      propertyPath: collection_document_lang
+      value: lang_contact_store
       objectReference: {fileID: 0}
     - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
         type: 3}

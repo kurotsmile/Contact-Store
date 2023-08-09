@@ -17,7 +17,6 @@ public class App_Contacts : MonoBehaviour
     public QR_scan qr;
     public Transform area_body_main;
 
-
     [Header("Template Prefab")]
     public GameObject prefab_contact_main_item;
     public GameObject prefab_row_waitting;

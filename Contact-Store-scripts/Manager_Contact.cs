@@ -57,6 +57,7 @@ public class Manager_Contact : MonoBehaviour
                     foreach (DocumentSnapshot doc in QDocs.Documents)
                     {
                         IDictionary data_contact = doc.ToDictionary();
+                        data_contact["user_id"] = doc.Id;
                         data_contact["id"] = doc.Id;
                         data_contact["type_item"] = "user";
                         this.list_contacts.Add(data_contact);
@@ -181,22 +182,15 @@ public class Manager_Contact : MonoBehaviour
                 }
 
             }
-            item_contact.set_act(() => this.view_contact(id_contact, lang_contact));
+            item_contact.set_act(() => this.view_contact(data_contact));
         }
     }
 
-    public void view_contact(string s_user_id, string s_user_lang)
+    public void view_contact(IDictionary data)
     {
-        this.app.carrot.user.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
+        this.app.carrot.user.show_info_user_by_data(data);
         this.app.carrot.ads.show_ads_Interstitial();
     }
-
-    private void after_view_contact(IDictionary data)
-    {
-        this.app.carrot.ads.show_ads_Interstitial();
-        Debug.Log("after_view_contact:" + data.ToString());
-    }
-
 
     private void call(string s_phone)
     {

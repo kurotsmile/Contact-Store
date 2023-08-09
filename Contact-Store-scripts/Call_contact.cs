@@ -105,7 +105,7 @@ public class Call_contact : MonoBehaviour
 
     public void view_contact_info()
     {
-        this.ct.view_contact(this.user_id_contact,this.user_lang_contact);
+        this.ct.carrot.user.show_user_by_id(this.user_id_contact,this.user_lang_contact);
     }
 
     public void btn_call()
