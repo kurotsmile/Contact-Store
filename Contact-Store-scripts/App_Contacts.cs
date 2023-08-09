@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class App_Contacts : MonoBehaviour
@@ -37,12 +38,9 @@ public class App_Contacts : MonoBehaviour
     public Image img_btn_contact_home;
     public Image img_btn_contact_store;
     public Image img_search;
-    public GameObject button_edit_contact_user_login;
-    public GameObject button_contact_backup;
-    public GameObject btn_add_account;
-    public GameObject btn_add_contact;
     public Color32 color_sel;
     public Color32 color_normal;
+    public ScrollRect scroll_rect_main;
 
     [Header("Sounds")]
     public AudioSource[] sound;
@@ -68,7 +66,7 @@ public class App_Contacts : MonoBehaviour
                 {
                     string data_link = this.link_deep_app.Replace("contactstore://show/", "");
                     string[] paramet_user = data_link.Split('/');
-                    this.view_contact(paramet_user[0], paramet_user[1]);
+                    this.carrot.user.show_user_by_id(paramet_user[0], paramet_user[1]);
                     this.link_deep_app = "";
                 }
             }
@@ -110,23 +108,6 @@ public class App_Contacts : MonoBehaviour
             this.qr.close();
             this.carrot.set_no_check_exit_app();
         }
-    }
-
-    public void view_contact(string s_user_id,string s_user_lang)
-    {
-        this.carrot.user.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
-        this.carrot.ads.show_ads_Interstitial();
-    }
-
-    private void after_view_contact(string s_data)
-    {
-        this.carrot.ads.show_ads_Interstitial();
-    }
-
-    public void view_contact_import(int index)
-    {
-        this.carrot.ads.show_ads_Interstitial();
-        this.play_sound(0);
     }
 
     public void btn_setting()
@@ -229,5 +210,10 @@ public class App_Contacts : MonoBehaviour
     public void play_sound(int index)
     {
         if (this.carrot.get_status_sound()) this.sound[index].Play();
+    }
+
+    public void scrollbar_on_top()
+    {
+        this.scroll_rect_main.verticalNormalizedPosition = 1f;
     }
 }

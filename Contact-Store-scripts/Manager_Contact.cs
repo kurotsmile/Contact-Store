@@ -107,6 +107,7 @@ public class Manager_Contact : MonoBehaviour
 
     public void show_list_data_contacts(IList list_contacts)
     {
+        this.app.scrollbar_on_top();
         foreach (IDictionary data_contact in list_contacts)
         {
             var id_contact = ""; if (data_contact["id"] != null) id_contact = data_contact["id"].ToString();
@@ -180,9 +181,22 @@ public class Manager_Contact : MonoBehaviour
                 }
 
             }
-            item_contact.set_act(() => this.app.carrot.user.show_user_by_id(id_contact, lang_contact));
+            item_contact.set_act(() => this.view_contact(id_contact, lang_contact));
         }
     }
+
+    public void view_contact(string s_user_id, string s_user_lang)
+    {
+        this.app.carrot.user.show_user_by_id(s_user_id, s_user_lang, after_view_contact);
+        this.app.carrot.ads.show_ads_Interstitial();
+    }
+
+    private void after_view_contact(IDictionary data)
+    {
+        this.app.carrot.ads.show_ads_Interstitial();
+        Debug.Log("after_view_contact:" + data.ToString());
+    }
+
 
     private void call(string s_phone)
     {
