@@ -49,7 +49,7 @@ public class Book_contact : MonoBehaviour
 				if (s_data != "")
 				{
 					IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
-					data_contact["type_item"] = "contact";
+					data_contact["type_item"] = "phonebook";
 					data_contact["index"] = i;
 					list_contact_book.Add(data_contact);
 				}
