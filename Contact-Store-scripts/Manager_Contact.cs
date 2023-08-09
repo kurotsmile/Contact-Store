@@ -42,9 +42,10 @@ public class Manager_Contact : MonoBehaviour
     {
         Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
         ContactQuery = ContactQuery.WhereEqualTo("status_share", "0");
-        ContactQuery = ContactQuery.WhereNotEqualTo(this.s_type_order, "");
-        ContactQuery = ContactQuery.OrderByDescending(this.s_type_order);
-        ContactQuery.Limit(60).GetSnapshotAsync().ContinueWithOnMainThread(task =>
+        //ContactQuery = ContactQuery.WhereNotEqualTo(this.s_type_order, "");
+        //ContactQuery = ContactQuery.OrderBy(this.s_type_order);
+        ContactQuery = ContactQuery.Limit(60);
+        ContactQuery.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             QuerySnapshot QDocs = task.Result;
             if (task.IsCompleted)
