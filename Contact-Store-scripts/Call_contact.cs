@@ -120,13 +120,6 @@ public class Call_contact : MonoBehaviour
         Application.OpenURL("sms:" + this.s_dial_txt);
     }
 
-    public void btn_add_contact()
-    {
-        this.bc.GetComponent<App_Contacts>().play_sound(0);
-        this.bc.add_new_contact(this.s_dial_txt);
-        this.gameObject.SetActive(false);
-    }
-
     public void btn_delete()
     {
         this.StopAllCoroutines();

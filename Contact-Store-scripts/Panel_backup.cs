@@ -130,19 +130,7 @@ public class Panel_backup : MonoBehaviour
 
 	private void act_export_backup(string s_data)
     {
-		Debug.Log("Export Backup:" + s_data);
-		IDictionary data = (IDictionary)Carrot.Json.Deserialize(s_data);
-		IList list_contact = (IList)Carrot.Json.Deserialize(data["data"].ToString());
-		for (int i = 0; i < list_contact.Count; i++)
-		{
-			IDictionary contact_info = (IDictionary)list_contact[i];
-			Carrot.Contact_carrot c = new Carrot.Contact_carrot("backup");
-			c.add_field("1", "name", "user_name",contact_info["name"].ToString(),"","");
-			IList list_phone = (IList)contact_info["phone"];
-			for(int y=0;y<list_phone.Count;y++) c.add_field("4", "sdt", "user_phone", list_phone[y].ToString(),"","");
-			Debug.Log("Contact new:" + c.get_json());
-			this.cts.GetComponent<Book_contact>().add_contact(c.user_id, c.get_json(), null);
-		}
+
 	}
 
 }

@@ -1,19 +1,16 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Extensions;
-using Firebase.Firestore;
 
 public class App_Contacts : MonoBehaviour
 {
     [Header("Obj Main")]
     public Carrot.Carrot carrot;
     public Manager_Contact manager_contact;
+    public Book_contact book_contact;
     public Search_Contacts search;
 
     [Header("Obj App")]
     public GameObject panel_backup;
-    public GameObject panel_search;
     public GameObject panel_call;
     public QR_scan qr;
     public Transform area_body_main;
@@ -23,12 +20,6 @@ public class App_Contacts : MonoBehaviour
     public GameObject prefab_contact_main_item;
     public GameObject prefab_row_waitting;
     public GameObject prefab_item_none;
-
-    [Header("Search Obj")]
-    public InputField inp_search_name;
-    public InputField inp_search_phone;
-    public InputField inp_search_address;
-    public Dropdown dropdow_search_sex;
 
     [Header("Icon Obj")]
     public Sprite icon_call_girl;
@@ -46,7 +37,6 @@ public class App_Contacts : MonoBehaviour
     public Image img_btn_contact_home;
     public Image img_btn_contact_store;
     public Image img_search;
-    public GameObject button_search_option;
     public GameObject button_edit_contact_user_login;
     public GameObject button_contact_backup;
     public GameObject btn_add_account;
@@ -56,21 +46,16 @@ public class App_Contacts : MonoBehaviour
     public Color32 color_sel;
     public Color32 color_normal;
 
-    [Header("Setting")]
-    public Image img_setting_audio;
-    public GameObject panel_setting_remove_ads;
     private string link_deep_app;
 
     void Start()
     {
         this.link_deep_app = Application.absoluteURL;
         this.panel_backup.SetActive(false);
-        this.panel_search.SetActive(false);
         this.panel_call.SetActive(false);
 
         this.carrot.Load_Carrot(check_exit_app);
-        this.GetComponent<Book_contact>().load_book_contact();
-        this.GetComponent<Field_contact>().load_field();
+        this.book_contact.load_book_contact();
     }
 
     public void check_link_deep_app()
@@ -111,19 +96,12 @@ public class App_Contacts : MonoBehaviour
     public void load_app_offline()
     {
         this.add_item_loading_or_screen_loading(this.area_body_main);
-        this.carrot.delay_function(0.5f, this.GetComponent<Book_contact>().show_list_book);
+        this.carrot.delay_function(0.5f, this.book_contact.show);
     }
 
     private void check_exit_app()
     {
-        this.play_sound(0);
-
-        if (this.panel_search.activeInHierarchy)
-        {
-            this.panel_search.SetActive(false);
-            this.carrot.set_no_check_exit_app();
-        }
-        else if (this.panel_call.activeInHierarchy)
+        if (this.panel_call.activeInHierarchy)
         {
             this.panel_call.SetActive(false);
             this.carrot.set_no_check_exit_app();
@@ -162,7 +140,7 @@ public class App_Contacts : MonoBehaviour
 
     private void after_view_contact(string s_data)
     {
-
+        this.carrot.ads.show_ads_Interstitial();
     }
 
     public void view_contact_import(int index)
@@ -225,35 +203,10 @@ public class App_Contacts : MonoBehaviour
         this.carrot.show_login();
     }
 
-    public void btn_show_search()
-    {
-        this.play_sound(0);
-        if (this.carrot.is_online())
-        {
-            this.panel_search.SetActive(true);
-            this.dropdow_search_sex.options.Clear();
-            this.dropdow_search_sex.options.Add(new Dropdown.OptionData() { text = PlayerPrefs.GetString("user_sex_no", "No select") });
-            this.dropdow_search_sex.options.Add(new Dropdown.OptionData() { text = PlayerPrefs.GetString("user_sex_boy", "Male") });
-            this.dropdow_search_sex.options.Add(new Dropdown.OptionData() { text = PlayerPrefs.GetString("user_sex_girl", "Female") });
-        }
-    }
-
-    public void btn_close_search()
-    {
-        this.play_sound(0);
-        this.panel_search.SetActive(false);
-    }
-
     public void btn_search_contact()
     {
         this.search.search_contact(this.inp_search.text.Trim());
     }
-
-    public void btn_search_option()
-    {
-
-    }
-
 
     public Carrot.Carrot_Box_Item add_item_title_list(string s_title)
     {
