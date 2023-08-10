@@ -97,4 +97,25 @@ public class Book_contact : MonoBehaviour
     {
 		return null;
     }
+
+	public IList get_list_data_backup()
+    {
+		IList list_data = (IList)Carrot.Json.Deserialize("[]");
+		if (this.length > 0)
+		{
+			for (int i = this.length - 1; i >= 0; i--)
+			{
+				string s_data = PlayerPrefs.GetString("contact_" + i, "");
+				if (s_data != "")
+				{
+					IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
+					data_contact["type_item"] = "phonebook";
+					data_contact["index"] = i;
+					list_data.Add(data_contact);
+				}
+
+			}
+		}
+		return list_data;
+	}
 }

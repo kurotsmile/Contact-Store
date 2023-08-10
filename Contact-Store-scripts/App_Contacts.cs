@@ -185,8 +185,8 @@ public class App_Contacts : MonoBehaviour
         item_none.on_load(this.carrot);
         item_none.check_type();
         item_none.GetComponent<Image>().color = this.carrot.color_highlight;
-        item_none.set_title("List is empty");
-        item_none.set_tip("There are no items in the list");
+        item_none.set_title(PlayerPrefs.GetString("list_none","List is empty"));
+        item_none.set_tip(PlayerPrefs.GetString("list_none_tip", "There are no items in the list"));
         return item_none;
     }
 
