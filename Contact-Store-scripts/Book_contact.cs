@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Book_contact : MonoBehaviour
@@ -39,8 +38,9 @@ public class Book_contact : MonoBehaviour
 		this.app.carrot.clear_contain(this.app.area_body_main);
 		if (this.length > 0)
 		{
-			Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list("Book_Contacts");
+			Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("phonebook","Phonebook"));
 			item_title.set_icon_white(this.sp_icon_import);
+			item_title.set_tip(PlayerPrefs.GetString("phonebook_list", "List of saved contacts"));
 
 			IList list_contact_book = (IList)Carrot.Json.Deserialize("[]");
 			for (int i = this.length - 1; i >= 0; i--)
@@ -81,6 +81,7 @@ public class Book_contact : MonoBehaviour
 
 	private void act_yes_delete()
     {
+        if (this.app.manager_contact.get_box_info() != null) this.app.manager_contact.get_box_info().close();
 		if (this.msg != null) this.msg.close();
 		PlayerPrefs.DeleteKey("contact_" + this.index_del);
 		this.list();

@@ -44,7 +44,7 @@ public class Manager_Contact : MonoBehaviour
         Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
         ContactQuery = ContactQuery.WhereEqualTo("status_share", "0");
         //ContactQuery = ContactQuery.WhereNotEqualTo(this.s_type_order, "");
-        //ContactQuery = ContactQuery.OrderBy(this.s_type_order);
+        ContactQuery = ContactQuery.OrderBy(this.s_type_order);
         ContactQuery = ContactQuery.Limit(60);
         ContactQuery.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
@@ -100,8 +100,8 @@ public class Manager_Contact : MonoBehaviour
 
     private void add_item_title()
     {
-        Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list("List Contact country(" + this.app.carrot.lang.get_key_lang() + ")");
-        item_title.set_tip("Number of items listed:" + this.list_contacts.Count);
+        Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("contact", "Contact") +" (" + this.app.carrot.lang.get_key_lang() + ")");
+        item_title.set_tip(PlayerPrefs.GetString("contact_list", "List of contacts in your country ") + "("+this.list_contacts.Count+" "+ PlayerPrefs.GetString("contact", "Contact")+")");
         Carrot.Carrot_Box_Btn_Item btn_sort_name = item_title.create_item();
         btn_sort_name.set_icon(this.icon_sort_name);
         btn_sort_name.set_icon_color(Color.white);
@@ -207,7 +207,8 @@ public class Manager_Contact : MonoBehaviour
 
         this.app.play_sound(0);
         this.app.carrot.ads.show_ads_Interstitial();
-        Carrot.Carrot_Box box_info=this.app.carrot.user.show_info_user_by_data(data);
+        if (this.box_info != null) this.box_info.close();
+        this.box_info=this.app.carrot.user.show_info_user_by_data(data);
         Carrot.Carrot_Box_Btn_Panel panel_tool=box_info.create_panel_btn();
 
         if (data["phone"] != null)

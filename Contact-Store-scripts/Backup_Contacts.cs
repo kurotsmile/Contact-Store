@@ -118,6 +118,7 @@ public class Backup_Contacts : MonoBehaviour
 
     public void download(IList contacts)
     {
+        this.app.play_sound(0);
         if (this.msg != null) this.msg.close();
         this.msg=this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"),PlayerPrefs.GetString("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
     }
