@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [FirestoreData]
 public struct Backup_contact_data
@@ -26,6 +27,8 @@ public class Backup_Contacts : MonoBehaviour
     [Header("Obj Backup")]
     public Sprite icon_backup;
     public Sprite icon_download;
+
+    private Carrot.Carrot_Window_Msg msg;
 
     public void show()
     {
@@ -69,9 +72,9 @@ public class Backup_Contacts : MonoBehaviour
 
                 if (list_backup.Count > 0)
                 {
-                    Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list("Backup");
+                    Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("backup","Backup"));
                     item_title.set_icon(this.app.carrot.icon_carrot_all_category);
-                    item_title.set_tip("List of backed up items");
+                    item_title.set_tip(PlayerPrefs.GetString("backup_list", "list of your backups"));
                     item_title.set_act(()=>this.list());
 
                     for (int i = 0; i < list_backup.Count; i++)
@@ -85,6 +88,10 @@ public class Backup_Contacts : MonoBehaviour
                         Carrot.Carrot_Box_Btn_Item btn_download=item_backup.create_item();
                         btn_download.set_icon(this.icon_download);
                         btn_download.set_color(this.app.carrot.color_highlight);
+                        Destroy(btn_download.GetComponent<Button>());
+
+                        IList list_contact =(IList) data_backup["contacts"];
+                        item_backup.set_act(() => this.download(list_contact));
                     }
                     this.add_item_create_new();
                 }
@@ -103,10 +110,26 @@ public class Backup_Contacts : MonoBehaviour
 
     private void add_item_create_new()
     {
-        Carrot.Carrot_Box_Item item_create = this.app.add_item_title_list("Create a new backup");
+        Carrot.Carrot_Box_Item item_create = this.app.add_item_title_list(PlayerPrefs.GetString("create_backup","Create a new backup"));
         item_create.set_icon(this.app.carrot.icon_carrot_add);
-        item_create.set_tip("Start backing up your contacts in your app");
+        item_create.set_tip(PlayerPrefs.GetString("create_backup_tip","Start backing up your contacts in your app"));
         item_create.set_act(() => this.backup());
+    }
+
+    public void download(IList contacts)
+    {
+        if (this.msg != null) this.msg.close();
+        this.msg=this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"),PlayerPrefs.GetString("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
+    }
+
+    private void download_yes()
+    {
+        if (this.msg != null) this.msg.close();
+    }
+
+    private void download_no()
+    {
+        if (this.msg != null) this.msg.close();
     }
 
     public void backup()

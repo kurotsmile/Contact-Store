@@ -113,7 +113,6 @@ public class Book_contact : MonoBehaviour
 					data_contact["index"] = i;
 					list_data.Add(data_contact);
 				}
-
 			}
 		}
 		return list_data;

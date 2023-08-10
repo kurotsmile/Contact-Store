@@ -16,6 +16,7 @@ public class Manager_Contact : MonoBehaviour
     private string s_type_order = "name";
     private IList list_contacts;
     private bool is_read_cache = false;
+    private Carrot.Carrot_Box box_info = null;
 
     public void list()
     {
@@ -61,6 +62,8 @@ public class Manager_Contact : MonoBehaviour
                         data_contact["user_id"] = doc.Id;
                         data_contact["id"] = doc.Id;
                         data_contact["type_item"] = "contact";
+                        if(data_contact["type_item"]!=null) data_contact.Remove("rates");
+                        if(data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
                         this.list_contacts.Add(data_contact);
                     }
 
@@ -236,7 +239,7 @@ public class Manager_Contact : MonoBehaviour
                 Carrot.Carrot_Button_Item btn_mail = panel_tool.create_btn("btn_mail");
                 btn_mail.set_icon_white(this.app.carrot.icon_carrot_mail);
                 btn_mail.set_label_color(Color.white);
-                btn_mail.set_label(PlayerPrefs.GetString("mail", "Send Mail"));
+                btn_mail.set_label(PlayerPrefs.GetString("send_mail", "Send Mail"));
                 btn_mail.set_bk_color(this.app.carrot.color_highlight);
                 btn_mail.set_act_click(() => this.mail(s_mail));
             }
@@ -260,7 +263,7 @@ public class Manager_Contact : MonoBehaviour
                 Carrot.Carrot_Button_Item btn_save = panel_act.create_btn("btn_save");
                 btn_save.set_icon_white(this.icon_save);
                 btn_save.set_label_color(Color.white);
-                btn_save.set_label("Save to contacts");
+                btn_save.set_label(PlayerPrefs.GetString("save_contact","Save Contact"));
                 btn_save.set_bk_color(this.app.carrot.color_highlight);
                 btn_save.set_act_click(() => this.app.book_contact.add(data));
             }
@@ -272,7 +275,7 @@ public class Manager_Contact : MonoBehaviour
                     Carrot.Carrot_Button_Item btn_del = panel_act.create_btn("btn_del");
                     btn_del.set_icon_white(this.app.carrot.sp_icon_del_data);
                     btn_del.set_label_color(Color.white);
-                    btn_del.set_label("Delete");
+                    btn_del.set_label(PlayerPrefs.GetString("del_contact", "Delete contact"));
                     btn_del.set_bk_color(Color.red);
                     btn_del.set_act_click(() => this.app.book_contact.delete(int.Parse(data["index"].ToString())));
                 }
@@ -315,5 +318,10 @@ public class Manager_Contact : MonoBehaviour
     public IList get_list_contacts()
     {
         return this.list_contacts;
+    }
+
+    public Carrot.Carrot_Box get_box_info()
+    {
+        return this.box_info;
     }
 }
