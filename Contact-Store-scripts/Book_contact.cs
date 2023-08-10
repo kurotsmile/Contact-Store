@@ -65,12 +65,17 @@ public class Book_contact : MonoBehaviour
 
 	public void add(IDictionary data)
     {
+		this.create(data);
 		this.app.play_sound(0);
+		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!",Carrot.Msg_Icon.Success);
+    }
+
+	public void create(IDictionary data)
+    {
 		PlayerPrefs.SetString("contact_" + this.length, Carrot.Json.Serialize(data));
 		this.length++;
 		PlayerPrefs.SetInt("contact_length", this.length);
-		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!",Carrot.Msg_Icon.Success);
-    }
+	}
 
 	public void delete(int index)
     {
@@ -117,5 +122,15 @@ public class Book_contact : MonoBehaviour
 			}
 		}
 		return list_data;
+	}
+
+	public void delete_all()
+	{
+		for (int i = 0; i < this.length; i++)
+        {
+			PlayerPrefs.DeleteKey("contact_" + i);
+        }
+		PlayerPrefs.DeleteKey("contact_length");
+		this.length = 0;
 	}
 }

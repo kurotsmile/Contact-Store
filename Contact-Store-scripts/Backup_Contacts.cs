@@ -29,6 +29,10 @@ public class Backup_Contacts : MonoBehaviour
     public Sprite icon_download;
 
     private Carrot.Carrot_Window_Msg msg;
+    private IList list_contact_download;
+    private int index_delete = -1;
+    private DocumentReference userRef;
+    private IList list_backup;
 
     public void show()
     {
@@ -43,7 +47,6 @@ public class Backup_Contacts : MonoBehaviour
         {
             this.list();
         }
-
     }
 
     private void show_login_for_backup()
@@ -55,7 +58,7 @@ public class Backup_Contacts : MonoBehaviour
     {
         this.app.carrot.clear_contain(this.app.area_body_main);
         this.app.add_item_loading();
-        DocumentReference userRef = this.app.carrot.db.Collection("user-" + this.app.carrot.user.get_lang_user_login()).Document(this.app.carrot.user.get_id_user_login());
+        this.userRef = this.app.carrot.db.Collection("user-" + this.app.carrot.user.get_lang_user_login()).Document(this.app.carrot.user.get_id_user_login());
         userRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             DocumentSnapshot snapshot = task.Result;
@@ -64,7 +67,7 @@ public class Backup_Contacts : MonoBehaviour
                 this.app.carrot.hide_loading();
                 this.app.carrot.clear_contain(this.app.area_body_main);
                 IDictionary data_user = (IDictionary)snapshot.ToDictionary();
-                IList list_backup;
+                
                 if (data_user["backup_contact"] != null)
                     list_backup = (IList)data_user["backup_contact"];
                 else
@@ -78,7 +81,8 @@ public class Backup_Contacts : MonoBehaviour
                     item_title.set_act(()=>this.list());
 
                     for (int i = 0; i < list_backup.Count; i++)
-                    { 
+                    {
+                        var index_item = i;
                         IDictionary data_backup = (IDictionary)list_backup[i];
                         Carrot.Carrot_Box_Item item_backup = this.app.create_item_main();
                         item_backup.set_icon(this.app.carrot.icon_carrot_database);
@@ -89,6 +93,11 @@ public class Backup_Contacts : MonoBehaviour
                         btn_download.set_icon(this.icon_download);
                         btn_download.set_color(this.app.carrot.color_highlight);
                         Destroy(btn_download.GetComponent<Button>());
+
+                        Carrot.Carrot_Box_Btn_Item btn_del = item_backup.create_item();
+                        btn_del.set_icon(this.app.carrot.sp_icon_del_data);
+                        btn_del.set_color(Color.red);
+                        btn_del.set_act(() => this.delete_backup(index_item));
 
                         IList list_contact =(IList) data_backup["contacts"];
                         item_backup.set_act(() => this.download(list_contact));
@@ -118,6 +127,7 @@ public class Backup_Contacts : MonoBehaviour
 
     public void download(IList contacts)
     {
+        this.list_contact_download = contacts;
         this.app.play_sound(0);
         if (this.msg != null) this.msg.close();
         this.msg=this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"),PlayerPrefs.GetString("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
@@ -125,12 +135,42 @@ public class Backup_Contacts : MonoBehaviour
 
     private void download_yes()
     {
+        this.app.book_contact.delete_all();
+        foreach(IDictionary contact in this.list_contact_download)
+        {
+            this.app.book_contact.create(contact);
+        }
         if (this.msg != null) this.msg.close();
+        this.app.book_contact.show();
+        this.msg = this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_success", "Download the backup and sync successfully!"),Carrot.Msg_Icon.Success);
     }
 
     private void download_no()
     {
         if (this.msg != null) this.msg.close();
+    }
+
+    private void delete_backup(int index_del)
+    {
+        this.index_delete = index_del;
+        this.msg = this.app.carrot.show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
+    }
+
+    private void act_yes_delete()
+    {
+        if (this.msg != null) this.msg.close();
+        this.app.play_sound(0);
+
+        list_backup.RemoveAt(this.index_delete);
+        Dictionary<string, object> UpdateData = new Dictionary<string, object> { { "backup_contact", list_backup } };
+        this.userRef.UpdateAsync(UpdateData);
+        this.list();
+    }
+
+    private void act_no_delete()
+    {
+        if (this.msg != null) this.msg.close();
+        this.app.play_sound(0);
     }
 
     public void backup()
