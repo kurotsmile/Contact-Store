@@ -5,7 +5,7 @@ public class Book_contact : MonoBehaviour
 {
 	[Header("Obj Main")]
 	public App_Contacts app;
-	
+
 	[Header("Contacts Book Obj")]
 	private int length = 0;
 	public Texture2D avatar_default;
@@ -27,18 +27,18 @@ public class Book_contact : MonoBehaviour
 	}
 
 	public void show()
-    {
+	{
 		this.app.carrot.clear_contain(this.app.area_body_main);
 		this.app.add_item_loading();
 		this.app.carrot.delay_function(0.5f, this.list);
 	}
 
 	private void list()
-    {
+	{
 		this.app.carrot.clear_contain(this.app.area_body_main);
 		if (this.length > 0)
 		{
-			Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("phonebook","Phonebook"));
+			Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("phonebook", "Phonebook"));
 			item_title.set_icon_white(this.sp_icon_import);
 			item_title.set_tip(PlayerPrefs.GetString("phonebook_list", "List of saved contacts"));
 
@@ -64,29 +64,29 @@ public class Book_contact : MonoBehaviour
 	}
 
 	public void add(IDictionary data)
-    {
+	{
 		this.create(data);
 		this.app.play_sound(0);
-		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!",Carrot.Msg_Icon.Success);
-    }
+		this.app.carrot.show_msg("Contact Store", "Contact Archive Successful!", Carrot.Msg_Icon.Success);
+	}
 
 	public void create(IDictionary data)
-    {
+	{
 		PlayerPrefs.SetString("contact_" + this.length, Carrot.Json.Serialize(data));
 		this.length++;
 		PlayerPrefs.SetInt("contact_length", this.length);
 	}
 
 	public void delete(int index)
-    {
+	{
 		this.index_del = index;
 		if (this.msg != null) this.msg.close();
 		this.msg = this.app.carrot.show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
-    }
+	}
 
 	private void act_yes_delete()
-    {
-        if (this.app.manager_contact.get_box_info() != null) this.app.manager_contact.get_box_info().close();
+	{
+		if (this.app.manager_contact.get_box_info() != null) this.app.manager_contact.get_box_info().close();
 		if (this.msg != null) this.msg.close();
 		PlayerPrefs.DeleteKey("contact_" + this.index_del);
 		this.list();
@@ -94,18 +94,18 @@ public class Book_contact : MonoBehaviour
 	}
 
 	private void act_no_delete()
-    {
+	{
 		if (this.msg != null) this.msg.close();
 		this.app.play_sound(0);
 	}
 
 	public GameObject get_contact_by_phone(string s_dial_txt)
-    {
+	{
 		return null;
-    }
+	}
 
 	public IList get_list_data_backup()
-    {
+	{
 		IList list_data = (IList)Carrot.Json.Deserialize("[]");
 		if (this.length > 0)
 		{
@@ -126,11 +126,28 @@ public class Book_contact : MonoBehaviour
 
 	public void delete_all()
 	{
-		for (int i = 0; i < this.length; i++)
-        {
-			PlayerPrefs.DeleteKey("contact_" + i);
-        }
+		for (int i = 0; i < this.length; i++) PlayerPrefs.DeleteKey("contact_" + i);
 		PlayerPrefs.DeleteKey("contact_length");
 		this.length = 0;
+	}
+
+	public void Create_New_BookContact(){
+		Carrot.Carrot_Box box=this.app.carrot.Create_Box();
+		box.set_icon(this.sp_icon_add_phone);
+		box.set_title("Add New Contact Book");
+
+        Carrot.Carrot_Box_Item item_name=box.create_item("item_name");
+		item_name.set_icon(this.app.carrot.user.icon_user_info);
+		item_name.set_title("Full name");
+		item_name.set_tip("Enter the contact's full name");
+		item_name.set_type(Carrot.Box_Item_Type.box_value_input);
+		item_name.check_type();
+
+		Carrot.Carrot_Box_Item item_phone = box.create_item("item_phone");
+		item_phone.set_icon(this.app.carrot.user.icon_user_info);
+		item_phone.set_title("Full name");
+		item_phone.set_tip("Enter the contact's full name");
+		item_phone.set_type(Carrot.Box_Item_Type.box_value_input);
+		item_phone.check_type();
 	}
 }

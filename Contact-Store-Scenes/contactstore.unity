@@ -3348,8 +3348,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 698190122}
         m_TargetAssemblyTypeName: Book_contact, Assembly-CSharp
-        m_MethodName: add_new_contact
-        m_Mode: 5
+        m_MethodName: Create_New_BookContact
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5532,19 +5532,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 721956164}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 698190122}
-        m_TargetAssemblyTypeName: Book_contact, Assembly-CSharp
-        m_MethodName: add_new_contact
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &721956162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8219,8 +8207,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1671750494876008765, guid: 20ce9bdd5f74aa04a985ac1af714dd11,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6d561ba56b7132a458214a5b4e93b00f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11467,19 +11454,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1425130821}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 698190122}
-        m_TargetAssemblyTypeName: Book_contact, Assembly-CSharp
-        m_MethodName: add_new_contact
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1425130819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12132,8 +12107,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1671750494876008765, guid: 20ce9bdd5f74aa04a985ac1af714dd11,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6d561ba56b7132a458214a5b4e93b00f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
