@@ -20,6 +20,7 @@ public class Book_contact : MonoBehaviour
 
 	private int index_del = -1;
 	private Carrot.Carrot_Window_Msg msg;
+	private Carrot.Carrot_Box box;
 
 	public void load_book_contact()
 	{
@@ -132,7 +133,7 @@ public class Book_contact : MonoBehaviour
 	}
 
 	public void Create_New_BookContact(){
-		Carrot.Carrot_Box box=this.app.carrot.Create_Box();
+		this.box=this.app.carrot.Create_Box();
 		box.set_icon(this.sp_icon_add_phone);
 		box.set_title("Add New Contact Book");
 
@@ -145,9 +146,26 @@ public class Book_contact : MonoBehaviour
 
 		Carrot.Carrot_Box_Item item_phone = box.create_item("item_phone");
 		item_phone.set_icon(this.app.carrot.user.icon_user_info);
-		item_phone.set_title("Full name");
-		item_phone.set_tip("Enter the contact's full name");
+		item_phone.set_title("Phone");
+		item_phone.set_tip("Enter Phone Number");
 		item_phone.set_type(Carrot.Box_Item_Type.box_value_input);
 		item_phone.check_type();
+
+		Carrot.Carrot_Box_Btn_Panel panel=box.create_panel_btn();
+		Carrot.Carrot_Button_Item btn_done=panel.create_btn("btn_done");
+		btn_done.set_icon_white(this.app.carrot.icon_carrot_done);
+		btn_done.set_bk_color(this.app.carrot.color_highlight);
+		btn_done.set_act_click(() => this.create_contact_done());
+
+		Carrot.Carrot_Button_Item btn_cancel = panel.create_btn("btn_cancel");
+		btn_cancel.set_icon_white(this.app.carrot.icon_carrot_cancel);
+		btn_cancel.set_bk_color(this.app.carrot.color_highlight);
+		btn_cancel.set_act_click(()=>box.close());
 	}
+
+	private void create_contact_done()
+    {
+		this.box.close();
+    }
+
 }
