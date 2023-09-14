@@ -279,6 +279,13 @@ public class Manager_Contact : MonoBehaviour
                     btn_del.set_label(PlayerPrefs.GetString("del_contact", "Delete contact"));
                     btn_del.set_bk_color(Color.red);
                     btn_del.set_act_click(() => this.app.book_contact.delete(int.Parse(data["index"].ToString())));
+
+                    Carrot.Carrot_Button_Item btn_edit= panel_act.create_btn("btn_edit");
+                    btn_edit.set_icon_white(this.app.carrot.user.icon_user_edit);
+                    btn_edit.set_label_color(Color.white);
+                    btn_edit.set_label(PlayerPrefs.GetString("edit_contact", "Edit contact"));
+                    btn_edit.set_bk_color(this.app.carrot.color_highlight);
+                    btn_edit.set_act_click(() => this.app.book_contact.edit(int.Parse(data["index"].ToString())));
                 }
             }
         }
