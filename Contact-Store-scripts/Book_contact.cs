@@ -60,6 +60,7 @@ public class Book_contact : MonoBehaviour
 				string s_data = PlayerPrefs.GetString("contact_" + i, "");
 				if (s_data != "")
 				{
+					Debug.Log(s_data);
 					IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
 					data_contact["type_item"] = "phonebook";
 					data_contact["index"] = i;
@@ -93,7 +94,7 @@ public class Book_contact : MonoBehaviour
 	{
 		this.index_del = index;
 		if (this.msg != null) this.msg.close();
-		this.msg = this.app.carrot.show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
+		this.msg = this.app.carrot.show_msg(PlayerPrefs.GetString("delete", "Delete"),PlayerPrefs.GetString("delete_item_msg", "Are you sure you want to remove this item?"), act_yes_delete, act_no_delete);
 	}
 
 	private void act_yes_delete()
@@ -114,6 +115,8 @@ public class Book_contact : MonoBehaviour
     public void edit(int index)
     {
         this.index_edit = index;
+		if(this.app.manager_contact.get_box_info()!=null) this.app.manager_contact.get_box_info().close();
+
         string s_data = PlayerPrefs.GetString("contact_" + index, "");
 		IDictionary data_contact = (IDictionary)Json.Deserialize(s_data);
 
@@ -124,9 +127,27 @@ public class Book_contact : MonoBehaviour
     }
 
 
-    public GameObject get_contact_by_phone(string s_dial_txt)
+    public IDictionary get_contact_by_phone(string s_dial_txt)
 	{
-		return null;
+        if (this.length > 0)
+        {
+            for (int i = this.length - 1; i >= 0; i--)
+            {
+                string s_data = PlayerPrefs.GetString("contact_" + i, "");
+                if (s_data != "")
+                {
+                    IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
+					if (data_contact["phone"].ToString().Contains(s_dial_txt))
+					{
+                        data_contact["type_item"] = "phonebook";
+                        data_contact["index"] = i;
+                        return data_contact;
+                    }
+                }
+
+            }
+        }
+        return null;
 	}
 
 	public IList get_list_data_backup()
@@ -192,10 +213,11 @@ public class Book_contact : MonoBehaviour
         this.item_field_email.set_icon(this.app.carrot.icon_carrot_mail);
         this.item_field_email.set_title("Email");
         this.item_field_email.set_tip("Enter Email Addreess");
-        this.item_field_email.set_type(Carrot.Box_Item_Type.box_value_input);
+        this.item_field_email.set_type(Carrot.Box_Item_Type.box_email_input);
         this.item_field_email.check_type();
         this.item_field_email.set_key_lang_title("user_email");
         this.item_field_email.load_lang_data();
+        if (data_contact["email"] != null) this.item_field_email.set_val(data_contact["email"].ToString());
 
         this.item_field_sex = box.create_item("item_sex");
         this.item_field_sex.set_icon(this.app.carrot.icon_carrot_sex);
@@ -245,7 +267,7 @@ public class Book_contact : MonoBehaviour
 
 	private void create_contact_done()
     {
-
+		this.app.play_sound(0);
 		if (this.item_field_phone.get_val().Trim() == "")
 		{
             this.app.carrot.show_msg(PlayerPrefs.GetString("phonebook", "Phonebook"),PlayerPrefs.GetString("error_phone_number","The contact's phone number cannot be left blank!"), Carrot.Msg_Icon.Alert);
@@ -268,7 +290,7 @@ public class Book_contact : MonoBehaviour
 		contact_data["user_id"] = s_id_contact_new;
 		IDictionary user_address=(IDictionary) Json.Deserialize("{}");
 		user_address["name"]= this.item_field_address.get_val();
-		contact_data["address"] = Json.Serialize(user_address);
+		contact_data["address"] = user_address;
 
         this.create(contact_data);
 		this.box.close();
@@ -279,7 +301,8 @@ public class Book_contact : MonoBehaviour
 
 	private void update_contact_done()
 	{
-		string s_data = PlayerPrefs.GetString("contact_" + this.index_edit, "");
+        this.app.play_sound(0);
+        string s_data = PlayerPrefs.GetString("contact_" + this.index_edit, "");
         IDictionary contact_data = (IDictionary)Json.Deserialize(s_data);
         contact_data["name"] = this.item_field_name.get_val();
         contact_data["phone"] = this.item_field_phone.get_val();
@@ -287,9 +310,13 @@ public class Book_contact : MonoBehaviour
         contact_data["sex"] = this.item_field_sex.get_val();
         IDictionary user_address = (IDictionary)Json.Deserialize("{}");
         user_address["name"] = this.item_field_address.get_val();
-        contact_data["address"] = Json.Serialize(user_address);
+		contact_data["address"] = user_address;
+
         PlayerPrefs.SetString("contact_" + this.index_edit, Carrot.Json.Serialize(contact_data));
+		this.box.close();
+
         this.app.carrot.show_msg(PlayerPrefs.GetString("phonebook", "Phonebook"), PlayerPrefs.GetString("phonebook_edit_success", "Contacts edited successfully!"), Carrot.Msg_Icon.Success);
+        this.show();
     }
 
 }

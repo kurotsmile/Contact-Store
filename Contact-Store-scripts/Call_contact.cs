@@ -50,8 +50,7 @@ public class Call_contact : MonoBehaviour
         this.img_loading.SetActive(false);
         if (this.s_dial_txt.Length > 3)
         {
-            this.StopAllCoroutines();
-            GameObject item_found = this.bc.get_contact_by_phone(s_dial_txt);
+            IDictionary item_found = this.bc.get_contact_by_phone(s_dial_txt);
             if (item_found != null)
             {
                 /*
@@ -64,6 +63,11 @@ public class Call_contact : MonoBehaviour
                 this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
                 this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(data_obj.click);
                 */
+
+                this.button_add_contact.SetActive(false);
+                this.panel_info_contact_found.SetActive(true);
+                if (item_found["name"] != null) this.txt_contact_name_found.text = item_found["name"].ToString();
+                if (item_found["phone"] != null) this.txt_contact_phone_found.text = item_found["phone"].ToString();
             }
             else
             {
