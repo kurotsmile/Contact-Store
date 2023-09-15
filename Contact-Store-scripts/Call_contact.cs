@@ -1,3 +1,5 @@
+using Firebase.Extensions;
+using Firebase.Firestore;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,19 +71,47 @@ public class Call_contact : MonoBehaviour
                 this.button_add_contact.SetActive(true);
                 this.panel_info_contact_found.SetActive(false);
 
-                if (s_dial_txt.Length < 20 && this.ct.carrot.is_online()) StartCoroutine(get_info_by_number_phone());
+                if (s_dial_txt.Length < 20 && this.ct.carrot.is_online())
+                {
+                    this.get_info_by_number_phone(this.s_dial_txt);
+                }
             }
         }
         this.bc.GetComponent<App_Contacts>().play_sound(1);
     }
 
-    private IEnumerator get_info_by_number_phone()
+    private void get_info_by_number_phone(string s_phone)
     {
-        yield return new WaitForSeconds(2f);
-        WWWForm frm = this.ct.carrot.frm_act("get_info_phone");
-        frm.AddField("phone", this.s_dial_txt);
-       // this.ct.carrot.send_hide(frm, act_get_info_by_phone);
         this.img_loading.SetActive(true);
+
+        Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
+        ContactQuery = ContactQuery.WhereEqualTo("phone", s_phone);
+        ContactQuery = ContactQuery.Limit(60);
+        ContactQuery.Limit(1).GetSnapshotAsync().ContinueWithOnMainThread(task =>
+        {
+            QuerySnapshot QDocs = task.Result;
+            if (task.IsCompleted)
+            {
+                if (QDocs.Count > 0)
+                {
+                    this.img_loading.SetActive(false);
+                    foreach (DocumentSnapshot doc in QDocs.Documents)
+                    {
+                        IDictionary data_contact = doc.ToDictionary();
+                        data_contact["user_id"] = doc.Id;
+                        data_contact["id"] = doc.Id;
+                        data_contact["type_item"] = "contact";
+                        if (data_contact["type_item"] != null) data_contact.Remove("rates");
+                        if (data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
+                    }
+                }
+            }
+
+            if (task.IsFaulted)
+            {
+                this.img_loading.SetActive(false);
+            }
+        });
     }
 
     private void act_get_info_by_phone(string data)
@@ -130,5 +160,11 @@ public class Call_contact : MonoBehaviour
         this.button_del.SetActive(false);
         this.panel_info_contact_found.SetActive(false);
         this.img_loading.SetActive(false);
+    }
+
+    public void btn_add_contacts()
+    {
+        this.app.play_sound(0);
+        this.app.book_contact.Create_New_BookContact_By_Phone_Number(this.s_dial_txt);
     }
 }

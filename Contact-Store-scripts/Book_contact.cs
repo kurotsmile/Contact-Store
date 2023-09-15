@@ -185,6 +185,16 @@ public class Book_contact : MonoBehaviour
         this.create_box_panel_btn(box_add, () => this.create_contact_done());
     }
 
+	public void Create_New_BookContact_By_Phone_Number(string s_phone)
+	{
+        IDictionary data_new_contact = (IDictionary)Carrot.Json.Deserialize("{}");
+		data_new_contact["phone"] = s_phone;
+        Carrot_Box box_add = this.box_add_or_edit(data_new_contact);
+        box_add.set_icon(this.sp_icon_add_phone);
+        box_add.set_title(PlayerPrefs.GetString("phonebook_add", "Add new contacts"));
+        this.create_box_panel_btn(box_add, () => this.create_contact_done());
+    }
+
 	private Carrot_Box box_add_or_edit(IDictionary data_contact)
 	{
         this.box = this.app.carrot.Create_Box();
