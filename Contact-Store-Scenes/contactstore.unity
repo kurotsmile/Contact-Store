@@ -1431,7 +1431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &242960399
@@ -1926,7 +1926,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &288023270
@@ -4049,7 +4049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &566893035
@@ -6394,7 +6394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &861339438
@@ -10167,7 +10167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1253868259
@@ -11178,7 +11178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1400622105
@@ -15478,7 +15478,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
         type: 3}
+      propertyPath: type_rate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
+        type: 3}
       propertyPath: setting_lang
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
+        type: 3}
+      propertyPath: store_public
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,

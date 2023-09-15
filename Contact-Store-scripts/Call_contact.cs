@@ -1,7 +1,6 @@
 using Firebase.Extensions;
 using Firebase.Firestore;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -103,6 +102,16 @@ public class Call_contact : MonoBehaviour
                         data_contact["type_item"] = "contact";
                         if (data_contact["type_item"] != null) data_contact.Remove("rates");
                         if (data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
+
+                        this.button_add_contact.SetActive(false);
+                        this.panel_info_contact_found.SetActive(true);
+                        if (data_contact["name"] != null) this.txt_contact_name_found.text = data_contact["name"].ToString();
+                        if (data_contact["phone"] != null) this.txt_contact_phone_found.text = data_contact["phone"].ToString();
+                        Sprite sp_avatar = this.app.carrot.get_tool().get_sprite_to_playerPrefs("avatar_user_" + data_contact["id"]);
+                        if (sp_avatar != null) this.img_contact_found.sprite = sp_avatar;
+                        else this.app.carrot.get_img_and_save_playerPrefs(data_contact["avatar"].ToString(), this.img_contact_found, "avatar_user_" + data_contact["id"]);
+                        this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
+                        this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(() => this.app.manager_contact.view_info_contact(data_contact));
                     }
                 }
             }
