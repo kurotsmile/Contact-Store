@@ -5767,6 +5767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 553a2224e6dc00b4ab4462bd0b76e9e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  app: {fileID: 698190117}
   txt_phone_call: {fileID: 1376386184}
   button_call: {fileID: 163346961}
   button_sms: {fileID: 1158708927}

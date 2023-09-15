@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Call_contact : MonoBehaviour
 {
+    [Header("Main Obj")]
+    public App_Contacts app;
     private string s_dial_txt;
 
     [Header("Call Obj")]
@@ -53,21 +55,14 @@ public class Call_contact : MonoBehaviour
             IDictionary item_found = this.bc.get_contact_by_phone(s_dial_txt);
             if (item_found != null)
             {
-                /*
-                Prefab_contact_item_main data_obj = item_found.GetComponent<Prefab_contact_item_main>();
-                this.txt_contact_name_found.text = data_obj.txt_name.text;
-                this.txt_contact_phone_found.text = data_obj.txt_phone.text;
-                this.img_contact_found.sprite = data_obj.img_avatar.sprite;
-                this.button_add_contact.SetActive(false);
-                this.panel_info_contact_found.SetActive(true);
-                this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
-                this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(data_obj.click);
-                */
-
                 this.button_add_contact.SetActive(false);
                 this.panel_info_contact_found.SetActive(true);
                 if (item_found["name"] != null) this.txt_contact_name_found.text = item_found["name"].ToString();
                 if (item_found["phone"] != null) this.txt_contact_phone_found.text = item_found["phone"].ToString();
+                Sprite sp_avatar = this.app.carrot.get_tool().get_sprite_to_playerPrefs("avatar_user_" + item_found["id"]);
+                if (sp_avatar != null) this.img_contact_found.sprite = sp_avatar;
+                this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
+                this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(()=>this.app.manager_contact.view_info_contact(item_found));
             }
             else
             {
