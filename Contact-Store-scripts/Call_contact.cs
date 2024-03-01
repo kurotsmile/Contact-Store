@@ -1,5 +1,4 @@
-using Firebase.Extensions;
-using Firebase.Firestore;
+using Carrot;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -72,55 +71,58 @@ public class Call_contact : MonoBehaviour
 
                 if (s_dial_txt.Length < 20 && this.ct.carrot.is_online())
                 {
-                    this.get_info_by_number_phone(this.s_dial_txt);
+                    this.Get_info_by_number_phone(this.s_dial_txt);
                 }
             }
         }
         this.bc.GetComponent<App_Contacts>().play_sound(1);
     }
 
-    private void get_info_by_number_phone(string s_phone)
+    private void Get_info_by_number_phone(string s_phone)
     {
         this.img_loading.SetActive(true);
+        StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
+        q.Add_where("phone", Query_OP.EQUAL, s_phone);
+        q.Set_limit(60);
+        app.carrot.server.Get_doc(q.ToJson(), Act_Get_info_by_number_phone_done, Act_Get_info_by_number_phone_fail);
+    }
 
-        Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
-        ContactQuery = ContactQuery.WhereEqualTo("phone", s_phone);
-        ContactQuery = ContactQuery.Limit(60);
-        ContactQuery.Limit(1).GetSnapshotAsync().ContinueWithOnMainThread(task =>
+    private void Act_Get_info_by_number_phone_done(string s_data)
+    {
+        Fire_Collection fc = new(s_data);
+
+        if (!fc.is_null)
         {
-            QuerySnapshot QDocs = task.Result;
-            if (task.IsCompleted)
+            this.img_loading.SetActive(false);
+            for (int i = 0; i < fc.fire_document.Length; i++)
             {
-                if (QDocs.Count > 0)
-                {
-                    this.img_loading.SetActive(false);
-                    foreach (DocumentSnapshot doc in QDocs.Documents)
-                    {
-                        IDictionary data_contact = doc.ToDictionary();
-                        data_contact["user_id"] = doc.Id;
-                        data_contact["id"] = doc.Id;
-                        data_contact["type_item"] = "contact";
-                        if (data_contact["type_item"] != null) data_contact.Remove("rates");
-                        if (data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
+                IDictionary data_contact = fc.fire_document[i].Get_IDictionary();
+                data_contact["user_id"] = data_contact["id"].ToString();
+                data_contact["id"] = data_contact["id"].ToString();
+                data_contact["type_item"] = "contact";
+                if (data_contact["type_item"] != null) data_contact.Remove("rates");
+                if (data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
 
-                        this.button_add_contact.SetActive(false);
-                        this.panel_info_contact_found.SetActive(true);
-                        if (data_contact["name"] != null) this.txt_contact_name_found.text = data_contact["name"].ToString();
-                        if (data_contact["phone"] != null) this.txt_contact_phone_found.text = data_contact["phone"].ToString();
-                        Sprite sp_avatar = this.app.carrot.get_tool().get_sprite_to_playerPrefs("avatar_user_" + data_contact["id"]);
-                        if (sp_avatar != null) this.img_contact_found.sprite = sp_avatar;
-                        else this.app.carrot.get_img_and_save_playerPrefs(data_contact["avatar"].ToString(), this.img_contact_found, "avatar_user_" + data_contact["id"]);
-                        this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
-                        this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(() => this.app.manager_contact.view_info_contact(data_contact));
-                    }
-                }
+                this.button_add_contact.SetActive(false);
+                this.panel_info_contact_found.SetActive(true);
+                if (data_contact["name"] != null) this.txt_contact_name_found.text = data_contact["name"].ToString();
+                if (data_contact["phone"] != null) this.txt_contact_phone_found.text = data_contact["phone"].ToString();
+                Sprite sp_avatar = this.app.carrot.get_tool().get_sprite_to_playerPrefs("avatar_user_" + data_contact["id"]);
+                if (sp_avatar != null) this.img_contact_found.sprite = sp_avatar;
+                else this.app.carrot.get_img_and_save_playerPrefs(data_contact["avatar"].ToString(), this.img_contact_found, "avatar_user_" + data_contact["id"]);
+                this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
+                this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(() => this.app.manager_contact.view_info_contact(data_contact));
             }
+        }
+        else
+        {
+            this.img_loading.SetActive(false);
+        }
+    }
 
-            if (task.IsFaulted)
-            {
-                this.img_loading.SetActive(false);
-            }
-        });
+    private void Act_Get_info_by_number_phone_fail(string s_error)
+    {
+        this.img_loading.SetActive(false);
     }
 
     private void act_get_info_by_phone(string data)

@@ -1,5 +1,4 @@
-using Firebase.Extensions;
-using Firebase.Firestore;
+using Carrot;
 using System.Collections;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class Manager_Contact : MonoBehaviour
     private string s_type_order = "name";
     private IList list_contacts;
     private bool is_read_cache = false;
-    private Carrot.Carrot_Box box_info = null;
+    private Carrot_Box box_info = null;
 
     public void list()
     {
@@ -27,66 +26,64 @@ public class Manager_Contact : MonoBehaviour
 
         if (this.is_read_cache == false)
         {
-            this.get_data_from_sever();
+            this.Get_data_from_server();
         }
         else
         {
             string s_list_data = PlayerPrefs.GetString("contacts_" + this.s_type_order + "_" + this.app.carrot.lang.get_key_lang(), "");
             if (s_list_data == "")
-                this.get_data_from_sever();
+                this.Get_data_from_server();
             else
                 this.get_data_from_cache(s_list_data);
         }
     }
 
-    private void get_data_from_sever()
+    private void Get_data_from_server()
     {
-        Query ContactQuery = this.app.carrot.db.Collection("user-" + this.app.carrot.lang.get_key_lang());
-        ContactQuery = ContactQuery.WhereEqualTo("status_share", "0");
-        //ContactQuery = ContactQuery.WhereNotEqualTo(this.s_type_order, "");
-        //ContactQuery = ContactQuery.OrderBy(this.s_type_order);
-        ContactQuery = ContactQuery.Limit(60);
-        ContactQuery.GetSnapshotAsync().ContinueWithOnMainThread(task =>
+        StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
+        q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Set_limit(60);
+        app.carrot.server.Get_doc(q.ToJson(), Act_get_data_from_server_done, Act_get_data_from_server_fail);
+    }
+
+    private void Act_get_data_from_server_done(string s_data)
+    {
+        this.app.carrot.clear_contain(this.app.area_body_main);
+
+        Fire_Collection fc = new(s_data);
+        if (!fc.is_null)
         {
-            QuerySnapshot QDocs = task.Result;
-            if (task.IsCompleted)
+            this.list_contacts = (IList)Carrot.Json.Deserialize("[]");
+
+            for(int i=0;i<fc.fire_document.Length;i++)
             {
-                this.app.carrot.clear_contain(this.app.area_body_main);
-                if (QDocs.Count > 0)
-                {
-                    this.list_contacts = (IList)Carrot.Json.Deserialize("[]");
-
-                    foreach (DocumentSnapshot doc in QDocs.Documents)
-                    {
-                        IDictionary data_contact = doc.ToDictionary();
-                        data_contact["user_id"] = doc.Id;
-                        data_contact["id"] = doc.Id;
-                        data_contact["type_item"] = "contact";
-                        if(data_contact["type_item"]!=null) data_contact.Remove("rates");
-                        if(data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
-                        this.list_contacts.Add(data_contact);
-                    }
-
-                    PlayerPrefs.SetString("contacts_" + this.s_type_order + "_" + this.app.carrot.lang.get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
-                    this.is_read_cache = true;
-
-                    this.add_item_title();
-                    this.show_list_data_contacts(this.list_contacts);
-                }
-                else
-                {
-                    this.app.add_item_none();
-                }
+                IDictionary data_contact = fc.fire_document[i].Get_IDictionary();
+                data_contact["user_id"] = data_contact["id"].ToString();
+                data_contact["id"] = data_contact["id"].ToString();
+                data_contact["type_item"] = "contact";
+                if (data_contact["type_item"] != null) data_contact.Remove("rates");
+                if (data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
+                this.list_contacts.Add(data_contact);
             }
 
-            if (task.IsFaulted)
-            {
-                this.app.carrot.clear_contain(this.app.area_body_main);
-                Carrot.Carrot_Box_Item item_error = this.app.add_item_title_list("Error");
-                item_error.set_icon_white(this.app.carrot.icon_carrot_bug);
-                item_error.set_tip("Operation failed, please try again!");
-            }
-        });
+            PlayerPrefs.SetString("contacts_" + this.s_type_order + "_" + this.app.carrot.lang.get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
+            this.is_read_cache = true;
+
+            this.Add_item_title();
+            this.show_list_data_contacts(this.list_contacts);
+        }
+        else
+        {
+            this.app.add_item_none();
+        }
+    }
+
+    private void Act_get_data_from_server_fail(string s_error)
+    {
+        this.app.carrot.clear_contain(this.app.area_body_main);
+        Carrot.Carrot_Box_Item item_error = this.app.add_item_title_list("Error");
+        item_error.set_icon_white(this.app.carrot.icon_carrot_bug);
+        item_error.set_tip("Operation failed, please try again!");
     }
 
     private void get_data_from_cache(string s_data_json)
@@ -94,11 +91,11 @@ public class Manager_Contact : MonoBehaviour
         this.app.carrot.clear_contain(this.app.area_body_main);
 
         this.list_contacts = (IList)Carrot.Json.Deserialize(s_data_json);
-        this.add_item_title();
+        this.Add_item_title();
         this.show_list_data_contacts(this.list_contacts);
     }
 
-    private void add_item_title()
+    private void Add_item_title()
     {
         Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("contact", "Contact") +" (" + this.app.carrot.lang.get_key_lang() + ")");
         item_title.set_tip(PlayerPrefs.GetString("contact_list", "List of contacts in your country ") + "("+this.list_contacts.Count+" "+ PlayerPrefs.GetString("contact", "Contact")+")");
@@ -106,7 +103,7 @@ public class Manager_Contact : MonoBehaviour
         btn_sort_name.set_icon(this.icon_sort_name);
         btn_sort_name.set_icon_color(Color.white);
         btn_sort_name.set_color(this.app.carrot.color_highlight);
-        btn_sort_name.set_act(() => this.sort());
+        btn_sort_name.set_act(() => this.Sort());
     }
 
 
@@ -149,7 +146,7 @@ public class Manager_Contact : MonoBehaviour
                         btn_call.set_icon(this.app.icon_call_boy);
                     }
                     btn_call.set_color(this.app.carrot.color_highlight);
-                    btn_call.set_act(() => this.call(s_phone));
+                    btn_call.set_act(() => this.Call(s_phone));
                     s_tip = data_contact["phone"].ToString();
                 }
             }
@@ -165,7 +162,7 @@ public class Manager_Contact : MonoBehaviour
                     Carrot.Carrot_Box_Btn_Item btn_email = item_contact.create_item();
                     btn_email.set_icon(this.app.carrot.icon_carrot_mail);
                     btn_email.set_color(this.app.carrot.color_highlight);
-                    btn_email.set_act(() => this.mail(s_email));
+                    btn_email.set_act(() => this.Mail(s_email));
                 }
                 else
                 {
@@ -208,7 +205,7 @@ public class Manager_Contact : MonoBehaviour
         this.app.play_sound(0);
         this.app.carrot.ads.show_ads_Interstitial();
         if (this.box_info != null) this.box_info.close();
-        this.box_info=this.app.carrot.user.show_info_user_by_data(data);
+        this.box_info=this.app.carrot.user.Show_info_user_by_data(data);
         Carrot.Carrot_Box_Btn_Panel panel_tool=box_info.create_panel_btn();
 
         if (data["phone"] != null)
@@ -229,7 +226,7 @@ public class Manager_Contact : MonoBehaviour
             btn_call.set_label_color(Color.white);
             btn_call.set_label(PlayerPrefs.GetString("call", "Call"));
             btn_call.set_bk_color(this.app.carrot.color_highlight);
-            btn_call.set_act_click(() => this.call(s_phone));
+            btn_call.set_act_click(() => this.Call(s_phone));
         }
 
         if (data["email"] != null)
@@ -242,7 +239,7 @@ public class Manager_Contact : MonoBehaviour
                 btn_mail.set_label_color(Color.white);
                 btn_mail.set_label(PlayerPrefs.GetString("send_mail", "Send Mail"));
                 btn_mail.set_bk_color(this.app.carrot.color_highlight);
-                btn_mail.set_act_click(() => this.mail(s_mail));
+                btn_mail.set_act_click(() => this.Mail(s_mail));
             }
         }
 
@@ -251,7 +248,7 @@ public class Manager_Contact : MonoBehaviour
         btn_share.set_label_color(Color.white);
         btn_share.set_label(PlayerPrefs.GetString("share", "Share"));
         btn_share.set_bk_color(this.app.carrot.color_highlight);
-        btn_share.set_act_click(() => this.share(id_contact,lang_contact));
+        btn_share.set_act_click(() => this.Share(id_contact,lang_contact));
 
 
         Carrot.Carrot_Box_Btn_Panel panel_act = box_info.create_panel_btn();
@@ -298,23 +295,23 @@ public class Manager_Contact : MonoBehaviour
         btn_close.set_act_click(() => box_info.close());
     }
 
-    private void call(string s_phone)
+    private void Call(string s_phone)
     {
         Application.OpenURL("tel://" + s_phone);
     }
 
-    private void mail(string s_mail)
+    private void Mail(string s_mail)
     {
         Application.OpenURL("mailto:" + s_mail);
     }
 
-    private void share(string id_contact,string lang_contact)
+    private void Share(string id_contact,string lang_contact)
     {
         string url_share = this.app.carrot.mainhost+"?p=phone_book&id="+id_contact+"&user_lang="+lang_contact;
         this.app.carrot.show_share(url_share, "Share this contacts with everyone");
     }
 
-    private void sort()
+    private void Sort()
     {
         if (this.s_type_order == "name")
             this.s_type_order = "phone";
