@@ -5139,10 +5139,10 @@ MonoBehaviour:
   img_search: {fileID: 1112707187}
   color_sel:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 570425343
   color_normal:
     serializedVersion: 2
-    rgba: 4294961664
+    rgba: 536855552
   scroll_rect_main: {fileID: 119786681}
   sound:
   - {fileID: 87223051}
@@ -11413,7 +11413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 82.48254, y: -34.68001}
+  m_AnchoredPosition: {x: 82.482544, y: -34.68001}
   m_SizeDelta: {x: 164.96507, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1428573837

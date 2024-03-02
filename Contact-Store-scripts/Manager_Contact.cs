@@ -125,13 +125,7 @@ public class Manager_Contact : MonoBehaviour
             var lang_contact = "en"; if (data_contact["lang"] != null) lang_contact = data_contact["lang"].ToString();
             string s_tip = "";
 
-            GameObject obj_contact_item = Instantiate(app.prefab_contact_main_item);
-            obj_contact_item.transform.SetParent(app.area_body_main);
-            obj_contact_item.transform.localPosition = new Vector3(0, 0, 0);
-            obj_contact_item.transform.localScale = new Vector3(1f, 1f, 1f);
-            obj_contact_item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-            Carrot_Box_Item item_contact = obj_contact_item.GetComponent<Carrot.Carrot_Box_Item>();
+            Carrot_Box_Item item_contact = app.create_item_main();
             item_contact.on_load(app.carrot);
             item_contact.check_type();
             item_contact.set_icon(this.icon_contact);
@@ -204,6 +198,7 @@ public class Manager_Contact : MonoBehaviour
 
             item_contact.set_act(() => this.view_info_contact(data_contact));
         }
+        app.Update_items_color();
     }
 
     public void view_info_contact(IDictionary data)

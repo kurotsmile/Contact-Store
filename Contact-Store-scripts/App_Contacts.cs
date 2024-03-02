@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class App_Contacts : MonoBehaviour
 {
@@ -173,6 +175,7 @@ public class App_Contacts : MonoBehaviour
         obj_item_main.transform.localPosition = new Vector3(obj_item_main.transform.localPosition.x, obj_item_main.transform.localPosition.y, 0f);
         obj_item_main.transform.localScale = new Vector3(1f, 1f, 1f);
         obj_item_main.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        obj_item_main.name = "item_contact";
 
         Carrot_Box_Item item_title = obj_item_main.GetComponent<Carrot_Box_Item>();
         item_title.on_load(this.carrot);
@@ -190,7 +193,7 @@ public class App_Contacts : MonoBehaviour
         item_title.check_type();
         item_title.set_title(s_title);
         item_title.GetComponent<Image>().color = this.carrot.color_highlight;
-
+        item_title.gameObject.name = "item_title";
         return item_title;
     }
 
@@ -205,7 +208,24 @@ public class App_Contacts : MonoBehaviour
         item_none.GetComponent<Image>().color = this.carrot.color_highlight;
         item_none.set_title(PlayerPrefs.GetString("list_none","List is empty"));
         item_none.set_tip(PlayerPrefs.GetString("list_none_tip", "There are no items in the list"));
+        item_none.gameObject.name = "item_none";
         return item_none;
+    }
+
+    public void Update_items_color()
+    {
+        int i_item = 0;
+        foreach(Transform tr in this.area_body_main)
+        {
+            if(tr.gameObject.name== "item_contact")
+            {
+                i_item++;
+                if (i_item % 2 == 0)
+                    tr.gameObject.GetComponent<Image>().color = this.color_normal;
+                else
+                    tr.gameObject.GetComponent<Image>().color = this.color_sel;
+            }
+        }
     }
 
     public void btn_show_call()

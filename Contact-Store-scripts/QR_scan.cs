@@ -139,7 +139,11 @@ public class QR_scan : MonoBehaviour
         if (codeWtr != null)
         {
             string id_user = app.carrot.user.get_id_user_login();
-            if (id_user != "")
+            if (id_user == "")
+            {
+                this.app.carrot.user.show_login(()=>Create_Code());
+            }
+            else
             {
                 this.StopReader();
                 string s_user_link = app.carrot.mainhost + "/?p=phone_book&id=" + app.carrot.user.get_id_user_login() + "&user_lang=" + app.carrot.user.get_lang_user_login();
