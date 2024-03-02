@@ -12,7 +12,7 @@ public class Manager_Contact : MonoBehaviour
     public Sprite icon_save;
     public Sprite icon_sort_name;
 
-    private string s_type_order = "name";
+    private Query_Order_Direction order_by = Query_Order_Direction.ASCENDING;
     private IList list_contacts;
     private bool is_read_cache = false;
     private Carrot_Box box_info = null;
@@ -30,7 +30,7 @@ public class Manager_Contact : MonoBehaviour
         }
         else
         {
-            string s_list_data = PlayerPrefs.GetString("contacts_" + this.s_type_order + "_" + app.carrot.lang.get_key_lang(), "");
+            string s_list_data = PlayerPrefs.GetString("contacts_" + this.order_by.ToString() + "_" + app.carrot.lang.get_key_lang(), "");
             if (s_list_data == "")
                 this.Get_data_from_server();
             else
@@ -41,7 +41,16 @@ public class Manager_Contact : MonoBehaviour
     private void Get_data_from_server()
     {
         StructuredQuery q = new("user-" + app.carrot.lang.get_key_lang());
+        q.Add_select("status_share");
+        q.Add_select("name");
+        q.Add_select("avatar");
+        q.Add_select("lang");
+        q.Add_select("email");
+        q.Add_select("phone");
+        q.Add_select("sex");
+        q.Add_select("status_share");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_order("name",this.order_by);
         q.Set_limit(60);
         app.carrot.server.Get_doc(q.ToJson(), Act_get_data_from_server_done, Act_get_data_from_server_fail);
     }
@@ -53,20 +62,19 @@ public class Manager_Contact : MonoBehaviour
         Fire_Collection fc = new(s_data);
         if (!fc.is_null)
         {
-            this.list_contacts = (IList)Carrot.Json.Deserialize("[]");
+            this.list_contacts = (IList)Json.Deserialize("[]");
 
             for(int i=0;i<fc.fire_document.Length;i++)
             {
                 IDictionary data_contact = fc.fire_document[i].Get_IDictionary();
                 data_contact["user_id"] = data_contact["id"].ToString();
-                data_contact["id"] = data_contact["id"].ToString();
                 data_contact["type_item"] = "contact";
                 if (data_contact["type_item"] != null) data_contact.Remove("rates");
                 if (data_contact["backup_contact"] != null) data_contact.Remove("backup_contact");
                 this.list_contacts.Add(data_contact);
             }
 
-            PlayerPrefs.SetString("contacts_" + this.s_type_order + "_" + app.carrot.lang.get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
+            PlayerPrefs.SetString("contacts_" + this.order_by.ToString() + "_" + app.carrot.lang.get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
             this.is_read_cache = true;
 
             this.Add_item_title();
@@ -80,6 +88,7 @@ public class Manager_Contact : MonoBehaviour
 
     private void Act_get_data_from_server_fail(string s_error)
     {
+        Debug.Log(s_error);
         app.carrot.clear_contain(app.area_body_main);
         Carrot_Box_Item item_error = app.add_item_title_list("Error");
         item_error.set_icon_white(app.carrot.icon_carrot_bug);
@@ -313,10 +322,12 @@ public class Manager_Contact : MonoBehaviour
 
     private void Sort()
     {
-        if (this.s_type_order == "name")
-            this.s_type_order = "phone";
+        app.carrot.play_sound_click();
+        if (order_by == Query_Order_Direction.ASCENDING)
+            order_by = Query_Order_Direction.DESCENDING;
         else
-            this.s_type_order = "name";
+            order_by = Query_Order_Direction.ASCENDING;
+
         this.List();
     }
 

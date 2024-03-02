@@ -1,4 +1,6 @@
 ﻿using Carrot;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,10 +51,25 @@ public class App_Contacts : MonoBehaviour
     void Start()
     {
         this.link_deep_app = Application.absoluteURL;
+        Application.deepLinkActivated += OnDeepLinkActivated;
+
         this.panel_call.SetActive(false);
 
         this.carrot.Load_Carrot(Check_exit_app);
         this.book_contact.Load_book_contact();
+    }
+
+    [ContextMenu("Test Link")]
+    public void Test_link()
+    {
+        this.OnDeepLinkActivated("contactstore://show/user9dd108c1acca4f8e8fefa8dec39d5a9d/vi");
+        //this.onDeepLinkActivated("contactstore://tel/0978651577");
+    }
+
+    private void OnDeepLinkActivated(string url)
+    {
+        this.link_deep_app = url;
+        if (this.carrot != null) this.carrot.delay_function(1f, this.Check_link_deep_app);
     }
 
     public void Check_link_deep_app()
@@ -65,7 +82,7 @@ public class App_Contacts : MonoBehaviour
                 {
                     string data_link = this.link_deep_app.Replace("contactstore://show/", "");
                     string[] paramet_user = data_link.Split('/');
-                    this.carrot.user.show_user_by_id(paramet_user[0], paramet_user[1]);
+                    this.View_contact_by_id(paramet_user[0], paramet_user[1]);
                     this.link_deep_app = "";
                 }
             }
@@ -214,5 +231,27 @@ public class App_Contacts : MonoBehaviour
     public void scrollbar_on_top()
     {
         this.scroll_rect_main.verticalNormalizedPosition = 1f;
+    }
+
+    public void View_contact_by_id(string s_id,string s_lang)
+    {
+        this.carrot.show_loading();
+        carrot.server.Get_doc_by_path("user-" + s_lang, s_id, Act_get_contact_by_id_done, Act_get_contact_by_id_fail);
+    }
+
+    private void Act_get_contact_by_id_done(string s_data)
+    {
+        this.carrot.hide_loading();
+        Fire_Document fd = new(s_data);
+        IDictionary data_contact = fd.Get_IDictionary();
+        data_contact["user_id"] = data_contact["id"].ToString();
+        data_contact["type_item"] = "contact";
+        this.manager_contact.view_info_contact(data_contact);
+    }
+
+    private void Act_get_contact_by_id_fail(string s_error)
+    {
+        this.carrot.hide_loading();
+        this.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), PlayerPrefs.GetString("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
     }
 }

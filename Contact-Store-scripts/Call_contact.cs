@@ -26,12 +26,8 @@ public class Call_contact : MonoBehaviour
     private string user_id_contact;
     private string user_lang_contact;
 
-
-    private App_Contacts ct;
     public void show()
     {
-        this.ct = GameObject.Find("App_Contacts").GetComponent<App_Contacts>();
-        this.bc = GameObject.Find("App_Contacts").GetComponent<Book_contact>();
         this.btn_delete();
     }
 
@@ -69,19 +65,20 @@ public class Call_contact : MonoBehaviour
                 this.button_add_contact.SetActive(true);
                 this.panel_info_contact_found.SetActive(false);
 
-                if (s_dial_txt.Length < 20 && this.ct.carrot.is_online())
+                if (s_dial_txt.Length < 20 && this.app.carrot.is_online())
                 {
                     this.Get_info_by_number_phone(this.s_dial_txt);
                 }
             }
         }
-        this.bc.GetComponent<App_Contacts>().play_sound(1);
+        this.app.play_sound(1);
     }
 
     private void Get_info_by_number_phone(string s_phone)
     {
         this.img_loading.SetActive(true);
         StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
+        q.Add_where("status_share", Query_OP.EQUAL, "0");
         q.Add_where("phone", Query_OP.EQUAL, s_phone);
         q.Set_limit(60);
         app.carrot.server.Get_doc(q.ToJson(), Act_Get_info_by_number_phone_done, Act_Get_info_by_number_phone_fail);
@@ -90,7 +87,6 @@ public class Call_contact : MonoBehaviour
     private void Act_Get_info_by_number_phone_done(string s_data)
     {
         Fire_Collection fc = new(s_data);
-
         if (!fc.is_null)
         {
             this.img_loading.SetActive(false);
@@ -137,7 +133,7 @@ public class Call_contact : MonoBehaviour
             this.txt_contact_phone_found.text = data_info["phone"].ToString();
             this.user_id_contact= data_info["user_id"].ToString();
             this.user_lang_contact= data_info["user_lang"].ToString();
-            this.ct.carrot.get_img(data_info["avatar"].ToString(),this.img_contact_found);
+            this.app.carrot.get_img(data_info["avatar"].ToString(),this.img_contact_found);
             this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
             this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(view_contact_info);
         }
@@ -145,7 +141,7 @@ public class Call_contact : MonoBehaviour
 
     public void view_contact_info()
     {
-        this.ct.carrot.user.show_user_by_id(this.user_id_contact,this.user_lang_contact);
+        this.app.carrot.user.show_user_by_id(this.user_id_contact,this.user_lang_contact);
     }
 
     public void btn_call()

@@ -1,7 +1,6 @@
 using Carrot;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,8 +15,7 @@ public class Backup_Contacts : MonoBehaviour
 
     private Carrot_Window_Msg msg;
     private IList list_contact_download;
-    private int index_delete = -1;
-    private IList list_backup;
+    private string id_backup_del_temp;
 
     public void Show()
     {
@@ -52,6 +50,12 @@ public class Backup_Contacts : MonoBehaviour
 
     public void List()
     {
+        if (app.carrot.user.get_id_user_login() == "")
+        {
+            this.Show_login_for_backup();
+            return;
+        }
+
         this.app.carrot.clear_contain(this.app.area_body_main);
         this.app.Add_item_loading();
 
@@ -62,54 +66,54 @@ public class Backup_Contacts : MonoBehaviour
 
     private void Act_list_done(string s_data)
     {
+        this.app.carrot.hide_loading();
+        this.app.carrot.clear_contain(this.app.area_body_main);
+
         Fire_Collection fc = new(s_data);
         if (!fc.is_null)
         {
-            this.app.carrot.hide_loading();
-            this.app.carrot.clear_contain(this.app.area_body_main);
-            IDictionary data_user = fc.fire_document[0].Get_IDictionary();
+            Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("backup", "Backup"));
+            item_title.set_icon(this.app.carrot.icon_carrot_all_category);
+            item_title.set_tip(PlayerPrefs.GetString("backup_list", "list of your backups"));
+            item_title.set_act(() => this.List());
 
-            if (data_user["backup_contact"] != null)
-                list_backup = (IList)data_user["backup_contact"];
-            else
-                list_backup = (IList)Carrot.Json.Deserialize("[]");
-
-            if (list_backup.Count > 0)
+            for (int i = 0; i < fc.fire_document.Length; i++)
             {
-                Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("backup", "Backup"));
-                item_title.set_icon(this.app.carrot.icon_carrot_all_category);
-                item_title.set_tip(PlayerPrefs.GetString("backup_list", "list of your backups"));
-                item_title.set_act(() => this.List());
+                var index_item = i;
+                IDictionary data_backup = fc.fire_document[i].Get_IDictionary();
 
-                for (int i = 0; i < list_backup.Count; i++)
-                {
-                    var index_item = i;
-                    IDictionary data_backup = (IDictionary)list_backup[i];
-                    Carrot_Box_Item item_backup = this.app.create_item_main();
-                    item_backup.set_icon(this.app.carrot.icon_carrot_database);
-                    item_backup.set_title(data_backup["date"].ToString());
-                    item_backup.set_tip(data_backup["length"].ToString() + " " + PlayerPrefs.GetString("contact", "Contact"));
+                var id_backup = data_backup["id"].ToString();
+                IList list_contact = (IList)data_backup["datas"];
 
-                    Carrot_Box_Btn_Item btn_download = item_backup.create_item();
-                    btn_download.set_icon(this.icon_download);
-                    btn_download.set_color(this.app.carrot.color_highlight);
-                    Destroy(btn_download.GetComponent<Button>());
+                Carrot_Box_Item item_backup = this.app.create_item_main();
+                item_backup.set_icon(this.app.carrot.icon_carrot_database);
+                item_backup.set_title(data_backup["date"].ToString());
+                item_backup.set_tip(data_backup["length"].ToString() + " " + PlayerPrefs.GetString("contact", "Contact"));
 
-                    Carrot_Box_Btn_Item btn_del = item_backup.create_item();
-                    btn_del.set_icon(this.app.carrot.sp_icon_del_data);
-                    btn_del.set_color(Color.red);
-                    btn_del.set_act(() => this.delete_backup(index_item));
+                Carrot_Box_Btn_Item btn_download = item_backup.create_item();
+                btn_download.set_icon(this.icon_download);
+                btn_download.set_color(this.app.carrot.color_highlight);
+                Destroy(btn_download.GetComponent<Button>());
 
-                    IList list_contact = (IList)data_backup["contacts"];
-                    item_backup.set_act(() => this.download(list_contact));
-                }
-                this.add_item_create_new();
+                Carrot_Box_Btn_Item btn_view = item_backup.create_item();
+                btn_view.set_icon(this.app.carrot.user.icon_user_info);
+                btn_view.set_color(this.app.carrot.color_highlight);
+                btn_view.set_act(() => View_backup(list_contact));
+
+                Carrot_Box_Btn_Item btn_del = item_backup.create_item();
+                btn_del.set_icon(this.app.carrot.sp_icon_del_data);
+                btn_del.set_color(Color.red);
+                btn_del.set_act(() => this.delete_backup(id_backup));
+
+                
+                item_backup.set_act(() => this.download(list_contact));
             }
+            this.Add_item_create_new();
         }
         else
         {
             this.app.add_item_none();
-            this.add_item_create_new();
+            this.Add_item_create_new();
         }
     }
 
@@ -118,7 +122,7 @@ public class Backup_Contacts : MonoBehaviour
         this.app.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
     }
 
-    private void add_item_create_new()
+    private void Add_item_create_new()
     {
         Carrot_Box_Item item_create = this.app.add_item_title_list(PlayerPrefs.GetString("create_backup","Create a new backup"));
         item_create.set_icon(this.app.carrot.icon_carrot_add);
@@ -151,9 +155,9 @@ public class Backup_Contacts : MonoBehaviour
         if (this.msg != null) this.msg.close();
     }
 
-    private void delete_backup(int index_del)
+    private void delete_backup(string s_id)
     {
-        this.index_delete = index_del;
+        this.id_backup_del_temp = s_id;
         this.msg = this.app.carrot.show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
     }
 
@@ -161,9 +165,14 @@ public class Backup_Contacts : MonoBehaviour
     {
         if (this.msg != null) this.msg.close();
         this.app.play_sound(0);
+        this.app.carrot.show_loading();
+        app.carrot.server.Delete_Doc(app.carrot.Carrotstore_AppId, id_backup_del_temp, Act_delete_backup_done, Backup_fail);
+        this.List();
+    }
 
-        list_backup.RemoveAt(this.index_delete);
-        Dictionary<string, object> UpdateData = new Dictionary<string, object> { { "backup_contact", list_backup } };
+    private void Act_delete_backup_done(string s_data)
+    {
+        app.carrot.hide_loading();
         this.List();
     }
 
@@ -195,7 +204,7 @@ public class Backup_Contacts : MonoBehaviour
         backup_data["id"] = 
         backup_data["date"] = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
         backup_data["length"] = list_contacts.Count;
-        backup_data["reports"] = list_contacts;
+        backup_data["datas"] = list_contacts;
         backup_data["user_id"] = this.app.carrot.user.get_id_user_login();
         backup_data["user_lang"] = this.app.carrot.user.get_lang_user_login();
 
@@ -213,5 +222,22 @@ public class Backup_Contacts : MonoBehaviour
     {
         app.carrot.hide_loading();
         this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_success", "Download the backup and sync successfully!"), Msg_Icon.Success);
+    }
+
+    private void View_backup(IList list_contact)
+    {
+        Carrot_Box box_list = app.carrot.Create_Box();
+        box_list.set_title(PlayerPrefs.GetString("backup", "Backup"));
+        box_list.set_icon(app.carrot.user.icon_user_info);
+
+        foreach (IDictionary contact in list_contact)
+        {
+            Carrot_Box_Item item_contact = box_list.create_item();
+            item_contact.set_icon(app.icon_contact_public);
+            if(contact["name"]!=null) item_contact.set_title(contact["name"].ToString());
+            if(contact["phone"]!=null) item_contact.set_tip(contact["phone"].ToString());
+            else
+                item_contact.set_title(contact["email"].ToString());
+        }
     }
 }

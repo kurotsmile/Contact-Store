@@ -1419,7 +1419,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &242960399
@@ -1909,7 +1909,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &288023270
@@ -4011,7 +4011,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &566893035
@@ -5243,6 +5243,9 @@ MonoBehaviour:
   - contact
   - backup
   - call
+  - call
+  - call_tip
+  - qr_tip
   emp:
   - {fileID: 1339170822}
   - {fileID: 1735231369}
@@ -5252,6 +5255,9 @@ MonoBehaviour:
   - {fileID: 861339438}
   - {fileID: 242960399}
   - {fileID: 1400622105}
+  - {fileID: 1598240438}
+  - {fileID: 1376386184}
+  - {fileID: 1411717905}
   List_img_change_icon_lang:
   - {fileID: 600417839}
 --- !u!114 &698190120
@@ -6261,7 +6267,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5.7000732, y: -63.586655}
+  m_AnchoredPosition: {x: 5.7000732, y: -63.58667}
   m_SizeDelta: {x: -95, y: -640.39746}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &860846979
@@ -6336,7 +6342,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &861339438
@@ -6437,6 +6443,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11488514, guid: de82aaf01b310b74e9a3011e5ea9c91f, type: 3}
+      propertyPath: e_LogoTex
+      value: 
+      objectReference: {fileID: 2800000, guid: a8cf5adcd71a9ff4ea03f14c2a5ef6a4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7103,6 +7113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c9eb261260a2c42987bf3a54b568a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  app: {fileID: 698190117}
   codeWtr: {fileID: 180009205}
   codetype: 0
   previewImg_wirite: {fileID: 282905043}
@@ -8708,8 +8719,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 252.44757, y: -34.68001}
-  m_SizeDelta: {x: 164.96506, y: 69.36002}
+  m_AnchoredPosition: {x: 260.96817, y: -34.68001}
+  m_SizeDelta: {x: 170.64545, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1139867898
 MonoBehaviour:
@@ -10077,7 +10088,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1253868259
@@ -10315,8 +10326,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 422.41266, y: -34.68001}
-  m_SizeDelta: {x: 164.96506, y: 69.36002}
+  m_AnchoredPosition: {x: 436.61362, y: -34.68001}
+  m_SizeDelta: {x: 170.64545, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1283303685
 MonoBehaviour:
@@ -11077,7 +11088,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1.0499992, y: 15.34}
+  m_AnchoredPosition: {x: -1.0499954, y: 15.34}
   m_SizeDelta: {x: -14.079998, y: 21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1400622105
@@ -11192,7 +11203,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Tip Scan QR Code
+  m_Text: Scan to recognize someone else's phone number or create your own QR code
 --- !u!222 &1411717906
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11251,7 +11262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 594318483}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1420380600
@@ -11479,8 +11490,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 82.482544, y: -34.68001}
-  m_SizeDelta: {x: 164.96506, y: 69.36002}
+  m_AnchoredPosition: {x: 85.32272, y: -34.68001}
+  m_SizeDelta: {x: 170.64545, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1428573837
 MonoBehaviour:
@@ -13343,7 +13354,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 28.399994, y: 47.6}
+  m_AnchoredPosition: {x: 28.40001, y: 47.6}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1750404583
