@@ -1,5 +1,4 @@
 ﻿using Carrot;
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,6 +56,7 @@ public class App_Contacts : MonoBehaviour
 
         this.carrot.Load_Carrot(Check_exit_app);
         this.book_contact.Load_book_contact();
+        this.qr.On_load();
     }
 
     [ContextMenu("Test Link")]
@@ -121,7 +121,7 @@ public class App_Contacts : MonoBehaviour
         }
         else if (this.qr.gameObject.activeInHierarchy)
         {
-            this.qr.close();
+            this.qr.Close();
             this.carrot.set_no_check_exit_app();
         }
     }

@@ -217,9 +217,10 @@ public class Manager_Contact : MonoBehaviour
         this.box_info=app.carrot.user.Show_info_user_by_data(data);
         Carrot_Box_Btn_Panel panel_tool=box_info.create_panel_btn();
 
+        var s_phone = "";
         if (data["phone"] != null)
         {
-            var s_phone = data["phone"].ToString();
+            s_phone = data["phone"].ToString();
             Carrot_Button_Item btn_call = panel_tool.create_btn("btn_call");
             if (data["sex"] != null)
             {
@@ -238,9 +239,10 @@ public class Manager_Contact : MonoBehaviour
             btn_call.set_act_click(() => this.Call(s_phone));
         }
 
+        var s_mail = "";
         if (data["email"] != null)
         {
-            var s_mail = data["email"].ToString();
+            s_mail = data["email"].ToString();
             if (s_mail != "")
             {
                 Carrot_Button_Item btn_mail = panel_tool.create_btn("btn_mail");
@@ -259,6 +261,34 @@ public class Manager_Contact : MonoBehaviour
         btn_share.set_bk_color(app.carrot.color_highlight);
         btn_share.set_act_click(() => this.Share(id_contact,lang_contact));
 
+        Carrot_Box_Btn_Panel panel_qr = box_info.create_panel_btn();
+
+        Carrot_Button_Item btn_qr_link = panel_qr.create_btn("btn_qr");
+        btn_qr_link.set_icon_white(app.qr.icon_read_qr);
+        btn_qr_link.set_label_color(Color.white);
+        btn_qr_link.set_label("QR (Link)");
+        btn_qr_link.set_bk_color(app.carrot.color_highlight);
+        btn_qr_link.set_act_click(() => this.QR_Code_link_user(id_contact,lang_contact));
+
+        if (s_phone != "")
+        {
+            Carrot_Button_Item btn_qr_phone = panel_qr.create_btn("btn_qr_phone");
+            btn_qr_phone.set_icon_white(app.qr.icon_read_qr);
+            btn_qr_phone.set_label_color(Color.white);
+            btn_qr_phone.set_label("QR (Phone)");
+            btn_qr_phone.set_bk_color(app.carrot.color_highlight);
+            btn_qr_phone.set_act_click(() => this.QR_Code_phone_number(s_phone));
+        }
+
+        if (s_mail != "")
+        {
+            Carrot_Button_Item btn_qr_mail = panel_qr.create_btn("btn_qr_mail");
+            btn_qr_mail.set_icon_white(app.qr.icon_read_qr);
+            btn_qr_mail.set_label_color(Color.white);
+            btn_qr_mail.set_label("QR (Mail)");
+            btn_qr_mail.set_bk_color(app.carrot.color_highlight);
+            btn_qr_mail.set_act_click(() => this.QR_Code_phone_number(s_mail));
+        }
 
         Carrot_Box_Btn_Panel panel_act = box_info.create_panel_btn();
 
@@ -273,6 +303,18 @@ public class Manager_Contact : MonoBehaviour
                 btn_save.set_label(PlayerPrefs.GetString("save_contact","Save Contact"));
                 btn_save.set_bk_color(app.carrot.color_highlight);
                 btn_save.set_act_click(() => app.book_contact.add(data));
+
+                if (app.carrot.model_app == ModelApp.Develope)
+                {
+                    string s_id = data["id"].ToString();
+                    string s_lang = this.app.carrot.lang.get_key_lang();
+                    Carrot_Button_Item btn_del_dev = panel_act.create_btn("btn_del_dev");
+                    btn_del_dev.set_icon_white(this.app.carrot.sp_icon_del_data);
+                    btn_del_dev.set_label_color(Color.white);
+                    btn_del_dev.set_label("Delete (Dev)");
+                    btn_del_dev.set_bk_color(app.carrot.color_highlight);
+                    btn_del_dev.set_act_click(() =>Delete_contact(s_id,s_lang));
+                }
             }
 
             if (type_item == "phonebook")
@@ -320,6 +362,17 @@ public class Manager_Contact : MonoBehaviour
         app.carrot.show_share(url_share, "Share this contacts with everyone");
     }
 
+    private void QR_Code_link_user(string id_contact, string lang_contact)
+    {
+        string url_share = app.carrot.mainhost + "?p=phone_book&id=" + id_contact + "&user_lang=" + lang_contact;
+        app.qr.Show_QR_create_by_data(url_share, true);
+    }
+
+    private void QR_Code_phone_number(string s_phone)
+    {
+        app.qr.Show_QR_create_by_data(s_phone, false);
+    }
+
     private void Sort()
     {
         app.carrot.play_sound_click();
@@ -339,5 +392,21 @@ public class Manager_Contact : MonoBehaviour
     public Carrot.Carrot_Box get_box_info()
     {
         return this.box_info;
+    }
+
+    public void Delete_contact(string s_id,string s_lang)
+    {
+        Debug.Log("Delete Dev " + s_id+" success !!!");
+        this.app.carrot.server.Delete_Doc("user-" + s_lang, s_id,Act_delete_contact_done,Act_delete_contact_fail);
+    }
+
+    public void Act_delete_contact_done(string s_data)
+    {
+        app.carrot.show_msg("Conact store", "Delete Success!", Msg_Icon.Success);
+    }
+
+    public void Act_delete_contact_fail(string s_error)
+    {
+        app.carrot.show_msg("Conact store", s_error, Msg_Icon.Error);
     }
 }

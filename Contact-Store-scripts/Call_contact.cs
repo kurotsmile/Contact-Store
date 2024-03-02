@@ -15,7 +15,6 @@ public class Call_contact : MonoBehaviour
     public GameObject button_sms;
     public GameObject button_add_contact;
     public GameObject button_del;
-    private Book_contact bc;
     public GameObject img_loading;
 
     [Header("Contact info found")]
@@ -48,9 +47,11 @@ public class Call_contact : MonoBehaviour
         this.img_loading.SetActive(false);
         if (this.s_dial_txt.Length > 3)
         {
-            IDictionary item_found = this.bc.get_contact_by_phone(s_dial_txt);
+            IDictionary item_found = this.app.book_contact.get_contact_by_phone(s_dial_txt);
             if (item_found != null)
             {
+                this.app.play_sound(2);
+                this.app.carrot.play_vibrate();
                 this.button_add_contact.SetActive(false);
                 this.panel_info_contact_found.SetActive(true);
                 if (item_found["name"] != null) this.txt_contact_name_found.text = item_found["name"].ToString();
@@ -65,9 +66,12 @@ public class Call_contact : MonoBehaviour
                 this.button_add_contact.SetActive(true);
                 this.panel_info_contact_found.SetActive(false);
 
-                if (s_dial_txt.Length < 20 && this.app.carrot.is_online())
+                if (this.s_dial_txt.Length > 8)
                 {
-                    this.Get_info_by_number_phone(this.s_dial_txt);
+                    if (s_dial_txt.Length < 20 && this.app.carrot.is_online())
+                    {
+                        this.Get_info_by_number_phone(this.s_dial_txt);
+                    }
                 }
             }
         }
@@ -80,7 +84,7 @@ public class Call_contact : MonoBehaviour
         StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
         q.Add_where("status_share", Query_OP.EQUAL, "0");
         q.Add_where("phone", Query_OP.EQUAL, s_phone);
-        q.Set_limit(60);
+        q.Set_limit(1);
         app.carrot.server.Get_doc(q.ToJson(), Act_Get_info_by_number_phone_done, Act_Get_info_by_number_phone_fail);
     }
 
@@ -89,6 +93,8 @@ public class Call_contact : MonoBehaviour
         Fire_Collection fc = new(s_data);
         if (!fc.is_null)
         {
+            this.app.play_sound(2);
+            this.app.carrot.play_vibrate();
             this.img_loading.SetActive(false);
             for (int i = 0; i < fc.fire_document.Length; i++)
             {
@@ -121,24 +127,6 @@ public class Call_contact : MonoBehaviour
         this.img_loading.SetActive(false);
     }
 
-    private void act_get_info_by_phone(string data)
-    {
-        Debug.Log(data);
-        this.img_loading.SetActive(false);
-        IDictionary data_info = (IDictionary)Carrot.Json.Deserialize(data);
-        if (data_info["error"].ToString() == "0")
-        {
-            this.panel_info_contact_found.SetActive(true);
-            this.txt_contact_name_found.text = data_info["name"].ToString();
-            this.txt_contact_phone_found.text = data_info["phone"].ToString();
-            this.user_id_contact= data_info["user_id"].ToString();
-            this.user_lang_contact= data_info["user_lang"].ToString();
-            this.app.carrot.get_img(data_info["avatar"].ToString(),this.img_contact_found);
-            this.panel_info_contact_found.GetComponent<Button>().onClick.RemoveAllListeners();
-            this.panel_info_contact_found.GetComponent<Button>().onClick.AddListener(view_contact_info);
-        }
-    }
-
     public void view_contact_info()
     {
         this.app.carrot.user.show_user_by_id(this.user_id_contact,this.user_lang_contact);
@@ -146,20 +134,20 @@ public class Call_contact : MonoBehaviour
 
     public void btn_call()
     {
-        this.bc.GetComponent<App_Contacts>().play_sound(0);
+        this.app.play_sound(0);
         Application.OpenURL("tel:" +this.s_dial_txt);
     }
 
     public void btn_sms()
     {
-        this.bc.GetComponent<App_Contacts>().play_sound(0);
+        this.app.play_sound(0);
         Application.OpenURL("sms:" + this.s_dial_txt);
     }
 
     public void btn_delete()
     {
         this.StopAllCoroutines();
-        this.txt_phone_call.text = PlayerPrefs.GetString("call_tip");
+        this.txt_phone_call.text = PlayerPrefs.GetString("call_tip", "Let's start dialing the contact number");
         this.s_dial_txt = "";
         this.button_add_contact.SetActive(false);
         this.button_call.SetActive(false);

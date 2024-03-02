@@ -1310,81 +1310,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 207525817}
   m_CullTransparentMesh: 0
---- !u!1 &234218054
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 234218055}
-  - component: {fileID: 234218057}
-  - component: {fileID: 234218056}
-  m_Layer: 5
-  m_Name: QR_scan_icon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &234218055
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 234218054}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 969786010}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -101.10986}
-  m_SizeDelta: {x: 60, y: 60}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &234218056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 234218054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4f0304842d603a049af027f1fca11651, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &234218057
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 234218054}
-  m_CullTransparentMesh: 0
 --- !u!1 &242960397
 GameObject:
   m_ObjectHideFlags: 0
@@ -1837,8 +1762,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0015869141, y: -78.52}
-  m_SizeDelta: {x: 503.76, y: 422.59998}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &282905043
 MonoBehaviour:
@@ -5145,6 +5070,7 @@ GameObject:
   - component: {fileID: 698190124}
   - component: {fileID: 698190125}
   - component: {fileID: 698190126}
+  - component: {fileID: 698190127}
   m_Layer: 0
   m_Name: App_Contacts
   m_TagString: Untagged
@@ -5189,7 +5115,7 @@ MonoBehaviour:
   backup_Contacts: {fileID: 698190126}
   search: {fileID: 698190124}
   panel_call: {fileID: 789889237}
-  qr: {fileID: 969786013}
+  qr: {fileID: 698190127}
   area_body_main: {fileID: 1050745622}
   prefab_contact_main_item: {fileID: 346399769378897854, guid: 5c76e0e7f1ec6f749989da9d070de244,
     type: 3}
@@ -5405,6 +5331,32 @@ MonoBehaviour:
   app: {fileID: 698190117}
   icon_backup: {fileID: 21300000, guid: a01f26f5e6f8a094b99c49a5f0136484, type: 3}
   icon_download: {fileID: 21300000, guid: b66cfc6d22476ec4c95d3cb80c7d35b5, type: 3}
+--- !u!114 &698190127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698190115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c9eb261260a2c42987bf3a54b568a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  app: {fileID: 698190117}
+  panel_scan_qr: {fileID: 969786009}
+  codeWtr: {fileID: 180009205}
+  codetype: 0
+  previewImg_Read: {fileID: 0}
+  targetTex: {fileID: 2800000, guid: a8cf5adcd71a9ff4ea03f14c2a5ef6a4, type: 3}
+  reader: {fileID: 948019059}
+  preview: {fileID: 1130120933}
+  btn_create_qr_txt: {fileID: 1117913556}
+  btn_create_qr_icon: {fileID: 1924074160}
+  icon_create_qr: {fileID: 21300000, guid: 3e0a1ff18657ce2409ff08905807acbd, type: 3}
+  icon_read_qr: {fileID: 21300000, guid: 4f0304842d603a049af027f1fca11651, type: 3}
+  panel_data_qr: {fileID: 860846977}
+  txt_data_qr: {fileID: 2042147032}
 --- !u!1 &721956159
 GameObject:
   m_ObjectHideFlags: 0
@@ -6054,9 +6006,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -10, y: 29.899902}
+  m_AnchoredPosition: {x: 0, y: 14.899872}
   m_SizeDelta: {x: 30, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &832650492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6070,7 +6022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6139,9 +6091,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 969786013}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: delete_data_qr
+      - m_Target: {fileID: 698190127}
+        m_TargetAssemblyTypeName: QR_scan, Assembly-CSharp
+        m_MethodName: Btb_delete_data_qr
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6267,8 +6219,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5.7000732, y: -63.58667}
-  m_SizeDelta: {x: -95, y: -640.39746}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -100, y: -300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &860846979
 MonoBehaviour:
@@ -6290,7 +6242,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7031,9 +6983,8 @@ GameObject:
   - component: {fileID: 969786010}
   - component: {fileID: 969786012}
   - component: {fileID: 969786011}
-  - component: {fileID: 969786013}
   m_Layer: 5
-  m_Name: QR_scan
+  m_Name: Panel_qr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7053,7 +7004,6 @@ RectTransform:
   m_Children:
   - {fileID: 282905042}
   - {fileID: 860846978}
-  - {fileID: 234218055}
   - {fileID: 1411717904}
   - {fileID: 1130393662}
   m_Father: {fileID: 2014243808}
@@ -7101,33 +7051,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969786009}
   m_CullTransparentMesh: 0
---- !u!114 &969786013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 969786009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50c9eb261260a2c42987bf3a54b568a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  app: {fileID: 698190117}
-  codeWtr: {fileID: 180009205}
-  codetype: 0
-  previewImg_wirite: {fileID: 282905043}
-  targetTex: {fileID: 2800000, guid: 02e0011330b6ba445b4c1fc107dbc564, type: 3}
-  reader: {fileID: 948019059}
-  preview: {fileID: 1130120933}
-  btn_create_qr: {fileID: 1283303685}
-  btn_flip_camera: {fileID: 1139867898}
-  btn_create_qr_txt: {fileID: 1117913556}
-  btn_create_qr_icon: {fileID: 1924074160}
-  icon_create_qr: {fileID: 21300000, guid: 3e0a1ff18657ce2409ff08905807acbd, type: 3}
-  icon_read_qr: {fileID: 21300000, guid: 4f0304842d603a049af027f1fca11651, type: 3}
-  panel_data_qr: {fileID: 860846977}
-  txt_data_qr: {fileID: 2042147032}
 --- !u!1 &988219323
 GameObject:
   m_ObjectHideFlags: 0
@@ -7907,9 +7830,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 969786013}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: show_QR_scan
+      - m_Target: {fileID: 698190127}
+        m_TargetAssemblyTypeName: QR_scan, Assembly-CSharp
+        m_MethodName: Show_QR_scan
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8719,8 +8642,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260.96817, y: -34.68001}
-  m_SizeDelta: {x: 170.64545, y: 69.36002}
+  m_AnchoredPosition: {x: 252.4476, y: -34.68001}
+  m_SizeDelta: {x: 164.96507, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1139867898
 MonoBehaviour:
@@ -8766,9 +8689,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 969786013}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: btn_camera_flip
+      - m_Target: {fileID: 698190127}
+        m_TargetAssemblyTypeName: QR_scan, Assembly-CSharp
+        m_MethodName: Btn_camera_flip
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10326,8 +10249,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 436.61362, y: -34.68001}
-  m_SizeDelta: {x: 170.64545, y: 69.36002}
+  m_AnchoredPosition: {x: 422.4127, y: -34.68001}
+  m_SizeDelta: {x: 164.96507, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1283303685
 MonoBehaviour:
@@ -10373,9 +10296,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 969786013}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Change_create_and_read
+      - m_Target: {fileID: 698190127}
+        m_TargetAssemblyTypeName: QR_scan, Assembly-CSharp
+        m_MethodName: Btn_create_code
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11165,11 +11088,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 969786010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -167.20001}
-  m_SizeDelta: {x: -15.999988, y: 29.1}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 103.79999}
+  m_SizeDelta: {x: -40, y: 29.099976}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1411717905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11195,7 +11118,7 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
+    m_MinSize: 6
     m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -11490,8 +11413,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 85.32272, y: -34.68001}
-  m_SizeDelta: {x: 170.64545, y: 69.36002}
+  m_AnchoredPosition: {x: 82.48254, y: -34.68001}
+  m_SizeDelta: {x: 164.96507, y: 69.36002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1428573837
 MonoBehaviour:
@@ -11537,9 +11460,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 969786013}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: close
+      - m_Target: {fileID: 698190127}
+        m_TargetAssemblyTypeName: QR_scan, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12940,9 +12863,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 969786013}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: click_goto_data_link
+      - m_Target: {fileID: 698190127}
+        m_TargetAssemblyTypeName: QR_scan, Assembly-CSharp
+        m_MethodName: Click_goto_data_link
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13354,7 +13277,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 28.40001, y: 47.6}
+  m_AnchoredPosition: {x: 28.400024, y: 47.6}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1750404583
@@ -15404,6 +15327,11 @@ PrefabInstance:
         type: 3}
       propertyPath: Carrotstore_AppId
       value: Contact store
+      objectReference: {fileID: 0}
+    - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
+        type: 3}
+      propertyPath: WindowUWP_ProductId
+      value: 9NGN6DZ4G91D
       objectReference: {fileID: 0}
     - target: {fileID: 5170736565810424378, guid: 03a96ab3934df714c9f607eeba1302ab,
         type: 3}
