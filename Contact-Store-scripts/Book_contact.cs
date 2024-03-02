@@ -33,7 +33,7 @@ public class Book_contact : MonoBehaviour
     private Carrot.Carrot_Window_Msg msg;
 	private Carrot.Carrot_Box box;
 
-	public void load_book_contact()
+    public void Load_book_contact()
 	{
 		this.length = PlayerPrefs.GetInt("contact_length", 0);
 	}
@@ -41,7 +41,7 @@ public class Book_contact : MonoBehaviour
 	public void show()
 	{
 		this.app.carrot.clear_contain(this.app.area_body_main);
-		this.app.add_item_loading();
+		this.app.Add_item_loading();
 		this.app.carrot.delay_function(0.5f, this.list);
 	}
 
@@ -60,7 +60,6 @@ public class Book_contact : MonoBehaviour
 				string s_data = PlayerPrefs.GetString("contact_" + i, "");
 				if (s_data != "")
 				{
-					Debug.Log(s_data);
 					IDictionary data_contact = (IDictionary)Carrot.Json.Deserialize(s_data);
 					data_contact["type_item"] = "phonebook";
 					data_contact["index"] = i;
@@ -152,7 +151,7 @@ public class Book_contact : MonoBehaviour
 
 	public IList get_list_data_backup()
 	{
-		IList list_data = (IList)Carrot.Json.Deserialize("[]");
+		IList list_data = (IList)Json.Deserialize("[]");
 		if (this.length > 0)
 		{
 			for (int i = this.length - 1; i >= 0; i--)

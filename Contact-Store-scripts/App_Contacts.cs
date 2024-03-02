@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Carrot;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class App_Contacts : MonoBehaviour
@@ -50,11 +51,11 @@ public class App_Contacts : MonoBehaviour
         this.link_deep_app = Application.absoluteURL;
         this.panel_call.SetActive(false);
 
-        this.carrot.Load_Carrot(check_exit_app);
-        this.book_contact.load_book_contact();
+        this.carrot.Load_Carrot(Check_exit_app);
+        this.book_contact.Load_book_contact();
     }
 
-    public void check_link_deep_app()
+    public void Check_link_deep_app()
     {
         if (this.link_deep_app.Trim() != "")
         {
@@ -78,23 +79,23 @@ public class App_Contacts : MonoBehaviour
         }
     }
 
-    public void load_app_online()
+    public void Load_app_online()
     {
         if (PlayerPrefs.GetString("lang") == "")
             this.btn_show_list_lang();
         else
         {
             this.menu.load();
-            this.check_link_deep_app();
+            this.Check_link_deep_app();
         }  
     }
 
-    public void load_app_offline()
+    public void Load_app_offline()
     {
         this.book_contact.show();
     }
 
-    private void check_exit_app()
+    private void Check_exit_app()
     {
         if (this.panel_call.activeInHierarchy)
         {
@@ -113,7 +114,7 @@ public class App_Contacts : MonoBehaviour
         this.carrot.Create_Setting();
     }
 
-    public void add_item_loading()
+    public void Add_item_loading()
     {
         GameObject item_waiting = Instantiate(this.prefab_row_waitting);
         item_waiting.transform.SetParent(this.area_body_main);
@@ -130,12 +131,12 @@ public class App_Contacts : MonoBehaviour
     public void btn_show_list_lang()
     {
         this.play_sound(0);
-        this.carrot.show_list_lang(act_after_load_lang);
+        this.carrot.show_list_lang(Act_after_load_lang);
     }
 
-    private void act_after_load_lang(string s_data)
+    private void Act_after_load_lang(string s_data)
     {
-        this.manager_contact.list();
+        this.manager_contact.List();
     }
 
     public void btn_account()
@@ -148,7 +149,7 @@ public class App_Contacts : MonoBehaviour
         this.search.search_contact(this.inp_search.text.Trim());
     }
 
-    public Carrot.Carrot_Box_Item create_item_main()
+    public Carrot_Box_Item create_item_main()
     {
         GameObject obj_item_main = Instantiate(this.prefab_contact_main_item);
         obj_item_main.transform.SetParent(this.area_body_main);
@@ -156,15 +157,15 @@ public class App_Contacts : MonoBehaviour
         obj_item_main.transform.localScale = new Vector3(1f, 1f, 1f);
         obj_item_main.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
-        Carrot.Carrot_Box_Item item_title = obj_item_main.GetComponent<Carrot.Carrot_Box_Item>();
+        Carrot_Box_Item item_title = obj_item_main.GetComponent<Carrot_Box_Item>();
         item_title.on_load(this.carrot);
         item_title.check_type();
         return item_title;
     }
 
-    public Carrot.Carrot_Box_Item add_item_title_list(string s_title)
+    public Carrot_Box_Item add_item_title_list(string s_title)
     {
-        Carrot.Carrot_Box_Item item_title = this.create_item_main();
+        Carrot_Box_Item item_title = this.create_item_main();
         item_title.set_icon_white(this.carrot.icon_carrot_all_category);
         item_title.txt_name.color = Color.white;
         item_title.txt_tip.color = Color.white;
@@ -176,9 +177,9 @@ public class App_Contacts : MonoBehaviour
         return item_title;
     }
 
-    public Carrot.Carrot_Box_Item add_item_none()
+    public Carrot_Box_Item add_item_none()
     {
-        Carrot.Carrot_Box_Item item_none = this.create_item_main();
+        Carrot_Box_Item item_none = this.create_item_main();
         item_none.set_icon_white(this.icon_sad);
         item_none.txt_name.color = Color.white;
         item_none.txt_tip.color = Color.white;

@@ -35,9 +35,9 @@ public class Manager_Menu : MonoBehaviour
         this.img_menu_footer_bk[this.index_cur_func].color = this.color_sel;
         this.btn_extension_add[this.index_cur_func].SetActive(true);
 
-        if (this.index_cur_func == 0) this.app.manager_contact.list();
+        if (this.index_cur_func == 0) this.app.manager_contact.List();
         if (this.index_cur_func == 1) this.app.book_contact.show();
-        if (this.index_cur_func == 2) this.app.backup_Contacts.show();
+        if (this.index_cur_func == 2) this.app.backup_Contacts.Show();
         if (this.index_cur_func == 3) this.app.btn_show_call();
     }
 
