@@ -46,6 +46,7 @@ public class App_Contacts : MonoBehaviour
 
     [Header("Sounds")]
     public AudioSource[] sound;
+    public AudioSource sound_bk_music;
 
     private string link_deep_app;
 
@@ -57,6 +58,8 @@ public class App_Contacts : MonoBehaviour
         this.panel_call.SetActive(false);
 
         this.carrot.Load_Carrot(Check_exit_app);
+        this.carrot.game.load_bk_music(this.sound_bk_music);
+
         this.book_contact.Load_book_contact();
         this.qr.On_load();
     }
