@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
 public class App_Contacts : MonoBehaviour
@@ -14,9 +13,10 @@ public class App_Contacts : MonoBehaviour
     public Book_contact book_contact;
     public Backup_Contacts backup_Contacts;
     public Search_Contacts search;
+    public Call_contact call;
+    public Carrot_DeviceOrientationChange deviceOrientation;
 
     [Header("Obj App")]
-    public GameObject panel_call;
     public QR_scan qr;
     public Transform area_body_main;
 
@@ -55,13 +55,14 @@ public class App_Contacts : MonoBehaviour
         this.link_deep_app = Application.absoluteURL;
         Application.deepLinkActivated += OnDeepLinkActivated;
 
-        this.panel_call.SetActive(false);
-
         this.carrot.Load_Carrot(Check_exit_app);
         this.carrot.game.load_bk_music(this.sound_bk_music);
 
         this.book_contact.Load_book_contact();
         this.qr.On_load();
+        this.call.panel_call.SetActive(false);
+        this.Check_scene_size();
+        this.carrot.carrot_lost_internet.Call_when_func();
     }
 
     [ContextMenu("Test Link")]
@@ -95,7 +96,7 @@ public class App_Contacts : MonoBehaviour
             if (this.link_deep_app.Contains("tel"))
             {
                 string data_link = this.link_deep_app.Replace("contactstore://tel/", "");
-                this.panel_call.GetComponent<Call_contact>().show_by_phone_number(data_link);
+                this.call.show_by_phone_number(data_link);
                 this.link_deep_app = "";
             }
         }
@@ -119,9 +120,9 @@ public class App_Contacts : MonoBehaviour
 
     private void Check_exit_app()
     {
-        if (this.panel_call.activeInHierarchy)
+        if (this.call.panel_call.activeInHierarchy)
         {
-            this.panel_call.SetActive(false);
+            this.call.panel_call.SetActive(false);
             this.carrot.set_no_check_exit_app();
         }
         else if (this.qr.gameObject.activeInHierarchy)
@@ -234,16 +235,14 @@ public class App_Contacts : MonoBehaviour
     public void btn_show_call()
     {
         this.play_sound(0);
-        this.panel_call.SetActive(true);
-        this.panel_call.GetComponent<Call_contact>().show();
+        this.call.show();
     }
 
     public void btn_close_call()
     {
         this.play_sound(0);
         this.carrot.stop_all_act();
-        this.panel_call.GetComponent<Call_contact>().StopAllCoroutines();
-        this.panel_call.SetActive(false);
+        this.call.Hide();
     }
 
     public void play_sound(int index)
@@ -276,5 +275,11 @@ public class App_Contacts : MonoBehaviour
     {
         this.carrot.hide_loading();
         this.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), PlayerPrefs.GetString("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+    }
+
+    public void Check_scene_size()
+    {
+        Debug.Log("Check_scene_size");
+        carrot.delay_function(0.2f, call.Check_scene_size);
     }
 }

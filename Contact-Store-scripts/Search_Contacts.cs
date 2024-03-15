@@ -33,6 +33,7 @@ public class Search_Contacts : MonoBehaviour
 
     private void Search_name_or_phone_offline(string s_key)
     {
+        app.call.panel_call.SetActive(false);
         IList list = this.app.manager_contact.get_list_contacts();
         IList list_search = (IList)Json.Deserialize("[]");
 
@@ -170,6 +171,9 @@ public class Search_Contacts : MonoBehaviour
 
     private void Act_advanced_search_done(string s_data)
     {
+        app.call.panel_call.SetActive(false);
+        app.deviceOrientation.Stop_check();
+
         Fire_Collection fc = new(s_data);
 
         if (!fc.is_null)
@@ -198,6 +202,9 @@ public class Search_Contacts : MonoBehaviour
 
     private void Act_advanced_search_fail(string s_error)
     {
+        app.call.panel_call.SetActive(false);
+        app.deviceOrientation.Stop_check();
+
         if (this.box_search_advanced != null) this.box_search_advanced.close();
         this.app.carrot.show_msg(PlayerPrefs.GetString("advanced_search", "Advanced Search"),s_error, Msg_Icon.Error);
     }

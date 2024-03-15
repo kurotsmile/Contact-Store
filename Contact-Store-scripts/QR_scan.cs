@@ -39,7 +39,7 @@ public class QR_scan : MonoBehaviour
     public void GetCodeImage(Texture2D tex)
     {
         app.play_sound(2);
-        app.carrot.camera_pro.show_photoshop(tex);
+        app.carrot.camera_pro.show_photoshop(tex,2F);
         this.StartReader();
     }
 
