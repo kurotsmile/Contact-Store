@@ -41,7 +41,7 @@ public class Call_contact : MonoBehaviour
         this.app.deviceOrientation.Start_check();
         this.app.Check_scene_size();
         this.panel_call.SetActive(true);
-        this.btn_delete();
+        this.Act_delete_all_obj_btn();
     }
 
     public void show_by_phone_number(string s_phone_numer)
@@ -159,10 +159,8 @@ public class Call_contact : MonoBehaviour
         Application.OpenURL("sms:" + this.s_dial_txt);
     }
 
-    public void btn_delete()
+    public void Act_delete_all_obj_btn()
     {
-        app.carrot.play_sound_click();
-        app.carrot.play_vibrate();
         this.txt_phone_call.text = PlayerPrefs.GetString("call_tip", "Let's start dialing the contact number");
         this.s_dial_txt = "";
         this.button_add_contact.SetActive(false);
@@ -171,6 +169,13 @@ public class Call_contact : MonoBehaviour
         this.button_del.SetActive(false);
         this.panel_info_contact_found.SetActive(false);
         this.img_loading.SetActive(false);
+    }
+
+    public void btn_delete()
+    {
+        app.carrot.play_sound_click();
+        app.carrot.play_vibrate();
+        this.Act_delete_all_obj_btn();
     }
 
     public void btn_add_contacts()

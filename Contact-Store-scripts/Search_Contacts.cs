@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum Search_Contacts_Type {search_name_or_phone,search_name,search_phone}
 public class Search_Contacts : MonoBehaviour
 {
     [Header("Obj Main")]
@@ -16,10 +17,20 @@ public class Search_Contacts : MonoBehaviour
     private Carrot_Box_Item item_phone;
     private Carrot_Box_Item item_sex;
 
+    private string s_key_search_temp = "";
+    private Search_Contacts_Type type_search = Search_Contacts_Type.search_name_or_phone;
+
     public void search_contact(string s_key)
     {
+        s_key = s_key.Trim();
+        this.type_search = Search_Contacts_Type.search_name_or_phone;
         if (s_key != "")
         {
+            app.carrot.ads.show_ads_Interstitial();
+            app.carrot.show_loading();
+            app.inp_search.text = "";
+            this.s_key_search_temp = s_key;
+
             if (app.carrot.is_offline())
                 Search_name_or_phone_offline(s_key);
             else
@@ -33,6 +44,7 @@ public class Search_Contacts : MonoBehaviour
 
     private void Search_name_or_phone_offline(string s_key)
     {
+        app.carrot.show_loading();
         app.call.panel_call.SetActive(false);
         IList list = this.app.manager_contact.get_list_contacts();
         IList list_search = (IList)Json.Deserialize("[]");
@@ -71,6 +83,7 @@ public class Search_Contacts : MonoBehaviour
 
     private void Search_name_online(string s_key)
     {
+        this.type_search = Search_Contacts_Type.search_name;
         StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
         q.Add_where("status_share", Query_OP.EQUAL, "0");
         q.Add_where("name", Query_OP.EQUAL, s_key);
@@ -80,6 +93,7 @@ public class Search_Contacts : MonoBehaviour
 
     public void Search_phone_number(string s_phone)
     {
+        this.type_search = Search_Contacts_Type.search_phone;
         StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
         q.Add_where("status_share", Query_OP.EQUAL, "0");
         q.Add_where("phone", Query_OP.EQUAL, s_phone);
@@ -171,6 +185,7 @@ public class Search_Contacts : MonoBehaviour
 
     private void Act_advanced_search_done(string s_data)
     {
+        app.carrot.hide_loading();
         app.call.panel_call.SetActive(false);
         app.deviceOrientation.Stop_check();
 
@@ -180,9 +195,9 @@ public class Search_Contacts : MonoBehaviour
         {
             if (this.box_search_advanced != null) this.box_search_advanced.close();
             this.app.carrot.clear_contain(this.app.area_body_main);
-            Carrot_Box_Item item_search_result = this.app.add_item_title_list("Search Results");
+            Carrot_Box_Item item_search_result = this.app.add_item_title_list(this.s_key_search_temp);
             item_search_result.set_icon(this.icon_search_return);
-            item_search_result.set_tip("Contacts found:" + fc.fire_document.Length);
+            item_search_result.set_tip(fc.fire_document.Length.ToString());
 
             IList list_search = (IList)Json.Deserialize("[]");
             for (int i = 0; i < fc.fire_document.Length; i++)
@@ -196,12 +211,22 @@ public class Search_Contacts : MonoBehaviour
         }
         else
         {
-            this.app.carrot.show_msg(PlayerPrefs.GetString("advanced_search", "Advanced Search"),PlayerPrefs.GetString("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+            if (this.type_search == Search_Contacts_Type.search_name)
+            {
+                app.carrot.hide_loading();
+                this.Search_phone_number(this.s_key_search_temp);
+            }
+            else
+            {
+                this.app.carrot.show_msg(PlayerPrefs.GetString("advanced_search", "Advanced Search"), PlayerPrefs.GetString("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+            }
+            
         }
     }
 
     private void Act_advanced_search_fail(string s_error)
     {
+        app.carrot.hide_loading();
         app.call.panel_call.SetActive(false);
         app.deviceOrientation.Stop_check();
 

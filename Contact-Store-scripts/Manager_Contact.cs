@@ -41,7 +41,6 @@ public class Manager_Contact : MonoBehaviour
     private void Get_data_from_server()
     {
         StructuredQuery q = new("user-" + app.carrot.lang.get_key_lang());
-        q.Add_select("status_share");
         q.Add_select("name");
         q.Add_select("avatar");
         q.Add_select("lang");
