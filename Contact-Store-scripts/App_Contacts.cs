@@ -247,7 +247,7 @@ public class App_Contacts : MonoBehaviour
 
     public void play_sound(int index)
     {
-        if (this.carrot.get_status_sound()) this.sound[index].Play();
+        if (this.carrot.get_status_sound()) if(this.sound[index]!=null) this.sound[index].Play();
     }
 
     public void scrollbar_on_top()
