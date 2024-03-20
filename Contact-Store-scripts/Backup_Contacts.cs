@@ -19,10 +19,11 @@ public class Backup_Contacts : MonoBehaviour
 
     public void Show()
     {
+        if (this.msg != null) this.msg.close();
         this.app.play_sound(0);
         if (this.app.carrot.user.get_id_user_login() == "")
         {
-            this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
+            this.msg=this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
             this.app.carrot.delay_function(2f, this.Show_login_for_backup);
         }
         else
@@ -30,14 +31,14 @@ public class Backup_Contacts : MonoBehaviour
             this.app.carrot.clear_contain(this.app.area_body_main);
 
             Carrot_Box_Item item_backup= app.create_item_main();
-            item_backup.set_title(PlayerPrefs.GetString("create_backup", "Create a new backup"));
-            item_backup.set_tip(PlayerPrefs.GetString("create_backup_tip", "Start backing up your contacts in your app"));
+            item_backup.set_title(this.app.carrot.lang.Val("create_backup", "Create a new backup"));
+            item_backup.set_tip(this.app.carrot.lang.Val("create_backup_tip", "Start backing up your contacts in your app"));
             item_backup.set_icon(this.icon_backup);
             item_backup.set_act(() => this.Backup());
 
             Carrot_Box_Item item_syn= app.create_item_main();
-            item_syn.set_title(PlayerPrefs.GetString("backup_list", "list of your backups"));
-            item_syn.set_tip(PlayerPrefs.GetString("backup_list", "list of your backups"));
+            item_syn.set_title(this.app.carrot.lang.Val("backup_list", "list of your backups"));
+            item_syn.set_tip(this.app.carrot.lang.Val("backup_list", "list of your backups"));
             item_syn.set_icon(this.icon_download);
             item_syn.set_act(() => this.List());
         }
@@ -45,6 +46,7 @@ public class Backup_Contacts : MonoBehaviour
 
     private void Show_login_for_backup()
     {
+        if (this.msg != null) this.msg.close();
         this.app.carrot.user.show_login(this.Show);
     }
 
@@ -72,9 +74,9 @@ public class Backup_Contacts : MonoBehaviour
         Fire_Collection fc = new(s_data);
         if (!fc.is_null)
         {
-            Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("backup", "Backup"));
+            Carrot_Box_Item item_title = this.app.add_item_title_list(this.app.carrot.lang.Val("backup", "Backup"));
             item_title.set_icon(this.app.carrot.icon_carrot_all_category);
-            item_title.set_tip(PlayerPrefs.GetString("backup_list", "list of your backups"));
+            item_title.set_tip(this.app.carrot.lang.Val("backup_list", "list of your backups"));
             item_title.set_act(() => this.List());
 
             for (int i = 0; i < fc.fire_document.Length; i++)
@@ -88,7 +90,7 @@ public class Backup_Contacts : MonoBehaviour
                 Carrot_Box_Item item_backup = this.app.create_item_main();
                 item_backup.set_icon(this.app.carrot.icon_carrot_database);
                 item_backup.set_title(data_backup["date"].ToString());
-                item_backup.set_tip(data_backup["length"].ToString() + " " + PlayerPrefs.GetString("contact", "Contact"));
+                item_backup.set_tip(data_backup["length"].ToString() + " " + this.app.carrot.lang.Val("contact", "Contact"));
 
                 Carrot_Box_Btn_Item btn_download = item_backup.create_item();
                 btn_download.set_icon(this.icon_download);
@@ -119,14 +121,14 @@ public class Backup_Contacts : MonoBehaviour
 
     private void Act_list_fail(string s_error)
     {
-        this.app.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
+        this.app.carrot.show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
     }
 
     private void Add_item_create_new()
     {
-        Carrot_Box_Item item_create = this.app.add_item_title_list(PlayerPrefs.GetString("create_backup","Create a new backup"));
+        Carrot_Box_Item item_create = this.app.add_item_title_list(this.app.carrot.lang.Val("create_backup","Create a new backup"));
         item_create.set_icon(this.app.carrot.icon_carrot_add);
-        item_create.set_tip(PlayerPrefs.GetString("create_backup_tip","Start backing up your contacts in your app"));
+        item_create.set_tip(this.app.carrot.lang.Val("create_backup_tip","Start backing up your contacts in your app"));
         item_create.set_act(() => this.Backup());
     }
 
@@ -135,7 +137,7 @@ public class Backup_Contacts : MonoBehaviour
         this.list_contact_download = contacts;
         this.app.play_sound(0);
         if (this.msg != null) this.msg.close();
-        this.msg=this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"),PlayerPrefs.GetString("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
+        this.msg=this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"),this.app.carrot.lang.Val("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
     }
 
     private void download_yes()
@@ -147,7 +149,7 @@ public class Backup_Contacts : MonoBehaviour
         }
         if (this.msg != null) this.msg.close();
         this.app.book_contact.show();
-        this.msg = this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_success", "Download the backup and sync successfully!"),Carrot.Msg_Icon.Success);
+        this.msg = this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_success", "Download the backup and sync successfully!"),Carrot.Msg_Icon.Success);
     }
 
     private void download_no()
@@ -193,7 +195,7 @@ public class Backup_Contacts : MonoBehaviour
         IList list_contacts = this.app.book_contact.get_list_data_backup();
         if (list_contacts.Count == 0)
         {
-            this.app.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), PlayerPrefs.GetString("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+            this.app.carrot.show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), this.app.carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
             return;
         }
 
@@ -215,19 +217,19 @@ public class Backup_Contacts : MonoBehaviour
     private void Backup_fail(string s_error)
     {
         app.carrot.hide_loading();
-        this.app.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
+        this.app.carrot.show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
     }
 
     private void Backup_data_done(string s_data)
     {
         app.carrot.hide_loading();
-        this.app.carrot.show_msg(PlayerPrefs.GetString("backup", "Backup"), PlayerPrefs.GetString("backup_success", "Download the backup and sync successfully!"), Msg_Icon.Success);
+        this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_success", "Download the backup and sync successfully!"), Msg_Icon.Success);
     }
 
     private void View_backup(IList list_contact)
     {
         Carrot_Box box_list = app.carrot.Create_Box();
-        box_list.set_title(PlayerPrefs.GetString("backup", "Backup"));
+        box_list.set_title(this.app.carrot.lang.Val("backup", "Backup"));
         box_list.set_icon(app.carrot.user.icon_user_info);
 
         foreach (IDictionary contact in list_contact)

@@ -96,7 +96,7 @@ public class Call_contact : MonoBehaviour
     private void Get_info_by_number_phone(string s_phone)
     {
         this.img_loading.SetActive(true);
-        StructuredQuery q = new("user-" + this.app.carrot.lang.get_key_lang());
+        StructuredQuery q = new("user-" + this.app.carrot.lang.Get_key_lang());
         q.Add_where("status_share", Query_OP.EQUAL, "0");
         q.Add_where("phone", Query_OP.EQUAL, s_phone);
         q.Set_limit(1);
@@ -161,7 +161,7 @@ public class Call_contact : MonoBehaviour
 
     public void Act_delete_all_obj_btn()
     {
-        this.txt_phone_call.text = PlayerPrefs.GetString("call_tip", "Let's start dialing the contact number");
+        this.txt_phone_call.text = this.app.carrot.lang.Val("call_tip", "Let's start dialing the contact number");
         this.s_dial_txt = "";
         this.button_add_contact.SetActive(false);
         this.button_call.SetActive(false);

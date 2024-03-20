@@ -30,7 +30,7 @@ public class Manager_Contact : MonoBehaviour
         }
         else
         {
-            string s_list_data = PlayerPrefs.GetString("contacts_" + this.order_by.ToString() + "_" + app.carrot.lang.get_key_lang(), "");
+            string s_list_data = PlayerPrefs.GetString("contacts_" + this.order_by.ToString() + "_" + app.carrot.lang.Get_key_lang(), "");
             if (s_list_data == "")
                 this.Get_data_from_server();
             else
@@ -40,7 +40,7 @@ public class Manager_Contact : MonoBehaviour
 
     private void Get_data_from_server()
     {
-        StructuredQuery q = new("user-" + app.carrot.lang.get_key_lang());
+        StructuredQuery q = new("user-" + app.carrot.lang.Get_key_lang());
         q.Add_select("name");
         q.Add_select("avatar");
         q.Add_select("lang");
@@ -73,7 +73,7 @@ public class Manager_Contact : MonoBehaviour
                 this.list_contacts.Add(data_contact);
             }
 
-            PlayerPrefs.SetString("contacts_" + this.order_by.ToString() + "_" + app.carrot.lang.get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
+            PlayerPrefs.SetString("contacts_" + this.order_by.ToString() + "_" + app.carrot.lang.Get_key_lang(), Carrot.Json.Serialize(this.list_contacts));
             this.is_read_cache = true;
 
             this.Add_item_title();
@@ -105,8 +105,8 @@ public class Manager_Contact : MonoBehaviour
 
     private void Add_item_title()
     {
-        Carrot_Box_Item item_title = app.add_item_title_list(PlayerPrefs.GetString("contact", "Contact") +" (" + app.carrot.lang.get_key_lang() + ")");
-        item_title.set_tip(PlayerPrefs.GetString("contact_list", "List of contacts in your country ") + "("+this.list_contacts.Count+" "+ PlayerPrefs.GetString("contact", "Contact")+")");
+        Carrot_Box_Item item_title = app.add_item_title_list(this.app.carrot.lang.Val("contact", "Contact") +" (" + app.carrot.lang.Get_key_lang() + ")");
+        item_title.set_tip(this.app.carrot.lang.Val("contact_list", "List of contacts in your country ") + "("+this.list_contacts.Count+" "+ this.app.carrot.lang.Val("contact", "Contact")+")");
         Carrot_Box_Btn_Item btn_sort_name = item_title.create_item();
         btn_sort_name.set_icon(this.icon_sort_name);
         btn_sort_name.set_icon_color(Color.white);
@@ -228,7 +228,7 @@ public class Manager_Contact : MonoBehaviour
                 btn_call.set_icon_white(app.icon_call_boy);
             }
             btn_call.set_label_color(Color.white);
-            btn_call.set_label(PlayerPrefs.GetString("call", "Call"));
+            btn_call.set_label(this.app.carrot.lang.Val("call", "Call"));
             btn_call.set_bk_color(app.carrot.color_highlight);
             btn_call.set_act_click(() => this.Call(s_phone));
         }
@@ -242,7 +242,7 @@ public class Manager_Contact : MonoBehaviour
                 Carrot_Button_Item btn_mail = panel_tool.create_btn("btn_mail");
                 btn_mail.set_icon_white(app.carrot.icon_carrot_mail);
                 btn_mail.set_label_color(Color.white);
-                btn_mail.set_label(PlayerPrefs.GetString("send_mail", "Send Mail"));
+                btn_mail.set_label(this.app.carrot.lang.Val("send_mail", "Send Mail"));
                 btn_mail.set_bk_color(app.carrot.color_highlight);
                 btn_mail.set_act_click(() => this.Mail(s_mail));
             }
@@ -251,18 +251,20 @@ public class Manager_Contact : MonoBehaviour
         Carrot_Button_Item btn_share = panel_tool.create_btn("btn_share");
         btn_share.set_icon_white(app.carrot.sp_icon_share);
         btn_share.set_label_color(Color.white);
-        btn_share.set_label(PlayerPrefs.GetString("share", "Share"));
+        btn_share.set_label(this.app.carrot.lang.Val("share", "Share"));
         btn_share.set_bk_color(app.carrot.color_highlight);
         btn_share.set_act_click(() => this.Share(id_contact,lang_contact));
 
         Carrot_Box_Btn_Panel panel_qr = box_info.create_panel_btn();
 
+        /*
         Carrot_Button_Item btn_qr_link = panel_qr.create_btn("btn_qr");
         btn_qr_link.set_icon_white(app.qr.icon_read_qr);
         btn_qr_link.set_label_color(Color.white);
         btn_qr_link.set_label("QR (Link)");
         btn_qr_link.set_bk_color(app.carrot.color_highlight);
         btn_qr_link.set_act_click(() => this.QR_Code_link_user(id_contact,lang_contact));
+        */
 
         if (s_phone != "")
         {
@@ -294,14 +296,14 @@ public class Manager_Contact : MonoBehaviour
                 Carrot_Button_Item btn_save = panel_act.create_btn("btn_save");
                 btn_save.set_icon_white(this.icon_save);
                 btn_save.set_label_color(Color.white);
-                btn_save.set_label(PlayerPrefs.GetString("save_contact","Save Contact"));
+                btn_save.set_label(this.app.carrot.lang.Val("save_contact","Save Contact"));
                 btn_save.set_bk_color(app.carrot.color_highlight);
                 btn_save.set_act_click(() => app.book_contact.add(data));
 
                 if (app.carrot.model_app == ModelApp.Develope)
                 {
                     string s_id = data["id"].ToString();
-                    string s_lang = this.app.carrot.lang.get_key_lang();
+                    string s_lang = this.app.carrot.lang.Get_key_lang();
                     Carrot_Button_Item btn_del_dev = panel_act.create_btn("btn_del_dev");
                     btn_del_dev.set_icon_white(this.app.carrot.sp_icon_del_data);
                     btn_del_dev.set_label_color(Color.white);
@@ -318,14 +320,14 @@ public class Manager_Contact : MonoBehaviour
                     Carrot_Button_Item btn_del = panel_act.create_btn("btn_del");
                     btn_del.set_icon_white(app.carrot.sp_icon_del_data);
                     btn_del.set_label_color(Color.white);
-                    btn_del.set_label(PlayerPrefs.GetString("del_contact", "Delete contact"));
+                    btn_del.set_label(this.app.carrot.lang.Val("del_contact", "Delete contact"));
                     btn_del.set_bk_color(Color.red);
                     btn_del.set_act_click(() => app.book_contact.delete(int.Parse(data["index"].ToString())));
 
                     Carrot_Button_Item btn_edit= panel_act.create_btn("btn_edit");
                     btn_edit.set_icon_white(app.carrot.user.icon_user_edit);
                     btn_edit.set_label_color(Color.white);
-                    btn_edit.set_label(PlayerPrefs.GetString("edit", "Edit"));
+                    btn_edit.set_label(this.app.carrot.lang.Val("edit", "Edit"));
                     btn_edit.set_bk_color(app.carrot.color_highlight);
                     btn_edit.set_act_click(() => app.book_contact.edit(int.Parse(data["index"].ToString())));
                 }
@@ -335,7 +337,7 @@ public class Manager_Contact : MonoBehaviour
         Carrot_Button_Item btn_close = panel_act.create_btn("btn_close");
         btn_close.set_icon_white(app.carrot.icon_carrot_cancel);
         btn_close.set_label_color(Color.white);
-        btn_close.set_label(PlayerPrefs.GetString("cancel", "Cancel"));
+        btn_close.set_label(this.app.carrot.lang.Val("cancel", "Cancel"));
         btn_close.set_bk_color(app.carrot.color_highlight);
         btn_close.set_act_click(() => box_info.close());
     }
@@ -359,12 +361,12 @@ public class Manager_Contact : MonoBehaviour
     private void QR_Code_link_user(string id_contact, string lang_contact)
     {
         string url_share = app.carrot.mainhost + "?p=phone_book&id=" + id_contact + "&user_lang=" + lang_contact;
-        app.qr.Show_QR_create_by_data(url_share, true);
+        app.qr.Show_QR_create_by_data(url_share);
     }
 
     private void QR_Code_phone_number(string s_phone)
     {
-        app.qr.Show_QR_create_by_data(s_phone, false);
+        app.qr.Show_QR_create_by_data(s_phone);
     }
 
     private void Sort()

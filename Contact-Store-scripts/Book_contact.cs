@@ -50,9 +50,9 @@ public class Book_contact : MonoBehaviour
 		this.app.carrot.clear_contain(this.app.area_body_main);
 		if (this.length > 0)
 		{
-			Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(PlayerPrefs.GetString("phonebook", "Phonebook"));
+			Carrot.Carrot_Box_Item item_title = this.app.add_item_title_list(this.app.carrot.lang.Val("phonebook", "Phonebook"));
 			item_title.set_icon_white(this.sp_icon_import);
-			item_title.set_tip(PlayerPrefs.GetString("phonebook_list", "List of saved contacts"));
+			item_title.set_tip(this.app.carrot.lang.Val("phonebook_list", "List of saved contacts"));
 
 			IList list_contact_book = (IList)Carrot.Json.Deserialize("[]");
 			for (int i = this.length - 1; i >= 0; i--)
@@ -93,7 +93,7 @@ public class Book_contact : MonoBehaviour
 	{
 		this.index_del = index;
 		if (this.msg != null) this.msg.close();
-		this.msg = this.app.carrot.show_msg(PlayerPrefs.GetString("delete", "Delete"),PlayerPrefs.GetString("delete_item_msg", "Are you sure you want to remove this item?"), act_yes_delete, act_no_delete);
+		this.msg = this.app.carrot.show_msg(this.app.carrot.lang.Val("delete", "Delete"),this.app.carrot.lang.Val("delete_item_msg", "Are you sure you want to remove this item?"), act_yes_delete, act_no_delete);
 	}
 
 	private void act_yes_delete()
@@ -121,7 +121,7 @@ public class Book_contact : MonoBehaviour
 
         Carrot_Box box_edit = this.box_add_or_edit(data_contact);
         box_edit.set_icon(this.app.carrot.user.icon_user_edit);
-        box_edit.set_title(PlayerPrefs.GetString("phonebook_edit", "Edit contacts"));
+        box_edit.set_title(this.app.carrot.lang.Val("phonebook_edit", "Edit contacts"));
         this.create_box_panel_btn(box_edit, () => this.update_contact_done());
     }
 
@@ -180,7 +180,7 @@ public class Book_contact : MonoBehaviour
 		IDictionary data_new_contact =(IDictionary)Carrot.Json.Deserialize("{}");
 		Carrot_Box box_add=this.box_add_or_edit(data_new_contact);
         box_add.set_icon(this.sp_icon_add_phone);
-        box_add.set_title(PlayerPrefs.GetString("phonebook_add", "Add new contacts"));
+        box_add.set_title(this.app.carrot.lang.Val("phonebook_add", "Add new contacts"));
         this.create_box_panel_btn(box_add, () => this.create_contact_done());
     }
 
@@ -190,7 +190,7 @@ public class Book_contact : MonoBehaviour
 		data_new_contact["phone"] = s_phone;
         Carrot_Box box_add = this.box_add_or_edit(data_new_contact);
         box_add.set_icon(this.sp_icon_add_phone);
-        box_add.set_title(PlayerPrefs.GetString("phonebook_add", "Add new contacts"));
+        box_add.set_title(this.app.carrot.lang.Val("phonebook_add", "Add new contacts"));
         this.create_box_panel_btn(box_add, () => this.create_contact_done());
     }
 
@@ -238,8 +238,8 @@ public class Book_contact : MonoBehaviour
         this.item_field_sex.load_lang_data();
 
         this.item_field_sex.dropdown_val.ClearOptions();
-        this.item_field_sex.dropdown_val.options.Add(new Dropdown.OptionData() { text = PlayerPrefs.GetString("user_sex_boy", "Male") });
-        this.item_field_sex.dropdown_val.options.Add(new Dropdown.OptionData() { text = PlayerPrefs.GetString("user_sex_girl", "Female") });
+        this.item_field_sex.dropdown_val.options.Add(new Dropdown.OptionData() { text = this.app.carrot.lang.Val("user_sex_boy", "Male") });
+        this.item_field_sex.dropdown_val.options.Add(new Dropdown.OptionData() { text = this.app.carrot.lang.Val("user_sex_girl", "Female") });
         if (data_contact["sex"] != null) this.item_field_sex.set_val(data_contact["sex"].ToString());
 
         this.item_field_address = box.create_item("item_address");
@@ -262,13 +262,13 @@ public class Book_contact : MonoBehaviour
 	{
         Carrot.Carrot_Box_Btn_Panel panel = box.create_panel_btn();
         Carrot.Carrot_Button_Item btn_done = panel.create_btn("btn_done");
-        btn_done.set_label(PlayerPrefs.GetString("done", "Done"));
+        btn_done.set_label(this.app.carrot.lang.Val("done", "Done"));
         btn_done.set_icon_white(this.app.carrot.icon_carrot_done);
         btn_done.set_bk_color(this.app.carrot.color_highlight);
         btn_done.set_act_click(event_done);
 
         Carrot.Carrot_Button_Item btn_cancel = panel.create_btn("btn_cancel");
-        btn_cancel.set_label(PlayerPrefs.GetString("cancel", "Cancel"));
+        btn_cancel.set_label(this.app.carrot.lang.Val("cancel", "Cancel"));
         btn_cancel.set_icon_white(this.app.carrot.icon_carrot_cancel);
         btn_cancel.set_bk_color(this.app.carrot.color_highlight);
         btn_cancel.set_act_click(() => box.close());
@@ -279,7 +279,7 @@ public class Book_contact : MonoBehaviour
 		this.app.play_sound(0);
 		if (this.item_field_phone.get_val().Trim() == "")
 		{
-            this.app.carrot.show_msg(PlayerPrefs.GetString("phonebook", "Phonebook"),PlayerPrefs.GetString("error_phone_number","The contact's phone number cannot be left blank!"), Carrot.Msg_Icon.Alert);
+            this.app.carrot.show_msg(this.app.carrot.lang.Val("phonebook", "Phonebook"),this.app.carrot.lang.Val("error_phone_number","The contact's phone number cannot be left blank!"), Carrot.Msg_Icon.Alert);
             return;
 		}
 
@@ -304,14 +304,14 @@ public class Book_contact : MonoBehaviour
         this.create(contact_data);
 		this.box.close();
 
-        this.app.carrot.show_msg(PlayerPrefs.GetString("phonebook", "Phonebook"),PlayerPrefs.GetString("phonebook_add_success", "Added contacts successfully!"), Carrot.Msg_Icon.Success);
+        this.app.carrot.show_msg(this.app.carrot.lang.Val("phonebook", "Phonebook"),this.app.carrot.lang.Val("phonebook_add_success", "Added contacts successfully!"), Carrot.Msg_Icon.Success);
 		this.show();
     }
 
 	private void update_contact_done()
 	{
         this.app.play_sound(0);
-        string s_data = PlayerPrefs.GetString("contact_" + this.index_edit, "");
+        string s_data = this.app.carrot.lang.Val("contact_" + this.index_edit, "");
         IDictionary contact_data = (IDictionary)Json.Deserialize(s_data);
         contact_data["name"] = this.item_field_name.get_val();
         contact_data["phone"] = this.item_field_phone.get_val();
@@ -324,7 +324,7 @@ public class Book_contact : MonoBehaviour
         PlayerPrefs.SetString("contact_" + this.index_edit, Carrot.Json.Serialize(contact_data));
 		this.box.close();
 
-        this.app.carrot.show_msg(PlayerPrefs.GetString("phonebook", "Phonebook"), PlayerPrefs.GetString("phonebook_edit_success", "Contacts edited successfully!"), Carrot.Msg_Icon.Success);
+        this.app.carrot.show_msg(this.app.carrot.lang.Val("phonebook", "Phonebook"), this.app.carrot.lang.Val("phonebook_edit_success", "Contacts edited successfully!"), Carrot.Msg_Icon.Success);
         this.show();
     }
 

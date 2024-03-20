@@ -58,7 +58,6 @@ public class App_Contacts : MonoBehaviour
         this.carrot.game.load_bk_music(this.sound_bk_music);
 
         this.book_contact.Load_book_contact();
-        this.qr.On_load();
         this.call.panel_call.SetActive(false);
         this.Check_scene_size();
         this.carrot.carrot_lost_internet.Call_when_func();
@@ -122,11 +121,6 @@ public class App_Contacts : MonoBehaviour
         if (this.call.panel_call.activeInHierarchy)
         {
             this.call.panel_call.SetActive(false);
-            this.carrot.set_no_check_exit_app();
-        }
-        else if (this.qr.gameObject.activeInHierarchy)
-        {
-            this.qr.Close();
             this.carrot.set_no_check_exit_app();
         }
     }
@@ -209,8 +203,8 @@ public class App_Contacts : MonoBehaviour
         item_none.on_load(this.carrot);
         item_none.check_type();
         item_none.GetComponent<Image>().color = this.carrot.color_highlight;
-        item_none.set_title(PlayerPrefs.GetString("list_none","List is empty"));
-        item_none.set_tip(PlayerPrefs.GetString("list_none_tip", "There are no items in the list"));
+        item_none.set_title(carrot.lang.Val("list_none","List is empty"));
+        item_none.set_tip(carrot.lang.Val("list_none_tip", "There are no items in the list"));
         item_none.gameObject.name = "item_none";
         return item_none;
     }
@@ -273,7 +267,7 @@ public class App_Contacts : MonoBehaviour
     private void Act_get_contact_by_id_fail(string s_error)
     {
         this.carrot.hide_loading();
-        this.carrot.show_msg(PlayerPrefs.GetString("app_title", "World contact book"), PlayerPrefs.GetString("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+        this.carrot.show_msg(carrot.lang.Val("app_title", "World contact book"), carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
     }
 
     public void Check_scene_size()
