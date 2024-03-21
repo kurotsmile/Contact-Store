@@ -248,12 +248,14 @@ public class Manager_Contact : MonoBehaviour
             }
         }
 
+        /*
         Carrot_Button_Item btn_share = panel_tool.create_btn("btn_share");
         btn_share.set_icon_white(app.carrot.sp_icon_share);
         btn_share.set_label_color(Color.white);
         btn_share.set_label(this.app.carrot.lang.Val("share", "Share"));
         btn_share.set_bk_color(app.carrot.color_highlight);
         btn_share.set_act_click(() => this.Share(id_contact,lang_contact));
+        */
 
         Carrot_Box_Btn_Panel panel_qr = box_info.create_panel_btn();
 
