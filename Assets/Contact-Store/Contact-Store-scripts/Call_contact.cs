@@ -96,11 +96,12 @@ public class Call_contact : MonoBehaviour
     private void Get_info_by_number_phone(string s_phone)
     {
         this.img_loading.SetActive(true);
-        StructuredQuery q = new("user-" + this.app.carrot.lang.Get_key_lang());
+        StructuredQuery q = new("users");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_where("lang", Query_OP.EQUAL, this.app.carrot.lang.Get_key_lang());
         q.Add_where("phone", Query_OP.EQUAL, s_phone);
         q.Set_limit(1);
-        app.carrot.server.Get_doc(q.ToJson(), Act_Get_info_by_number_phone_done, Act_Get_info_by_number_phone_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_Get_info_by_number_phone_done, Act_Get_info_by_number_phone_fail);
     }
 
     private void Act_Get_info_by_number_phone_done(string s_data)
@@ -144,7 +145,7 @@ public class Call_contact : MonoBehaviour
 
     public void view_contact_info()
     {
-        this.app.carrot.user.show_user_by_id(this.user_id_contact,this.user_lang_contact);
+        this.app.carrot.user.show_user_by_id(this.user_id_contact);
     }
 
     public void btn_call()

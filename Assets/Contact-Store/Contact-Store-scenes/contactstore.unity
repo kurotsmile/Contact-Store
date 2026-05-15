@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 1
     m_BakeBackend: 0
@@ -182,6 +178,106 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &1341849360
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 206775702983524856, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_Name
+      value: Carrot_Ads
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5798580663018266885, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819394031016630929, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: app_key
+      value: 265f6b36d
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819394031016630929, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: id_video
+      value: winltujwivqwtlov
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819394031016630929, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: id_banner
+      value: 3ou7dfj1zg1nsyvl
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819394031016630929, guid: 03c349d608b1c994292a245209f4d840,
+        type: 3}
+      propertyPath: id_rewarded
+      value: f9uoc1vj6iw5m8ll
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 03c349d608b1c994292a245209f4d840, type: 3}
+--- !u!114 &1341849361 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8819394031016630929, guid: 03c349d608b1c994292a245209f4d840,
+    type: 3}
+  m_PrefabInstance: {fileID: 1341849360}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b043387d306f5a479191834b569c420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!82 &1654146038 stripped
@@ -543,7 +639,7 @@ PrefabInstance:
     - target: {fileID: 1414631616687179582, guid: bc432f5e5110c8748ba4572693e32a2f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 28.400024
+      value: 28.400055
       objectReference: {fileID: 0}
     - target: {fileID: 1756984655596041115, guid: bc432f5e5110c8748ba4572693e32a2f,
         type: 3}
@@ -822,6 +918,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7069181349800508701, guid: bc432f5e5110c8748ba4572693e32a2f,
         type: 3}
+      propertyPath: ads
+      value: 
+      objectReference: {fileID: 1341849361}
+    - target: {fileID: 7069181349800508701, guid: bc432f5e5110c8748ba4572693e32a2f,
+        type: 3}
       propertyPath: carrot
       value: 
       objectReference: {fileID: 891154733}
@@ -832,7 +933,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7069181349800508701, guid: bc432f5e5110c8748ba4572693e32a2f,
         type: 3}
-      propertyPath: sound.Array.data[3]
+      propertyPath: 'sound.Array.data[3]'
       value: 
       objectReference: {fileID: 1654146038}
     - target: {fileID: 7187521201405818605, guid: bc432f5e5110c8748ba4572693e32a2f,
@@ -924,3 +1025,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 4479580113000525068}
   - {fileID: 2029344849}
+  - {fileID: 1341849360}

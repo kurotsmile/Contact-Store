@@ -23,7 +23,7 @@ public class QR_scan : MonoBehaviour
     {
         app.carrot.hide_loading();
         app.play_sound(2);
-        app.carrot.camera_pro.show_photoshop(tex,2f);
+        app.carrot.camera_pro.Show_photoshop(tex,2f);
     }
 
     public void Create_Code()

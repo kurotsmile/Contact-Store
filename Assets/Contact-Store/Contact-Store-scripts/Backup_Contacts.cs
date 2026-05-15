@@ -23,7 +23,7 @@ public class Backup_Contacts : MonoBehaviour
         this.app.play_sound(0);
         if (this.app.carrot.user.get_id_user_login() == "")
         {
-            this.msg=this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
+            this.msg=this.app.carrot.Show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_no_login", "You need to log in to your account to backup your contacts"), Carrot.Msg_Icon.Alert);
             this.app.carrot.delay_function(2f, this.Show_login_for_backup);
         }
         else
@@ -63,7 +63,7 @@ public class Backup_Contacts : MonoBehaviour
 
         StructuredQuery q = new(app.carrot.Carrotstore_AppId);
         q.Add_where("user_id",Query_OP.EQUAL, app.carrot.user.get_id_user_login());
-        app.carrot.server.Get_doc(q.ToJson(), Act_list_done, Act_list_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_list_done, Act_list_fail);
     }
 
     private void Act_list_done(string s_data)
@@ -121,7 +121,7 @@ public class Backup_Contacts : MonoBehaviour
 
     private void Act_list_fail(string s_error)
     {
-        this.app.carrot.show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
+        this.app.carrot.Show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
     }
 
     private void Add_item_create_new()
@@ -137,7 +137,7 @@ public class Backup_Contacts : MonoBehaviour
         this.list_contact_download = contacts;
         this.app.play_sound(0);
         if (this.msg != null) this.msg.close();
-        this.msg=this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"),this.app.carrot.lang.Val("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
+        this.msg=this.app.carrot.Show_msg(this.app.carrot.lang.Val("backup", "Backup"),this.app.carrot.lang.Val("backup_sync", "Do you want to sync your contacts with this backup?"),this.download_yes,this.download_no);
     }
 
     private void download_yes()
@@ -149,7 +149,7 @@ public class Backup_Contacts : MonoBehaviour
         }
         if (this.msg != null) this.msg.close();
         this.app.book_contact.show();
-        this.msg = this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_success", "Download the backup and sync successfully!"),Carrot.Msg_Icon.Success);
+        this.msg = this.app.carrot.Show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_success", "Download the backup and sync successfully!"),Carrot.Msg_Icon.Success);
     }
 
     private void download_no()
@@ -160,7 +160,7 @@ public class Backup_Contacts : MonoBehaviour
     private void delete_backup(string s_id)
     {
         this.id_backup_del_temp = s_id;
-        this.msg = this.app.carrot.show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
+        this.msg = this.app.carrot.Show_msg("Delete", "Are you sure you want to remove this item?", act_yes_delete, act_no_delete);
     }
 
     private void act_yes_delete()
@@ -168,7 +168,7 @@ public class Backup_Contacts : MonoBehaviour
         if (this.msg != null) this.msg.close();
         this.app.play_sound(0);
         this.app.carrot.show_loading();
-        app.carrot.server.Delete_Doc(app.carrot.Carrotstore_AppId, id_backup_del_temp, Act_delete_backup_done, Backup_fail);
+        app.DeleteTableRecord(app.carrot.Carrotstore_AppId, id_backup_del_temp, Act_delete_backup_done, Backup_fail);
         this.List();
     }
 
@@ -195,7 +195,7 @@ public class Backup_Contacts : MonoBehaviour
         IList list_contacts = this.app.book_contact.get_list_data_backup();
         if (list_contacts.Count == 0)
         {
-            this.app.carrot.show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), this.app.carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+            this.app.carrot.Show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), this.app.carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
             return;
         }
 
@@ -203,27 +203,26 @@ public class Backup_Contacts : MonoBehaviour
         string id_backup= "backup" + this.app.carrot.generateID()+UnityEngine.Random.Range(0,20);
         
         IDictionary backup_data = (IDictionary)Json.Deserialize("{}");
-        backup_data["id"] = 
+        backup_data["id"] = id_backup;
         backup_data["date"] = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
         backup_data["length"] = list_contacts.Count;
         backup_data["datas"] = list_contacts;
         backup_data["user_id"] = this.app.carrot.user.get_id_user_login();
         backup_data["user_lang"] = this.app.carrot.user.get_lang_user_login();
 
-        string s_json = app.carrot.server.Convert_IDictionary_to_json(backup_data);
-        app.carrot.server.Add_Document_To_Collection(app.carrot.Carrotstore_AppId, id_backup,s_json, Backup_data_done, Backup_fail);
+        app.InsertTableRecord(app.carrot.Carrotstore_AppId, backup_data, Backup_data_done, Backup_fail);
     }
 
     private void Backup_fail(string s_error)
     {
         app.carrot.hide_loading();
-        this.app.carrot.show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
+        this.app.carrot.Show_msg(this.app.carrot.lang.Val("app_title", "World contact book"), "the operation has not been performed because of some server error, please try again later", Carrot.Msg_Icon.Error);
     }
 
     private void Backup_data_done(string s_data)
     {
         app.carrot.hide_loading();
-        this.app.carrot.show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_success", "Download the backup and sync successfully!"), Msg_Icon.Success);
+        this.app.carrot.Show_msg(this.app.carrot.lang.Val("backup", "Backup"), this.app.carrot.lang.Val("backup_success", "Download the backup and sync successfully!"), Msg_Icon.Success);
     }
 
     private void View_backup(IList list_contact)

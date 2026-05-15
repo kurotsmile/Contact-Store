@@ -1,12 +1,16 @@
 ﻿using Carrot;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class App_Contacts : MonoBehaviour
 {
     [Header("Obj Main")]
     public Carrot.Carrot carrot;
+    public IronSourceAds ads;
     public Manager_Menu menu;
     public Manager_Contact manager_contact;
     public Book_contact book_contact;
@@ -56,6 +60,9 @@ public class App_Contacts : MonoBehaviour
 
         this.carrot.Load_Carrot(Check_exit_app);
         this.carrot.game.load_bk_music(this.sound_bk_music);
+
+        this.ads.On_Load();
+        this.carrot.act_buy_ads_success=this.ads.RemoveAds;
 
         this.book_contact.Load_book_contact();
         this.call.panel_call.SetActive(false);
@@ -147,7 +154,7 @@ public class App_Contacts : MonoBehaviour
     public void btn_show_list_lang()
     {
         this.play_sound(0);
-        this.carrot.show_list_lang(Act_after_load_lang);
+        this.carrot.Show_list_lang(Act_after_load_lang);
     }
 
     private void Act_after_load_lang(string s_data)
@@ -251,7 +258,7 @@ public class App_Contacts : MonoBehaviour
     public void View_contact_by_id(string s_id,string s_lang)
     {
         this.carrot.show_loading();
-        carrot.server.Get_doc_by_path("user-" + s_lang, s_id, Act_get_contact_by_id_done, Act_get_contact_by_id_fail);
+        carrot.hub.Get_doc_by_path("users", s_id, Act_get_contact_by_id_done, Act_get_contact_by_id_fail);
     }
 
     private void Act_get_contact_by_id_done(string s_data)
@@ -267,12 +274,58 @@ public class App_Contacts : MonoBehaviour
     private void Act_get_contact_by_id_fail(string s_error)
     {
         this.carrot.hide_loading();
-        this.carrot.show_msg(carrot.lang.Val("app_title", "World contact book"), carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+        this.carrot.Show_msg(carrot.lang.Val("app_title", "World contact book"), carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
     }
 
     public void Check_scene_size()
     {
         Debug.Log("Check_scene_size");
         carrot.delay_function(0.2f, call.Check_scene_size);
+    }
+
+    public void InsertTableRecord(string table, IDictionary data, UnityAction<string> actDone = null, UnityAction<string> actFail = null)
+    {
+        IDictionary payload = new Dictionary<string, object>
+        {
+            { "table", table },
+            { "data", data }
+        };
+        this.PostWorkerJson("/inster_table", payload, actDone, actFail);
+    }
+
+    public void DeleteTableRecord(string table, string id, UnityAction<string> actDone = null, UnityAction<string> actFail = null)
+    {
+        IDictionary data = new Dictionary<string, object>
+        {
+            { "id", id }
+        };
+        IDictionary payload = new Dictionary<string, object>
+        {
+            { "table", table },
+            { "data", data }
+        };
+        this.PostWorkerJson("/delete_table", payload, actDone, actFail);
+    }
+
+    private void PostWorkerJson(string path, IDictionary payload, UnityAction<string> actDone = null, UnityAction<string> actFail = null)
+    {
+        StartCoroutine(PostWorkerJsonS(path, payload, actDone, actFail));
+    }
+
+    private IEnumerator PostWorkerJsonS(string path, IDictionary payload, UnityAction<string> actDone, UnityAction<string> actFail)
+    {
+        string url = this.carrot.url_worker + path;
+        byte[] body = System.Text.Encoding.UTF8.GetBytes(Json.Serialize(payload));
+        UnityWebRequest req = new(url, "POST");
+        req.uploadHandler = new UploadHandlerRaw(body);
+        req.downloadHandler = new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
+            actDone?.Invoke(req.downloadHandler.text);
+        else
+            actFail?.Invoke(string.IsNullOrEmpty(req.downloadHandler.text) ? req.error : req.downloadHandler.text);
     }
 }

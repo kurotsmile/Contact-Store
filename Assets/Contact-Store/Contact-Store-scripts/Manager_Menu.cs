@@ -47,6 +47,6 @@ public class Manager_Menu : MonoBehaviour
         this.app.play_sound(0);
         PlayerPrefs.SetInt("index_cur_func", index);
         this.select_menu(index);
-        this.app.carrot.ads.show_ads_Interstitial();
+        this.app.ads.show_ads_Interstitial();
     }
 }

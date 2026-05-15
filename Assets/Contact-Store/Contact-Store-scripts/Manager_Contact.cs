@@ -6,6 +6,7 @@ public class Manager_Contact : MonoBehaviour
 {
     [Header("Obj main")]
     public App_Contacts app;
+    public IronSourceAds ads;
 
     [Header("Icon")]
     public Sprite icon_contact;
@@ -40,7 +41,7 @@ public class Manager_Contact : MonoBehaviour
 
     private void Get_data_from_server()
     {
-        StructuredQuery q = new("user-" + app.carrot.lang.Get_key_lang());
+        StructuredQuery q = new("users");
         q.Add_select("name");
         q.Add_select("avatar");
         q.Add_select("lang");
@@ -49,9 +50,10 @@ public class Manager_Contact : MonoBehaviour
         q.Add_select("sex");
         q.Add_select("status_share");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_where("lang", Query_OP.EQUAL, app.carrot.lang.Get_key_lang());
         q.Add_order("name",this.order_by);
         q.Set_limit(60);
-        app.carrot.server.Get_doc(q.ToJson(), Act_get_data_from_server_done, Act_get_data_from_server_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_get_data_from_server_done, Act_get_data_from_server_fail);
     }
 
     private void Act_get_data_from_server_done(string s_data)
@@ -206,7 +208,7 @@ public class Manager_Contact : MonoBehaviour
         var lang_contact = "en"; if (data["lang"] != null) lang_contact = data["lang"].ToString();
 
         app.play_sound(0);
-        app.carrot.ads.show_ads_Interstitial();
+        app.ads.show_ads_Interstitial();
         if (this.box_info != null) this.box_info.close();
         this.box_info=app.carrot.user.Show_info_user_by_data(data);
         Carrot_Box_Btn_Panel panel_tool=box_info.create_panel_btn();
@@ -395,16 +397,16 @@ public class Manager_Contact : MonoBehaviour
     public void Delete_contact(string s_id,string s_lang)
     {
         Debug.Log("Delete Dev " + s_id+" success !!!");
-        this.app.carrot.server.Delete_Doc("user-" + s_lang, s_id,Act_delete_contact_done,Act_delete_contact_fail);
+        this.app.DeleteTableRecord("users", s_id,Act_delete_contact_done,Act_delete_contact_fail);
     }
 
     public void Act_delete_contact_done(string s_data)
     {
-        app.carrot.show_msg("Conact store", "Delete Success!", Msg_Icon.Success);
+        app.carrot.Show_msg("Conact store", "Delete Success!", Msg_Icon.Success);
     }
 
     public void Act_delete_contact_fail(string s_error)
     {
-        app.carrot.show_msg("Conact store", s_error, Msg_Icon.Error);
+        app.carrot.Show_msg("Conact store", s_error, Msg_Icon.Error);
     }
 }

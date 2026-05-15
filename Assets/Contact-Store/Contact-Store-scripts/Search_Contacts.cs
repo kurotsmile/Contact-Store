@@ -26,7 +26,7 @@ public class Search_Contacts : MonoBehaviour
         this.type_search = Search_Contacts_Type.search_name_or_phone;
         if (s_key != "")
         {
-            app.carrot.ads.show_ads_Interstitial();
+            app.ads.show_ads_Interstitial();
             app.carrot.show_loading();
             app.inp_search.text = "";
             this.s_key_search_temp = s_key;
@@ -38,7 +38,7 @@ public class Search_Contacts : MonoBehaviour
         }
         else
         {
-            this.app.carrot.show_msg(this.app.carrot.lang.Val("search","Search"), this.app.carrot.lang.Val("search_key_error","Search keywords cannot be empty"), Msg_Icon.Alert);
+            this.app.carrot.Show_msg(this.app.carrot.lang.Val("search","Search"), this.app.carrot.lang.Val("search_key_error","Search keywords cannot be empty"), Msg_Icon.Alert);
         }
     }
 
@@ -84,30 +84,33 @@ public class Search_Contacts : MonoBehaviour
     private void Search_name_online(string s_key)
     {
         this.type_search = Search_Contacts_Type.search_name;
-        StructuredQuery q = new("user-" + this.app.carrot.lang.Get_key_lang());
+        StructuredQuery q = new("users");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_where("lang", Query_OP.EQUAL, this.app.carrot.lang.Get_key_lang());
         q.Add_where("name", Query_OP.EQUAL, s_key);
         q.Set_limit(20);
-        app.carrot.server.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
     }
 
     public void Search_phone_number(string s_phone)
     {
         this.type_search = Search_Contacts_Type.search_phone;
-        StructuredQuery q = new("user-" + this.app.carrot.lang.Get_key_lang());
+        StructuredQuery q = new("users");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_where("lang", Query_OP.EQUAL, this.app.carrot.lang.Get_key_lang());
         q.Add_where("phone", Query_OP.EQUAL, s_phone);
         q.Set_limit(20);
-        app.carrot.server.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
     }
 
     public void Search_email(string s_phone)
     {
-        StructuredQuery q = new("user-" + this.app.carrot.lang.Get_key_lang());
+        StructuredQuery q = new("users");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_where("lang", Query_OP.EQUAL, this.app.carrot.lang.Get_key_lang());
         q.Add_where("email", Query_OP.EQUAL, s_phone);
         q.Set_limit(20);
-        app.carrot.server.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
     }
 
     public void advanced_search()
@@ -166,12 +169,13 @@ public class Search_Contacts : MonoBehaviour
 
         if (item_name.get_val() == "" && item_phone.get_val() == "")
         {
-            this.app.carrot.show_msg(this.app.carrot.lang.Val("advanced_search", "Advanced Search"), this.app.carrot.lang.Val("search_key_error", "Search keywords cannot be empty"), Msg_Icon.Alert);
+            this.app.carrot.Show_msg(this.app.carrot.lang.Val("advanced_search", "Advanced Search"), this.app.carrot.lang.Val("search_key_error", "Search keywords cannot be empty"), Msg_Icon.Alert);
             return;
         }
 
-        StructuredQuery q = new("user-" + this.app.carrot.lang.Get_key_lang());
+        StructuredQuery q = new("users");
         q.Add_where("status_share", Query_OP.EQUAL, "0");
+        q.Add_where("lang", Query_OP.EQUAL, this.app.carrot.lang.Get_key_lang());
         if (s_name != "") q.Add_where("name",Query_OP.EQUAL,s_name);
         if (s_phone != "") q.Add_where("phone",Query_OP.EQUAL,s_phone);
         if (s_sex != "0")
@@ -180,7 +184,7 @@ public class Search_Contacts : MonoBehaviour
             if (s_sex == "2") q.Add_where("sex", Query_OP.EQUAL, "1");
         }
         q.Set_limit(20);
-        app.carrot.server.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
+        app.carrot.hub.Get_doc(q.ToJson(), Act_advanced_search_done, Act_advanced_search_fail);
     }
 
     private void Act_advanced_search_done(string s_data)
@@ -218,7 +222,7 @@ public class Search_Contacts : MonoBehaviour
             }
             else
             {
-                this.app.carrot.show_msg(this.app.carrot.lang.Val("advanced_search", "Advanced Search"), this.app.carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
+                this.app.carrot.Show_msg(this.app.carrot.lang.Val("advanced_search", "Advanced Search"), this.app.carrot.lang.Val("list_none_tip", "There are no items in the list"), Msg_Icon.Alert);
             }
             
         }
@@ -231,6 +235,6 @@ public class Search_Contacts : MonoBehaviour
         app.deviceOrientation.Stop_check();
 
         if (this.box_search_advanced != null) this.box_search_advanced.close();
-        this.app.carrot.show_msg(this.app.carrot.lang.Val("advanced_search", "Advanced Search"),s_error, Msg_Icon.Error);
+        this.app.carrot.Show_msg(this.app.carrot.lang.Val("advanced_search", "Advanced Search"),s_error, Msg_Icon.Error);
     }
 }
